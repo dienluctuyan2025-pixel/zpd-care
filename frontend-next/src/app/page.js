@@ -613,7 +613,7 @@ export default function Home() {
                     key={s.id}
                     type="button"
                     className={`zpd-hs-item r-${color}${on ? ' is-on' : ''}`}
-                    onClick={() => setSelectedStudentId(s.id)}
+                    onClick={() => { setSelectedStudentId(s.id); setIsMobileMenuOpen(false); }}
                     title={`${fullName} · ${cls} · CARS ${scoreLabel}`}
                   >
                     <span
