@@ -36,6 +36,13 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&subset=vietnamese&display=swap"
           rel="stylesheet"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="ZPD Care" />
+        <link rel="apple-touch-icon" href="/logo_care.jpg" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#1d2d50" />
       </head>
       <body suppressHydrationWarning>
         <script
