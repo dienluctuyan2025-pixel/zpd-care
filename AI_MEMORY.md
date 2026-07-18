@@ -137,8 +137,9 @@ npm run dev
 
 - **Palette cold rust:** `#ba370a`, `#af5b3f`, `#f0f4f8`, `#133b5c`, `#1d2d50`.
 - **CSS sống:** `base.css` + `zpd-ui.css` only.
-- **Brand:** `logo-zpd.svg`; badge UI **5.5**.
-- **Sidebar HS:** search, sort risk/name/class, score chips, class `Lớp MG 5-6 tuổi A4`.
+- **Brand:** `logo-zpd.svg`; badge UI **5.5**. PWA Icon: `apple-icon.png` (do iOS cấm SVG).
+- **PWA / Standalone:** `manifest.json` + meta `apple-mobile-web-app-capable`. Gắn cứng thẻ `<link rel="apple-touch-icon">` trong `layout.js` trỏ vào `apple-icon.png` để tránh iOS sinh icon chữ "Z" rác. Đã xóa `favicon.ico` mặc định của Vercel, dùng `icon.svg`.
+- **Sidebar HS:** search, sort risk/name/class, score chips, class `Lớp MG 5-6 tuổi A4`. Không dùng `position: absolute` cho list để tránh đè lên thanh search (flexbug).
 - **Shortcut:** Ctrl+K.
 - **Chat FAB:** doctor photo + badge ZPD.
 - **Dark mode (đã sửa 18/07 tối):**
@@ -179,11 +180,11 @@ npm run dev
 | Risk bẩn | seed + placeholder 1.0 | Filter risk engine |
 | Text auto-risk | asymmetry multimodal | Text = nháp + confirm |
 | Game auto-ghi điểm | mâu thuẫn HITL | Game chỉ gợi ý |
-| Empty students spinner | không empty state | Màn “chưa có HS” |
-| Chat dính HS cũ | không reset | Reset theo studentId |
-| PDF pred trống | parse dict `6_months` trong khi API list | Parse list tháng |
-| PDF probe sai màu | Đạt/Không Đạt | Rubric 1–4 + DEMO |
-| Dark mode không đổi | CSS light `!important` | Dark tokens + overrides |
+| Báo lỗi "Chưa có HS" ngay lúc mở | Thiếu state chờ API | Thêm `fetchingList` + Skeleton loading |
+| Crash React "This page couldn't load" | Dùng regex tiêm code lỗi | Sửa thủ công định nghĩa biến `fetchingList` |
+| Drawer bị cắt cụt / cuộn ngang | Lỗi flex Safari | Gắn `min-height: 0` / `overflow: hidden` |
+| iOS Add to Home Screen hiện icon chữ "Z" | iOS cấm dùng SVG làm icon | Dùng script gen ra `apple-icon.png` 180x180 cứng |
+| Tab hiện logo Vercel đen trắng | Vướng file mặc định | Xóa `favicon.ico`, chuyển sang `icon.svg` |
 | Lớp “Chồi 1/2” | seed cũ | DB + import → `Lớp MG 5-6 tuổi A4` |
 
 ---
@@ -273,5 +274,5 @@ python -c "from main import _build_student_dashboard; from pdf_generator import 
 
 ---
 
-**Phiên bản memory:** 2026-07-18 21:40 ICT  
-**UI 5.5** · HITL · scientific probes · doctor chat · PDF chi tiết I–X · dark mode hoạt động · lớp MG 5-6 tuổi A4 · Đã lên Cloud Vercel/Render
+**Phiên bản memory:** 2026-07-19 00:45 ICT  
+**UI 5.5** · HITL · scientific probes · PWA Standalone · PDF chi tiết I–X · dark mode hoạt động · Đã lên Cloud Vercel/Render
