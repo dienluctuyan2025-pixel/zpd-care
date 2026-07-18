@@ -33,7 +33,7 @@ export default function CommandPalette({
       { id: "tab-probes", label: "Tab: Kiểm chứng", icon: Stethoscope, run: () => onNavigate("probes") },
       { id: "tab-survey", label: "Tab: Khảo sát PH (GV nhập)", icon: Phone, run: () => onNavigate("survey") },
       { id: "page-home", label: "Về bảng làm việc", icon: Home, run: () => onNavigate("dashboard") },
-      { id: "page-about", label: "Cơ sở khoa học", icon: Info, run: () => onNavigate("about") },
+      { id: "page-about", label: "Giới thiệu dự án", icon: Info, run: () => onNavigate("about") },
       ...(onToggleTheme
         ? [{ id: "theme", label: "Đổi sáng / tối", icon: Moon, run: () => onToggleTheme() }]
         : []),

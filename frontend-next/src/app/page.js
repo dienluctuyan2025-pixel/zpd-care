@@ -549,7 +549,7 @@ export default function Home() {
             <User size={15} /> Hồ sơ làm việc
           </button>
           <button type="button" className={activePage === 'about' ? 'active' : ''} onClick={() => setActivePage('about')}>
-            <Info size={15} /> Cơ sở khoa học
+            <Info size={15} /> Giới thiệu dự án
           </button>
           <button type="button" onClick={() => setCmdOpen(true)}>
             <Search size={15} /> Tìm kiếm

@@ -84,7 +84,7 @@ export default function AboutProject({ onBack }) {
       {/* Hero — cold rust */}
       <header className="about-hero">
         <div className="about-hero-inner">
-          <span className="about-hero-badge">Cơ sở khoa học · ZPD Care</span>
+          <span className="about-hero-badge">Giới thiệu dự án · ZPD Care</span>
           <h1>
             AI hỗ trợ theo dõi & can thiệp ZPD<br />
             <em>cho giáo dục mầm non hòa nhập</em>
