@@ -352,7 +352,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
           </button>
           <label className={`btn-premium obs-file-btn ${analyzing || confirming ? 'is-disabled' : ''}`}>
             {analyzing ? <><div className="loader-spinner"></div> Đang xử lý media…</> : <><Upload size={16}/> Audio / video</>}
-            <input type="file" accept="audio/*,video/*" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming} />
+            <input type="file" accept="audio/*,video/*,image/*" capture="environment" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming} />
           </label>
           {result && (
             <button 

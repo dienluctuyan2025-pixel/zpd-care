@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import {
   User, ShieldCheck, Activity, BarChart2, Stethoscope,
-  LogOut, Info, Search, Moon, Sun, LayoutList, Phone, ArrowUpDown
+  LogOut, Info, Search, Moon, Sun, LayoutList, Phone, ArrowUpDown, Menu, X
 } from 'lucide-react';
 import LoginScreen from '@/components/auth/LoginScreen';
 import ToastHost from '@/components/ui/ToastHost';
@@ -148,6 +148,7 @@ export default function Home() {
   const [showTimeline, setShowTimeline] = useState(false);
   const [studentQuery, setStudentQuery] = useState('');
   const [studentSort, setStudentSort] = useState('risk'); // risk | name | class
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const abortControllerRef = useRef(null);
 
@@ -518,8 +519,8 @@ export default function Home() {
         onLogout={handleLogout}
         onToggleTheme={toggleDark}
       />
-
-      <aside className="sidebar sci-sidebar">
+      <div className={`mobile-overlay ${isMobileMenuOpen ? 'show' : ''}`} onClick={() => setIsMobileMenuOpen(false)}></div>
+      <aside className={`sidebar sci-sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="sci-brand zpd-brand">
           <div
             className="zpd-brand-mark"
@@ -678,6 +679,9 @@ export default function Home() {
       <div className="main-wrapper sci-main">
         <header className="sci-topbar">
           <div className="sci-topbar-left">
+            <button className="sci-mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+              <Menu size={18} />
+            </button>
             <div className="sci-breadcrumb">
               <span className="sci-topbar-title">Bảng làm việc GV</span>
               {selected && (
