@@ -138,19 +138,29 @@ export default function AboutProject({ onBack }) {
           <Target size={18} />
           <h2>Triết lý ZPD Care là gì?</h2>
         </div>
-        <p className="about-section-lead" style={{ textAlign: 'justify', lineHeight: '1.6' }}>
-          <strong>ZPD (Zone of Proximal Development)</strong> — hay <em>Vùng phát triển gần</em> — là học thuyết cốt lõi của nhà tâm lý học Lev Vygotsky. Khái niệm này xác định khoảng cách giữa những gì một đứa trẻ <strong>có thể tự làm được</strong> (trình độ hiện tại) và những gì trẻ <strong>có thể đạt được nếu có sự hướng dẫn</strong> (trình độ tiềm năng).
-        </p>
-        <div className="about-practice-grid" style={{ marginTop: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+        
+        <div className="about-section-lead" style={{ textAlign: 'justify', lineHeight: '1.7', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <p>
+            <strong>ZPD (Zone of Proximal Development)</strong> — hay <em>Vùng phát triển gần</em> — là học thuyết nền tảng do nhà tâm lý học lỗi lạc Lev Vygotsky đề xướng. Thuyết này khẳng định rằng sự phát triển nhận thức của trẻ không diễn ra cô lập, mà được thúc đẩy mạnh mẽ nhất thông qua tương tác xã hội và sự hướng dẫn đúng mức.
+          </p>
+          <p>
+            Vygotsky định nghĩa ZPD là khoảng cách giữa <strong>"trình độ phát triển thực tế"</strong> (những gì trẻ có thể tự làm một mình một cách độc lập) và <strong>"trình độ phát triển tiềm năng"</strong> (những gì trẻ có thể đạt được khi có sự hướng dẫn, dìu dắt của người lớn hoặc bạn bè đồng trang lứa có năng lực hơn).
+          </p>
+          <p>
+            Trong bối cảnh giáo dục mầm non, đặc biệt đối với trẻ có rối loạn phát triển, triết lý ZPD mang một thông điệp vô cùng sâu sắc: <strong>Không một đứa trẻ nào bị bỏ lại phía sau nếu chúng ta tìm đúng "Vùng phát triển" của chúng.</strong> Thay vì đánh giá trẻ bằng những chuẩn mực cào bằng cứng nhắc, giáo viên cần xác định chính xác "vùng" mà trẻ đang đứng để cung cấp sự hỗ trợ vừa vặn nhất.
+          </p>
+        </div>
+
+        <div className="about-practice-grid" style={{ marginTop: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
           <div className="about-practice">
             <Layers size={18} />
             <h3>Scaffolding (Thiết lập giàn giáo)</h3>
-            <p style={{ textAlign: 'justify' }}>Hệ thống không đánh giá trẻ bằng những chuẩn mực cào bằng. Dựa trên dữ liệu tam giác hóa, ZPD Care gợi ý cho giáo viên và phụ huynh những bước can thiệp nhỏ, vừa sức (scaffolding), giúp "nâng đỡ" trẻ từng bước tiến lên vùng tiềm năng.</p>
+            <p style={{ textAlign: 'justify' }}>Thuật ngữ ẩn dụ cho việc cung cấp các bậc thang hỗ trợ. ZPD Care ứng dụng AI và dữ liệu tam giác hóa (từ giáo viên, phụ huynh và hệ thống kiểm chứng) không phải để gán nhãn trẻ, mà để <strong>dựng lên những chiếc "giàn giáo" vô hình</strong>. Hệ thống phân tích và gợi ý cho giáo viên những bước can thiệp chia nhỏ, vừa sức, giúp "nâng đỡ" trẻ từng bước tiến lên vùng tiềm năng. Khi trẻ đã vững vàng, chiếc giàn giáo này sẽ dần được rút ra để trẻ tự lập.</p>
           </div>
           <div className="about-practice">
             <Shield size={18} />
             <h3>Care (Sự thấu cảm & Chăm sóc)</h3>
-            <p style={{ textAlign: 'justify' }}>Công nghệ AI và hệ thống đo lường phức tạp chỉ là công cụ để giải phóng giáo viên khỏi gánh nặng sổ sách. Giá trị cốt lõi làm nên sự thay đổi ở trẻ chính là tình yêu thương và sự kiên nhẫn của giáo viên mầm non.</p>
+            <p style={{ textAlign: 'justify' }}>Từ <em>Care</em> được đặt cạnh ZPD để khẳng định triết lý cốt lõi của toàn bộ dự án: Công nghệ AI tiên tiến hay hệ thống đo lường phức tạp đến đâu cũng chỉ là công cụ hỗ trợ giải phóng giáo viên khỏi gánh nặng sổ sách. Giá trị đích thực làm nên sự thay đổi kỳ diệu ở mỗi đứa trẻ không đến từ thuật toán, mà xuất phát từ <strong>tình yêu thương, sự kiên nhẫn thấu cảm và trái tim chăm sóc</strong> của người giáo viên mầm non trên hành trình giáo dục hòa nhập.</p>
           </div>
         </div>
       </section>
