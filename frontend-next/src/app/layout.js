@@ -4,6 +4,26 @@ import "./zpd-ui.css";
 export const metadata = {
   title: "ZPD Care | Sàng lọc hành vi · Mầm non",
   description: "Hệ thống hỗ trợ sàng lọc hành vi và can thiệp ZPD cho giáo viên mầm non. Không thay thế chẩn đoán y khoa.",
+  manifest: "/manifest.json",
+  icons: {
+    apple: "/logo_care.jpg",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "ZPD Care",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#1d2d50",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({ children }) {
