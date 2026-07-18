@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="ZPD Care">
+  <defs>
+    <linearGradient id="bg" x1="18" y1="10" x2="110" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F4"/>
+      <stop offset=".55" stop-color="#FDECE6"/>
+      <stop offset="1" stop-color="#F0D4C8"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="20" y1="16" x2="108" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BA370A"/>
+      <stop offset=".5" stop-color="#AF5B3F"/>
+      <stop offset="1" stop-color="#133B5C"/>
+    </linearGradient>
+    <linearGradient id="heart" x1="40" y1="36" x2="90" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E07A52"/>
+      <stop offset="1" stop-color="#BA370A"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="70" y1="28" x2="98" y2="70" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2A9D8F"/>
+      <stop offset="1" stop-color="#133B5C"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#1D2D50" flood-opacity=".14"/>
+    </filter>
+  </defs>
+
+  <!-- soft card -->
+  <rect x="8" y="8" width="112" height="112" rx="30" fill="url(#bg)" filter="url(#soft)"/>
+  <rect x="12" y="12" width="104" height="104" rx="26" fill="none" stroke="url(#ring)" stroke-width="3.2"/>
+
+  <!-- abstract care heart -->
+  <path
+    d="M64 94
+       C46 80 30 68 30 52.5
+       C30 41 38.5 34 48 34
+       C54.2 34 59.5 37 64 42.5
+       C68.5 37 73.8 34 80 34
+       C89.5 34 98 41 98 52.5
+       C98 68 82 80 64 94Z"
+    fill="url(#heart)"
+    opacity=".96"
+  />
+  <path
+    d="M64 86
+       C50 74 38 64.5 38 53
+       C38 45.2 43.8 40 50.2 40
+       C54.5 40 58.2 42.2 64 48.2
+       C69.8 42.2 73.5 40 77.8 40
+       C84.2 40 90 45.2 90 53
+       C90 64.5 78 74 64 86Z"
+    fill="#FFF8F4"
+    opacity=".18"
+  />
+
+  <!-- growth sprout / ZPD zone -->
+  <path
+    d="M72 70
+       C78 58 86 50 96 46
+       C92 56 86 64 76 72
+       Z"
+    fill="url(#leaf)"
+    opacity=".92"
+  />
+  <path
+    d="M76 72
+       C70 62 62 56 52 54
+       C58 62 66 68 76 72
+       Z"
+    fill="#133B5C"
+    opacity=".55"
+  />
+  <path
+    d="M76 72 V88"
+    stroke="#133B5C"
+    stroke-width="3.2"
+    stroke-linecap="round"
+    opacity=".75"
+  />
+
+  <!-- three care dots (triad: observe · family · probe) -->
+  <circle cx="48" cy="58" r="3.1" fill="#FFF8F4" opacity=".9"/>
+  <circle cx="64" cy="52" r="3.1" fill="#FFF8F4" opacity=".9"/>
+  <circle cx="80" cy="58" r="3.1" fill="#FFF8F4" opacity=".9"/>
+
+  <!-- tiny spark -->
+  <circle cx="92" cy="38" r="2.4" fill="#BA370A"/>
+  <path d="M92 32.5 V35.2 M92 40.8 V43.5 M86.5 38 H89.2 M94.8 38 H97.5" stroke="#BA370A" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
