@@ -1,0 +1,54 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env.local
+
+# Databases & runtime artifacts
+*.db
+*.sqlite
+*.sqlite3
+backend/temp_pdfs/
+backend/temp_uploads/
+backend/debug*.json
+backend/dump.json
+backend/chatbot_debug_error.txt
+backend/test_*.pdf
+backend/test_out.txt
+
+# Node
+node_modules/
+.next/
+dist/
+out/
+.npm
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# One-off migration scripts (frontend-next root)
+frontend-next/fix_*.js
+frontend-next/orb_*.js
+frontend-next/*_sidebar.js
+frontend-next/split*.js
+frontend-next/probes_ui.js
+frontend-next/header_ui_script.js
+frontend-next/style_fix.js
+frontend-next/ultra_premium.js
+frontend-next/update_*.js
+frontend-next/ux_overrides.js
+frontend-next/add_icons.js
+frontend-next/rename_app.js
+frontend-next/*.backup

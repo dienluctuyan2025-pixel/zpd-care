@@ -1,0 +1,256 @@
+"use client";
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import { User, Target, Users, ShieldCheck, Activity, BarChart2, Stethoscope, Sparkles, UserCog, LogOut, Home as HomeIcon, Info, BookOpen } from 'lucide-react';
+import BehaviorTab from '@/components/dashboard/BehaviorTab';
+import RadarTab from '@/components/dashboard/RadarTab';
+import ProbesTab from '@/components/dashboard/ProbesTab';
+import ParentPortalTab from '@/components/dashboard/ParentPortalTab';
+import AboutProject from '@/components/dashboard/AboutProject';
+import ChatWidget from '@/components/chat/ChatWidget';
+
+const API_URL = typeof window !== 'undefined' ? `http://${window.location.hostname}:8000/api` : 'http://localhost:8000/api';
+
+export default function Home() {
+  const [students, setStudents] = useState([]);
+  const [selectedStudentId, setSelectedStudentId] = useState('');
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentRole, setCurrentRole] = useState('expert');
+  const [activeTab, setActiveTab] = useState('behavior');
+  const [activePage, setActivePage] = useState('dashboard');
+  
+  const abortControllerRef = useRef(null);
+
+  const loadDashboard = (studentId, isRefresh) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    
+    if (!isRefresh) setLoading(true);
+    
+    axios.get(`${API_URL}/students/${studentId}/dashboard`, { signal: controller.signal })
+      .then(res => {
+        setDashboardData(res.data);
+      })
+      .catch(err => {
+        if (!axios.isCancel(err)) console.error(err);
+      })
+      .finally(() => {
+        if (abortControllerRef.current === controller) {
+          setLoading(false);
+        }
+      });
+  };
+
+  useEffect(() => {
+    axios.get(`${API_URL}/students`).then(res => {
+      setStudents(res.data);
+      if (res.data.length > 0) setSelectedStudentId(res.data[0].id);
+    }).catch(err => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    if (selectedStudentId) {
+      loadDashboard(selectedStudentId, false);
+    }
+  }, [selectedStudentId]);
+
+  if (!students.length) return <div style={{padding: '3rem', textAlign: 'center'}}>Đang kết nối cơ sở dữ liệu học đường...</div>;
+
+  return (
+    <div className="app-container">
+      {/* SIDEBAR */}
+      <aside className="sidebar">
+        <div className="brand-area">
+          <div className="brand-icon" style={{background: 'transparent', boxShadow: 'none'}}>
+            <img src="/logo_care.jpg" alt="ZPD Care Logo" style={{width: '44px', height: '44px', borderRadius: '12px', objectFit: 'cover', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'}} />
+          </div>
+          <div>
+            <div className="brand-title">ZPD Care</div>
+            <div className="brand-sub">HỆ SINH THÁI YÊU THƯƠNG & PHÁT TRIỂN</div>
+          </div>
+        </div>
+        
+        <div className="role-switch">
+          <button className={`role-btn ${currentRole === 'expert' ? 'active' : ''}`} onClick={() => { setCurrentRole('expert'); setActiveTab('behavior'); }}>Chuyên gia</button>
+          <button className={`role-btn ${currentRole === 'parent' ? 'active' : ''}`} onClick={() => { setCurrentRole('parent'); setActiveTab('parent'); }}>Phụ huynh</button>
+        </div>
+
+        <div className="nav-section" style={{paddingBottom: '0'}}>
+          <div className="nav-label">HỆ THỐNG</div>
+          <button className={`nav-item ${activePage === 'dashboard' ? 'active' : ''}`} onClick={() => setActivePage('dashboard')}>
+            <HomeIcon size={18} /> Bảng điều khiển ZPD
+          </button>
+          <button className={`nav-item ${activePage === 'about' ? 'active' : ''}`} onClick={() => setActivePage('about')}>
+            <Info size={18} /> Tổng quan đề tài
+          </button>
+        </div>
+
+        <div className="nav-section">
+          <div className="nav-label">HỒ SƠ HỌC SINH</div>
+          <select 
+            className="custom-select"
+            value={selectedStudentId} 
+            onChange={e => setSelectedStudentId(Number(e.target.value))}
+          >
+            {students.map(s => (
+              <option key={s.id} value={s.id} style={{color:'#000'}}>Mã: #{s.id.toString().padStart(4, '0')} - {s.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="user-profile">
+          <div className="user-avatar"><UserCog size={18} color="var(--sidebar-bg)"/></div>
+          <div>
+            <div className="user-name">{currentRole === 'expert' ? 'GV. Nguyễn Văn A' : 'Phụ huynh học sinh'}</div>
+            <div className="user-role">{currentRole === 'expert' ? 'Chuyên viên Tâm lý' : 'Tài khoản Gia đình'}</div>
+          </div>
+          <LogOut size={16} style={{marginLeft:'auto', cursor:'pointer'}} />
+        </div>
+      </aside>
+
+      {/* HEADER & MAIN */}
+      <div className="main-wrapper">
+        <header className="top-header premium-top-header">
+          <div className="top-header-title">
+            <Sparkles size={16} className="top-header-icon" />
+            HỆ SINH THÁI YÊU THƯƠNG & PHÁT TRIỂN HỌC SINH TOÀN DIỆN
+          </div>
+          <div className="header-actions">
+            <span className="version-badge">Bản nội bộ v1.0.2</span>
+          </div>
+        </header>
+
+        <main className="content-area">
+          {activePage === 'about' ? (
+            <AboutProject onBack={() => setActivePage('dashboard')} />
+          ) : (
+            <>
+          <div className="page-header premium-page-header">
+            <div className="page-header-content">
+              <h1 className="page-title premium-page-title">
+                {currentRole === 'expert' ? (
+                  'Dashboard Y Khoa Lâm Sàng'
+                ) : (
+                  'Cổng Khảo Sát Tại Nhà (M-CHAT-R)'
+                )}
+              </h1>
+              <div className="page-subtitle premium-page-subtitle">
+                <span className="subtitle-label">Hồ sơ đang chọn</span> 
+                <div className="subtitle-chip">
+                  <User size={14} style={{color: '#007aff'}}/> 
+                  <span>{dashboardData ? dashboardData.student_info.name : 'Họ tên trẻ'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="layout-grid">
+            {/* LEFT PROFILE COLUMN */}
+            <div className="profile-column">
+              <div className="glass-panel profile-card animate-fade-in delay-1">
+                <h3><User size={14} /> THÔNG TIN HỌC SINH</h3>
+                {dashboardData && (
+                  <>
+                    <div className="info-list">
+                      <div className="info-row">
+                        <span className="info-key" style={{display:"flex", alignItems:"center", gap:"6px"}}><User size={14} color="#007aff"/> Họ và tên</span>
+                        <span className="info-val">{dashboardData.student_info.name}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="info-key" style={{display:"flex", alignItems:"center", gap:"6px"}}><Target size={14} color="#34c759"/> Mã định danh</span>
+                        <span className="info-val">#{dashboardData.student_info.id.toString().padStart(4, '0')}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="info-key" style={{display:"flex", alignItems:"center", gap:"6px"}}><Users size={14} color="#ff9f0a"/> Lớp quản lý</span>
+                        <span className="info-val">{dashboardData.student_info.class_name}</span>
+                      </div>
+                    </div>
+
+                    <div className="risk-box">
+                      <h4><ShieldCheck size={14} color="#007aff" style={{display:"inline", marginRight:"4px", verticalAlign:"text-bottom"}}/> CHỈ SỐ RỦI RO ZPD</h4>
+                      <div className="score">{dashboardData.risk_profile.risk_score}</div>
+                      <div className="status" style={{color: dashboardData.risk_profile.color === 'red' ? 'var(--danger)' : 'var(--success)'}}>
+                        {dashboardData.risk_profile.status}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* RIGHT CONTENT COLUMN */}
+            <div className="content-column">
+              {loading ? (
+                 <div style={{padding:'40px', textAlign:'center', color:'var(--text-muted)'}}>Đang tải dữ liệu mô hình...</div>
+              ) : !dashboardData ? (
+                 <div style={{padding:'40px', textAlign:'center', color:'var(--danger)'}}>Không thể kết nối đến Backend AI. Vui lòng kiểm tra lại server.</div>
+              ) : (
+                <>
+                  <div style={{ display: currentRole === 'expert' ? 'block' : 'none', height: '100%' }}>
+                    {/* TOP LEVEL TABS TO REDUCE CLUTTER */}
+                    <div className="expert-tabs-nav">
+                      <button 
+                        className={`card-tab ${activeTab === 'behavior' || activeTab === 'tab1' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('behavior')}
+                        style={{fontSize: '15px'}}
+                      >
+                        <Activity size={16} style={{display:'inline', marginRight:'6px'}}/> PHÂN TÍCH HÀNH VI
+                      </button>
+                      <button 
+                        className={`card-tab ${activeTab === 'radar' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('radar')}
+                        style={{fontSize: '15px'}}
+                      >
+                        <BarChart2 size={16} style={{display:'inline', marginRight:'6px'}}/> HỒ SƠ ĐÁNH GIÁ
+                      </button>
+                      <button 
+                        className={`card-tab ${activeTab === 'probes' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('probes')}
+                        style={{fontSize: '15px'}}
+                      >
+                        <Stethoscope size={16} style={{display:'inline', marginRight:'6px'}}/> THỰC NGHIỆM LÂM SÀNG
+                      </button>
+                    </div>
+
+                    <div className="expert-tab-content animate-fade-in">
+                      {(activeTab === 'behavior' || activeTab === 'tab1') && (
+                        <div style={{maxWidth: '900px'}}>
+                          <BehaviorTab key={`behavior-${selectedStudentId}`} studentId={selectedStudentId} onRefresh={() => loadDashboard(selectedStudentId, true)} />
+                        </div>
+                      )}
+                      
+                      {activeTab === 'radar' && (
+                        <div style={{maxWidth: '1000px'}}>
+                          <RadarTab key={`radar-${selectedStudentId}`} dashboardData={dashboardData} />
+                        </div>
+                      )}
+                      
+                      {activeTab === 'probes' && (
+                        <div style={{maxWidth: '1000px'}}>
+                          <ProbesTab key={`probes-${selectedStudentId}`} dashboardData={dashboardData} onRefresh={() => loadDashboard(selectedStudentId, true)} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: currentRole === 'parent' ? 'block' : 'none', height: '100%' }}>
+                    <ParentPortalTab studentId={selectedStudentId} onComplete={() => loadDashboard(selectedStudentId, true)} />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+          </>
+          )}
+        </main>
+      </div>
+      
+      {/* AI CHATBOT */}
+      <ChatWidget studentId={selectedStudentId} />
+    </div>
+  );
+}
