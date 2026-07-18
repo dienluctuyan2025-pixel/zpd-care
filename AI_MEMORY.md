@@ -208,13 +208,17 @@ npm run dev
 
 ---
 
-## 9. Deploy zero-cost (18/07 tối)
+## 9. Deploy zero-cost (18/07 tối - Đã Deploy Thành Công)
 
-- **FE → Vercel Hobby:** root `frontend-next`, env `NEXT_PUBLIC_API_URL=https://<api>/api`
-- **API → Render Free:** root `backend`, start `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- Files: `DEPLOY.md`, `frontend-next/vercel.json`, `backend/render.yaml`, `backend/Dockerfile`, `backend/bootstrap.py`
+- **Trạng thái:** Live 100%
+- **FE (Vercel):** `https://zpd-care.vercel.app`
+- **API (Render):** `https://zpd-care-api.onrender.com`
+- **Cấu hình Environment:**
+  - FE Vercel: `NEXT_PUBLIC_API_URL` = `https://zpd-care-api.onrender.com/api` (Lưu ý: KHÔNG có dấu cách thừa ở đầu, KHÔNG có trailing slash ở cuối, bắt buộc kết thúc bằng `/api`)
+  - BE Render: `ALLOWED_ORIGINS` = `https://zpd-care.vercel.app` (Lưu ý: KHÔNG để dấu `/` ở cuối)
+- Files cấu hình: `DEPLOY.md`, `frontend-next/vercel.json`, `backend/render.yaml`, `backend/Dockerfile`, `backend/bootstrap.py`
 - Startup: `init_db()` + `bootstrap()` (expert/admin + roster nếu trống)
-- CORS: `ALLOWED_ORIGINS` + regex `https://.*\.vercel\.app`
+- CORS: Backend đã config `ALLOWED_ORIGINS` chuẩn.
 - **Giới hạn free:** Render sleep ~15p; SQLite ephemeral khi redeploy — không “data vĩnh viễn” trừ khi gắn Postgres sau
 - Chi tiết từng bước: xem `MatThanSuPham/DEPLOY.md`
 
@@ -269,5 +273,5 @@ python -c "from main import _build_student_dashboard; from pdf_generator import 
 
 ---
 
-**Phiên bản memory:** 2026-07-18 20:25 ICT  
-**UI 5.5** · HITL · scientific probes · doctor chat · PDF chi tiết I–X · dark mode hoạt động · lớp MG 5-6 tuổi A4
+**Phiên bản memory:** 2026-07-18 21:40 ICT  
+**UI 5.5** · HITL · scientific probes · doctor chat · PDF chi tiết I–X · dark mode hoạt động · lớp MG 5-6 tuổi A4 · Đã lên Cloud Vercel/Render

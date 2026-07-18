@@ -132,6 +132,29 @@ export default function AboutProject({ onBack }) {
         </div>
       </section>
 
+      {/* ZPD Philosophy */}
+      <section className="about-section">
+        <div className="about-section-head">
+          <Target size={18} />
+          <h2>Triết lý ZPD Care là gì?</h2>
+        </div>
+        <p className="about-section-lead" style={{ textAlign: 'justify', lineHeight: '1.6' }}>
+          <strong>ZPD (Zone of Proximal Development)</strong> — hay <em>Vùng phát triển gần</em> — là học thuyết cốt lõi của nhà tâm lý học Lev Vygotsky. Khái niệm này xác định khoảng cách giữa những gì một đứa trẻ <strong>có thể tự làm được</strong> (trình độ hiện tại) và những gì trẻ <strong>có thể đạt được nếu có sự hướng dẫn</strong> (trình độ tiềm năng).
+        </p>
+        <div className="about-practice-grid" style={{ marginTop: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+          <div className="about-practice">
+            <Layers size={18} />
+            <h3>Scaffolding (Thiết lập giàn giáo)</h3>
+            <p style={{ textAlign: 'justify' }}>Hệ thống không đánh giá trẻ bằng những chuẩn mực cào bằng. Dựa trên dữ liệu tam giác hóa, ZPD Care gợi ý cho giáo viên và phụ huynh những bước can thiệp nhỏ, vừa sức (scaffolding), giúp "nâng đỡ" trẻ từng bước tiến lên vùng tiềm năng.</p>
+          </div>
+          <div className="about-practice">
+            <Shield size={18} />
+            <h3>Care (Sự thấu cảm & Chăm sóc)</h3>
+            <p style={{ textAlign: 'justify' }}>Công nghệ AI và hệ thống đo lường phức tạp chỉ là công cụ để giải phóng giáo viên khỏi gánh nặng sổ sách. Giá trị cốt lõi làm nên sự thay đổi ở trẻ chính là tình yêu thương và sự kiên nhẫn của giáo viên mầm non.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Pillars */}
       <section className="about-section">
         <div className="about-section-head">
