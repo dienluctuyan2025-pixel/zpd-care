@@ -139,6 +139,7 @@ export default function Home() {
   const [selectedStudentId, setSelectedStudentId] = useState('');
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fetchingList, setFetchingList] = useState(true);
   const [schoolStats, setSchoolStats] = useState(null);
   const [activeTab, setActiveTab] = useState('behavior');
   const [activePage, setActivePage] = useState('dashboard');
