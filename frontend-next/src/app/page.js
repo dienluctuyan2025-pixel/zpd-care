@@ -267,6 +267,7 @@ export default function Home() {
       return;
     }
     setConnError('');
+    setFetchingList(true);
     api.get('/students')
       .then(res => {
         const list = res.data || [];
@@ -279,6 +280,9 @@ export default function Home() {
       .catch(err => {
         console.error(err);
         setConnError(err?.response?.data?.detail || 'Không kết nối API');
+      })
+      .finally(() => {
+        setFetchingList(false);
       });
 
     // refresh=1 lần đầu sau login để đồng bộ cache sau đổi thuật toán risk
@@ -329,6 +333,15 @@ export default function Home() {
           <p className="sci-error-text">{connError}</p>
           <button type="button" className="sci-btn primary" onClick={handleLogout}>Đăng xuất</button>
         </div>
+      </>
+    );
+  }
+
+  if (fetchingList) {
+    return (
+      <>
+        <ToastHost />
+        <TabLoading />
       </>
     );
   }
