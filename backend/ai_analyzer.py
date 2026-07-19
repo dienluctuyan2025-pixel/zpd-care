@@ -23,7 +23,8 @@ def build_safe_analysis_fallback(raw_text: str, error_msg: str = "", source: str
     Fallback an toàn khi AI lỗi: KHÔNG gán điểm rủi ro cao, KHÔNG tạo probe/survey giả.
     Tránh false-positive lâm sàng và ô nhiễm risk score.
     """
-    preview = (raw_text or "").strip()
+    full_text = f"{raw_text}\n\n[CHI TIẾT LỖI HỆ THỐNG]\n{error_msg}" if error_msg else raw_text
+    preview = (full_text or "").strip()
     if len(preview) > 400:
         preview = preview[:400] + "..."
     return {
