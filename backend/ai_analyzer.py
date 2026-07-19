@@ -643,6 +643,9 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
   "diem_nguy_co_giai_thich": "Giải thích mức 1–4 theo quan sát sư phạm",
   "xai_confidence": "70%",
   "kich_ban_test_kiem_chung": null,
+  "xai_timestamps": [
+      {"time": "00:15", "description": "Mô tả chi tiết hành vi tại mốc thời gian này"}
+  ],
   "xai_highlights": [
       {"keyword": "cụm từ có trong hanh_vi_goc", "weight": "Trung bình", "reason": "Lý do quan sát giáo dục"}
   ],
@@ -676,7 +679,7 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
                 )
                 response = model.generate_content([
                     uploaded_file,
-                    "Mô tả quan sát giáo dục từ file và trả JSON sàng lọc (không chẩn đoán y khoa).",
+                    "Phân tích hành vi theo trình tự thời gian. Chỉ rõ hành vi xảy ra ở giây thứ mấy trong mảng xai_timestamps. Trả về JSON sàng lọc giáo dục (không chẩn đoán y khoa).",
                 ])
                 break
             except Exception as e:

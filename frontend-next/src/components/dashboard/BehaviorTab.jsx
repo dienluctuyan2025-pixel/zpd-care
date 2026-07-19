@@ -19,6 +19,9 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   const [isLiveResult, setIsLiveResult] = useState(false);
   const [showAiReasoning, setShowAiReasoning] = useState(false);
   const [pendingLogId, setPendingLogId] = useState(null);
+  const [localMediaUrl, setLocalMediaUrl] = useState(null);
+  const [localMediaType, setLocalMediaType] = useState('');
+  const mediaRef = useRef(null);
   const abortControllerRef = React.useRef(null);
 
   useEffect(() => {
@@ -42,6 +45,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     setAnalyzing(false);
     setConfirming(false);
     setShowAiReasoning(false);
+    if (localMediaUrl) {
+      URL.revokeObjectURL(localMediaUrl);
+      setLocalMediaUrl(null);
+      setLocalMediaType('');
+    }
     api.get(`/students/${studentId}/latest-log`)
       .then(res => {
         if (res.data) {
@@ -116,6 +124,10 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     const formData = new FormData();
     formData.append("file", file);
 
+    const url = URL.createObjectURL(file);
+    setLocalMediaUrl(url);
+    setLocalMediaType(file.type.startsWith('audio/') ? 'audio' : 'video');
+
     try {
       const res = await api.post(`/analyze-multimodal?student_id=${studentId}`, formData, {
         signal: controller.signal,
@@ -175,6 +187,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
       });
       setPendingLogId(null);
       setIsLiveResult(true);
+      if (localMediaUrl) {
+        URL.revokeObjectURL(localMediaUrl);
+        setLocalMediaUrl(null);
+        setLocalMediaType('');
+      }
       toastSuccess("Đã xác nhận — ghi hồ sơ và cập nhật điểm rủi ro.");
       if (onRefresh) onRefresh();
     } catch (err) {
@@ -190,6 +207,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     setResult(null);
     setText('');
     setIsLiveResult(false);
+    if (localMediaUrl) {
+      URL.revokeObjectURL(localMediaUrl);
+      setLocalMediaUrl(null);
+      setLocalMediaType('');
+    }
     try { sessionStorage.removeItem(`draft-${studentId}`); } catch { /* ignore */ }
     toastWarn("Đã bỏ bản nháp (chưa ghi điểm rủi ro).");
   };
@@ -226,6 +248,25 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     }
     // Longer phrases first to avoid nested replace issues
     return terms.sort((a, b) => b.phrase.length - a.phrase.length);
+  };
+
+  const parseTime = (timeStr) => {
+    if (!timeStr) return 0;
+    const parts = String(timeStr).split(':');
+    if (parts.length === 2) {
+      return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+    }
+    if (parts.length === 3) {
+      return parseInt(parts[0], 10) * 3600 + parseInt(parts[1], 10) * 60 + parseInt(parts[2], 10);
+    }
+    return parseInt(timeStr, 10) || 0;
+  };
+
+  const handleSeek = (timeStr) => {
+    if (mediaRef.current) {
+      mediaRef.current.currentTime = parseTime(timeStr);
+      mediaRef.current.play().catch(() => {});
+    }
   };
 
   const applyHighlights = (sourceText, highlights) => {
@@ -351,7 +392,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
             {analyzing ? <><div className="loader-spinner"></div> Đang phân tích…</> : <><Layers size={16}/> Phân tích văn bản</>}
           </button>
           <label className={`btn-premium obs-file-btn ${analyzing || confirming ? 'is-disabled' : ''}`}>
-            {analyzing ? <><div className="loader-spinner"></div> Đang xử lý media…</> : <><Upload size={16}/> Audio / video</>}
+            {analyzing ? <><div className="loader-spinner"></div> Đang phân tích bằng AI…</> : <><Upload size={16}/> Audio / video</>}
             <input type="file" accept="audio/*,video/*,image/*" capture="environment" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming} />
           </label>
           {result && (
@@ -491,6 +532,46 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
                   </div>
                 </div>
               </div>
+
+              {localMediaUrl && (
+                <section className="obs-panel elevated" style={{ marginTop: 16 }}>
+                  <div className="obs-panel-head">
+                    <div className="obs-panel-head-left">
+                      <span className="obs-panel-ico"><Eye size={15} /></span>
+                      <div>
+                        <h3 className="obs-panel-title">Media kiểm chứng</h3>
+                        <p className="obs-panel-sub">File phát cục bộ, tự động xoá sau khi xác nhận</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="obs-panel-body" style={{ padding: 0, backgroundColor: '#000', display: 'flex', justifyContent: 'center' }}>
+                    {localMediaType === 'video' ? (
+                      <video ref={mediaRef} src={localMediaUrl} controls style={{ width: '100%', maxHeight: 360, display: 'block' }} />
+                    ) : (
+                      <audio ref={mediaRef} src={localMediaUrl} controls style={{ width: '100%', margin: '16px 0', padding: '0 16px' }} />
+                    )}
+                  </div>
+                  {Array.isArray(result.xai_timestamps) && result.xai_timestamps.length > 0 && (
+                    <div style={{ padding: '12px 16px', backgroundColor: '#fcfcfd', borderTop: '1px solid #eaeaea', fontSize: 13 }}>
+                      <strong style={{ display: 'block', marginBottom: 8, color: '#333' }}>Mốc thời gian AI trích xuất (Bấm để tua):</strong>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {result.xai_timestamps.map((ts, idx) => (
+                          <div key={idx} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                            <button
+                              type="button"
+                              onClick={() => handleSeek(ts.time)}
+                              style={{ padding: '2px 8px', background: 'rgba(37, 99, 235, 0.1)', color: '#2563eb', border: '1px solid rgba(37,99,235,0.2)', borderRadius: 4, cursor: 'pointer', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap' }}
+                            >
+                              ▶ {ts.time}
+                            </button>
+                            <span style={{ color: '#444', lineHeight: 1.5 }}>{ts.description}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </section>
+              )}
 
               {hlCount > 0 && (
                 <div className="obs-evidence">
