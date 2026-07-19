@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import time
 import google.generativeai as genai
 from typing import Dict, Any, List, Optional
 from database import SessionLocal, TeacherBehaviorLog, ParentSurvey, ProactiveProbe, Student
@@ -668,6 +669,15 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
     try:
         uploaded_file = genai.upload_file(path=file_path)
         
+        # Wait for media processing (essential for video files)
+        while uploaded_file.state.name == "PROCESSING":
+            print(f"Waiting for media processing... {uploaded_file.name}")
+            time.sleep(2)
+            uploaded_file = genai.get_file(uploaded_file.name)
+            
+        if uploaded_file.state.name == "FAILED":
+            raise Exception("Media processing failed on Gemini server.")
+            
         models_to_try = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
         response = None
         for m_name in models_to_try:
