@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import {
   User, ShieldCheck, Activity, BarChart2, Stethoscope,
@@ -20,10 +20,20 @@ const AboutProject = dynamic(() => import('@/components/dashboard/AboutProject')
 const ChatWidget = dynamic(() => import('@/components/chat/ChatWidget'), { ssr: false });
 
 function TabLoading() {
+  const [slow, setSlow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setSlow(true), 4000);
+    return () => clearTimeout(t);
+  }, []);
   return (
-    <div className="sci-loading">
+    <div className="sci-loading" style={{ minHeight: 200, display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div className="skeleton skeleton-line" style={{ width: '40%' }} />
       <div className="skeleton skeleton-card" style={{ height: 100 }} />
+      {slow && (
+        <p style={{ color: '#af5b3f', fontSize: 13, textAlign: 'center', opacity: 0.8, marginTop: 12 }}>
+          Đang đánh thức máy chủ API (có thể mất 1-2 phút do chế độ ngủ của Cloud)...
+        </p>
+      )}
     </div>
   );
 }
