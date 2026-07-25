@@ -255,6 +255,9 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     const formData = new FormData();
     formData.append("file", file, file.name || "recording.webm");
 
+    if (localMediaUrl) {
+      URL.revokeObjectURL(localMediaUrl);
+    }
     const url = URL.createObjectURL(file);
     setLocalMediaUrl(url);
     let mediaType = 'unknown';
