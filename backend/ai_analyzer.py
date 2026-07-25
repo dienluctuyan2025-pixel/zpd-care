@@ -682,8 +682,9 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
             "data": media_bytes
         }
             
-        models_to_try = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
+        models_to_try = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-flash"]
         response = None
+        errs = {}
         for m_name in models_to_try:
             try:
                 model = genai.GenerativeModel(
@@ -697,8 +698,13 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
                 ])
                 break
             except Exception as e:
+                errs[m_name] = str(e)
                 print(f"Model {m_name} failed: {e}")
                 continue
+        
+        if not response:
+            details = " | ".join([f"{k}: {v}" for k,v in errs.items()])
+            raise Exception(f"All models exhausted or failed. Details: {details}")
                 
         if not response:
             raise Exception("All models exhausted or failed.")
