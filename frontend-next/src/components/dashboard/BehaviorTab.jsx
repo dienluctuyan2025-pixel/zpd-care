@@ -197,7 +197,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     setAnalyzing(true);
     setPendingLogId(null);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", file, file.name || "recording.webm");
 
     const url = URL.createObjectURL(file);
     setLocalMediaUrl(url);
