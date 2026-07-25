@@ -519,7 +519,7 @@ def _build_student_dashboard(student_id: int):
             except (json.JSONDecodeError, TypeError, ValueError):
                 pass
                 
-        # Smart Clinical Fallback if AI didn't provide one (e.g. old data)
+        # Smart Educational Fallback if AI didn't provide one (e.g. old data)
         if not isinstance(zpd_rec, dict) or not isinstance(zpd_rec.get("cho_nha_truong"), dict) or "phac_do_tham_chieu" not in zpd_rec.get("cho_nha_truong", {}):
             if risk_profile["risk_score"] < 2.0:
                 zpd_rec = {
@@ -545,7 +545,7 @@ def _build_student_dashboard(student_id: int):
             elif 2.0 <= risk_profile["risk_score"] <= 2.9:
                 zpd_rec = {
                     "cho_nha_truong": {
-                        "phac_do_tham_chieu": "ESDM (Early Start Denver Model) & ZPD Scaffolding",
+                        "phac_do_tham_chieu": "Mô hình ZPD Scaffolding (Hỗ trợ cấu trúc)",
                         "muc_tieu": "Giúp bé tập trung hơn và hoàn thành các nhiệm vụ cơ bản.",
                         "hanh_dong": [
                             "Chia nhỏ bài tập thành từng bước ngắn.", 
@@ -554,11 +554,11 @@ def _build_student_dashboard(student_id: int):
                         "luu_y": "Tránh đưa ra quá nhiều yêu cầu cùng lúc khiến bé bị ngợp."
                     },
                     "cho_gia_dinh": {
-                        "phac_do_tham_chieu": "Can thiệp Dựa trên Thói quen (RBI - Routine Based Intervention)",
+                        "phac_do_tham_chieu": "Mô hình Hỗ trợ Thói quen (Routine-Based Support)",
                         "muc_tieu": "Tạo sự ổn định tâm lý và nề nếp sinh hoạt tại nhà.",
                         "hanh_dong": [
                             "Tạo thời gian biểu sinh hoạt cố định (giờ ăn, ngủ, chơi) và dán ở nơi bé dễ thấy.", 
-                            "Thông báo trước 5 phút khi chuẩn bị chuyển sang hoạt động khác (VD: sắp đến giờ đi ngủ)."
+                            "Thông báo trước 5 phút khi chuẩn bị chuyển sang hoạt động khác."
                         ],
                         "luu_y": "Quan sát xem bé có hay bị mất tập trung không để nhắc nhở nhẹ nhàng."
                     }
@@ -566,22 +566,22 @@ def _build_student_dashboard(student_id: int):
             else:
                 zpd_rec = {
                     "cho_nha_truong": {
-                        "phac_do_tham_chieu": "Mô hình TEACCH (Giáo dục có cấu trúc) & PECS",
-                        "muc_tieu": "Kiểm soát các cơn hoảng loạn và giảm thiểu quá tải giác quan.",
+                        "phac_do_tham_chieu": "Mô hình Giáo dục có cấu trúc (Visual Supports & Routine)",
+                        "muc_tieu": "Kiểm soát cảm xúc và giảm thiểu quá tải giác quan.",
                         "hanh_dong": [
                             "Thiết lập 'Góc An Toàn' yên tĩnh trong lớp để bé tĩnh tâm khi bị quá tải.", 
                             "Sử dụng thẻ hình ảnh để giao tiếp nếu bé chưa thể nói ngay."
                         ],
-                        "luu_y": "Tuyệt đối không dùng hình phạt lớn tiếng hoặc ép buộc bé khi đang hoảng loạn."
+                        "luu_y": "Linh hoạt không ép buộc bé tham gia nhóm nếu bé đang có dấu hiệu quá tải."
                     },
                     "cho_gia_dinh": {
-                        "phac_do_tham_chieu": "Phác đồ Quản lý Hành vi (Behavior Management) & DIRFloortime",
+                        "phac_do_tham_chieu": "Mô hình Hỗ trợ Hành vi Tích cực (Positive Behavior Support)",
                         "muc_tieu": "Đảm bảo an toàn và hỗ trợ bé bình tĩnh lại.",
                         "hanh_dong": [
-                            "Nhanh chóng đưa bé đến cơ sở y tế chuyên sâu để đánh giá.", 
-                            "Loại bỏ các đồ vật có thể gây nguy hiểm khi bé nổi giận."
+                            "Trao đổi kỹ hơn với giáo viên để đồng bộ cách phản hồi hành vi của bé.", 
+                            "Loại bỏ các đồ vật có thể gây nguy hiểm khi bé có cảm xúc mạnh."
                         ],
-                        "luu_y": "Gia đình cần giữ bình tĩnh, đồng hành cùng trẻ và tuyệt đối không la mắng."
+                        "luu_y": "Gia đình cần giữ bình tĩnh, đồng hành cùng trẻ và tạo môi trường an toàn."
                     }
                 }
 
