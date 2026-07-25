@@ -1,4 +1,4 @@
-# AI_MEMORY — ZPD Care (cập nhật 18/07/2026 · tối)
+# AI_MEMORY — ZPD Care (cập nhật 25/07/2026)
 
 **Vai trò:** Project memory cho agent/dev tiếp theo  
 **Stack chạy thật:** `backend` FastAPI `:8000` · `frontend-next` Next.js `:3000`  
@@ -186,6 +186,10 @@ npm run dev
 | iOS Add to Home Screen hiện icon chữ "Z" | iOS cấm dùng SVG làm icon | Dùng script gen ra `apple-icon.png` 180x180 cứng |
 | Tab hiện logo Vercel đen trắng | Vướng file mặc định | Xóa `favicon.ico`, chuyển sang `icon.svg` |
 | Lớp “Chồi 1/2” | seed cũ | DB + import → `Lớp MG 5-6 tuổi A4` |
+| Lỗi Audio/WebM bị từ chối (0 frames) | Trình duyệt ghi âm audio/webm, Gemini từ chối hoặc báo hỏng video | JS frontend tự convert WebM sang WAV (`blobToWav`) trước khi gửi lên server |
+| AI bịa đặt hành vi (hallucination) | Prompt chung chung "nghe và thấy" | Thêm "Strict anti-hallucination" cấm mô tả thị giác nếu chỉ có file audio |
+| Nhận diện sai tên (Trâm Anh -> Tâm Anh) | STT nhận diện theo âm thanh thuần túy | Truyền `student_name` vào ngữ cảnh AI để tự sửa lỗi phát âm |
+| Nút "Tải file" ép mở Camera điện thoại | `capture="environment"` nằm trên thẻ input | Bỏ capture ở "Tải file", làm thêm một nút "Chụp / Quay" riêng biệt có chứa capture |
 
 ---
 
@@ -274,5 +278,5 @@ python -c "from main import _build_student_dashboard; from pdf_generator import 
 
 ---
 
-**Phiên bản memory:** 2026-07-19 00:45 ICT  
-**UI 5.5** · HITL · scientific probes · PWA Standalone · PDF chi tiết I–X · dark mode hoạt động · Đã lên Cloud Vercel/Render
+**Phiên bản memory:** 2026-07-25 18:50 ICT  
+**UI 5.5** · HITL · PWA · PDF chi tiết · Fix Audio WebM/WAV · Anti-Hallucination STT · 4 nút Input Observaton
