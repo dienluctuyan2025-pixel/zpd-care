@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   FileText, Activity, Clock, Sparkles, Layers, Upload, RefreshCw, AlertTriangle, X, Search, Stethoscope,
-  ShieldCheck, Target, Brain, BookOpen, ChevronRight, Gauge, CheckCircle2, Scale, Eye, Users, ClipboardList, Mic, Square
+  ShieldCheck, Target, Brain, BookOpen, ChevronRight, Gauge, CheckCircle2, Scale, Eye, Users, ClipboardList, Mic, Square, Camera
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toastError, toastSuccess, toastWarn } from '@/lib/toast';
@@ -532,6 +532,10 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
           <label className={`btn-premium obs-file-btn ${analyzing || confirming || isRecording ? 'is-disabled' : ''}`}>
             {analyzing ? <><div className="loader-spinner"></div> Đang phân tích…</> : <><Upload size={16}/> Tải file</>}
             <input type="file" accept="audio/*,video/*,image/*" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming || isRecording} />
+          </label>
+          <label className={`btn-premium obs-camera-btn ${analyzing || confirming || isRecording ? 'is-disabled' : ''}`}>
+            {analyzing ? <><div className="loader-spinner"></div> Đang phân tích…</> : <><Camera size={16}/> Chụp / Quay</>}
+            <input type="file" accept="video/*,image/*" capture="environment" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming || isRecording} />
           </label>
           {result && (
             <button 
