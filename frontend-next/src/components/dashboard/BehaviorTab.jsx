@@ -139,16 +139,20 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
           const mimeType = mediaRecorder.mimeType || 'audio/webm';
           const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
           const fileExtension = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
-          const audioFile = new File([audioBlob], `recording.${fileExtension}`, { type: mimeType });
           
-          handleFileUpload({ target: { files: [audioFile] } });
+          // Tránh lỗi constructor File trên một số trình duyệt cũ/webview
+          audioBlob.name = `recording.${fileExtension}`;
+          
+          handleFileUpload({ target: { files: [audioBlob] } });
+        } else {
+          toastError("Không thu được dữ liệu âm thanh. Vui lòng thử lại.");
         }
         setIsRecording(false);
         setRecordingTime(0);
         clearInterval(timerIntervalRef.current);
       };
 
-      mediaRecorder.start(200);
+      mediaRecorder.start(); // Bỏ timeslice 200ms để tương thích Safari/iOS
       setIsRecording(true);
       setRecordingTime(0);
       
@@ -234,7 +238,9 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
       if (abortControllerRef.current === controller) {
         setAnalyzing(false);
       }
-      e.target.value = null;
+      if (e.target && e.target.type === 'file') {
+        e.target.value = null;
+      }
     }
   };
 
