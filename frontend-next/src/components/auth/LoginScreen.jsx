@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { loginRequest, clearSession } from '@/lib/api';
 import { toastError, toastSuccess } from '@/lib/toast';
+import { ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 const DEMO = [
   { user: 'expert', pass: 'expert123', role: 'Giáo viên', desc: 'Toàn bộ học sinh' },
@@ -49,9 +50,9 @@ export default function LoginScreen({ onSuccess }) {
             và can thiệp ZPD — một tài khoản giáo viên là đủ.
           </p>
           <ul className="sci-login-points">
-            <li>Quan sát AI có xác nhận giáo viên</li>
-            <li>Khảo sát PH do cô nhập hộ sau khi liên hệ</li>
-            <li>Catalog kiểm chứng + rubric 1–4</li>
+            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Quan sát AI có xác nhận giáo viên</span></li>
+            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Khảo sát PH do cô nhập hộ sau khi liên hệ</span></li>
+            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Catalog kiểm chứng + rubric 1–4</span></li>
           </ul>
         </aside>
 
@@ -63,7 +64,8 @@ export default function LoginScreen({ onSuccess }) {
           </div>
 
           <div className="sci-login-note">
-            Chỉ mang tính hỗ trợ giáo dục. Không dùng để chẩn đoán y khoa.
+            <ShieldAlert size={16} />
+            <span>Chỉ mang tính hỗ trợ giáo dục. Không dùng để chẩn đoán y khoa.</span>
           </div>
 
           <form onSubmit={handleSubmit} className="sci-login-form">
