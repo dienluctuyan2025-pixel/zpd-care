@@ -557,7 +557,18 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
           {result && (
             <button 
               className="btn-secondary" 
-              onClick={() => { setText(''); setResult(null); setIsLiveResult(false); setPendingLogId(null); sessionStorage.removeItem(`draft-${studentId}`); }} 
+              onClick={() => { 
+                setText(''); 
+                setResult(null); 
+                setIsLiveResult(false); 
+                setPendingLogId(null); 
+                sessionStorage.removeItem(`draft-${studentId}`);
+                if (localMediaUrl) {
+                  URL.revokeObjectURL(localMediaUrl);
+                  setLocalMediaUrl(null);
+                  setLocalMediaType('');
+                }
+              }} 
               title="Xóa form để nhập quan sát mới"
               disabled={analyzing || confirming}
             >
