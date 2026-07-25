@@ -131,6 +131,12 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     const controller = new AbortController();
     abortControllerRef.current = controller;
     
+    if (localMediaUrl) {
+      URL.revokeObjectURL(localMediaUrl);
+      setLocalMediaUrl(null);
+      setLocalMediaType('');
+    }
+    
     setAnalyzing(true);
     try {
       const res = await api.post(`/analyze`, { student_id: studentId, raw_text: text }, { signal: controller.signal });
@@ -164,6 +170,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   };
 
   const startRecording = async () => {
+    if (localMediaUrl) {
+      URL.revokeObjectURL(localMediaUrl);
+      setLocalMediaUrl(null);
+      setLocalMediaType('');
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
