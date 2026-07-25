@@ -672,11 +672,7 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
         mime_type, _ = mimetypes.guess_type(file_path)
         if not mime_type:
             # Default fallback if guess fails
-            mime_type = 'video/webm' if file_path.endswith('.webm') else 'audio/mp4'
-
-        # Lách luật: Gemini hỗ trợ video/webm nhưng không hỗ trợ audio/webm
-        if mime_type == 'audio/webm':
-            mime_type = 'video/webm'
+            mime_type = 'audio/mp4'
 
         with open(file_path, "rb") as f:
             media_bytes = f.read()
