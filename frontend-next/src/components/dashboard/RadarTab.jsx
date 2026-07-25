@@ -190,7 +190,12 @@ function RadarTab({ dashboardData }) {
       return <div className="rz-prose">{block}</div>;
     }
 
-    const steps = Array.isArray(block.hanh_dong) ? block.hanh_dong : [];
+    let steps = [];
+    if (Array.isArray(block.hanh_dong)) {
+      steps = block.hanh_dong;
+    } else if (typeof block.hanh_dong === 'string' && block.hanh_dong.trim()) {
+      steps = [block.hanh_dong];
+    }
     return (
       <div className="rz-zpd-grid">
         {block.phac_do_tham_chieu && (
