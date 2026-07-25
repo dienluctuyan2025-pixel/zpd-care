@@ -44,23 +44,22 @@ export default function LoginScreen({ onSuccess }) {
       <div className="sci-login-shell">
         <aside className="sci-login-hero">
           <div className="sci-login-hero-badge">ZPD Care</div>
-          <h1>Công cụ của<br />giáo viên mầm non</h1>
+          <h1>Nền tảng hỗ trợ<br />giáo dục mầm non thông minh</h1>
           <p>
-            Theo dõi hành vi, nhập khảo sát phụ huynh (do cô thu thập), kiểm chứng module
-            và can thiệp ZPD — một tài khoản giáo viên là đủ.
+            Trợ lý AI đắc lực giúp giáo viên theo dõi hành vi, số hoá đánh giá tâm lý và cá nhân hoá lộ trình phát triển (ZPD) cho từng trẻ.
           </p>
           <ul className="sci-login-points">
-            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Quan sát AI có xác nhận giáo viên</span></li>
-            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Khảo sát PH do cô nhập hộ sau khi liên hệ</span></li>
-            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Catalog kiểm chứng + rubric 1–4</span></li>
+            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Phân tích hành vi tự động với sự xác nhận của giáo viên</span></li>
+            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Số hoá & quản lý toàn diện hồ sơ khảo sát từ gia đình</span></li>
+            <li><CheckCircle2 size={16} color="rgba(255,255,255,0.8)" /> <span>Hệ thống kiểm chứng chuyên sâu với Rubric chuẩn hoá</span></li>
           </ul>
         </aside>
 
         <div className="sci-login-card">
           <div className="sci-login-head">
             <div className="sci-login-mark">ZPD</div>
-            <h2>Đăng nhập giáo viên</h2>
-            <p>Phụ huynh không cần tài khoản web — trả lời qua cô giáo</p>
+            <h2>Cổng không gian làm việc</h2>
+            <p>Hệ thống nội bộ dành cho Giáo viên & Chuyên gia</p>
           </div>
 
           <div className="sci-login-note">
