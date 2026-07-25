@@ -694,7 +694,8 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
                 )
                 response = model.generate_content([
                     media_part,
-                    "Phân tích hành vi theo trình tự thời gian. Chỉ rõ hành vi xảy ra ở giây thứ mấy trong mảng xai_timestamps. Trả về JSON sàng lọc giáo dục (không chẩn đoán y khoa).",
+                    "CHÚ Ý QUAN TRỌNG: Nếu đây chỉ là file ghi âm (audio), bạn CHỈ ĐƯỢC trích xuất nguyên văn lời nói và cảm xúc qua giọng điệu. TUYỆT ĐỐI KHÔNG tự suy diễn, không bịa đặt các hành vi thị giác (như 'mỉm cười', 'ánh mắt', 'chỉ tay', 'đi lại'...). Hãy bám sát 100% vào những gì bạn NGHE được.\n\n"
+                    "Phân tích theo trình tự thời gian, chỉ rõ ở giây thứ mấy trong mảng xai_timestamps. Trả về JSON sàng lọc giáo dục (không chẩn đoán y khoa)."
                 ])
                 break
             except Exception as e:
