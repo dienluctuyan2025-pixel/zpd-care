@@ -97,6 +97,9 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     setAnalyzing(false);
     setConfirming(false);
     setShowAiReasoning(false);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
     if (localMediaUrl) {
       URL.revokeObjectURL(localMediaUrl);
       setLocalMediaUrl(null);
