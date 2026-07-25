@@ -887,8 +887,34 @@ def generate_medical_report(student_data: dict, output_path: str, exported_by: O
             styles["small"],
         ))
 
-    # ========== VIII. CHECKLIST VIỆC LÀM TIẾP ==========
-    story.append(_section_title("VIII. Kế hoạch hành động đề xuất (checklist)", styles))
+    # ========== VIII. KHUYẾN NGHỊ CAN THIỆP ZPD ==========
+    story.append(_section_title("VIII. Khuyến nghị can thiệp ZPD (Gợi ý Sư phạm)", styles))
+    if isinstance(zpd, dict) and (zpd.get("cho_nha_truong") or zpd.get("cho_gia_dinh")):
+        for role_key, role_label in [("cho_nha_truong", "Tại Nhà Trường"), ("cho_gia_dinh", "Tại Gia Đình")]:
+            role_data = zpd.get(role_key)
+            if isinstance(role_data, dict):
+                story.append(Paragraph(f"<b>• {role_label}</b>", styles["h2"]))
+                story.append(Paragraph(f"<b>Mô hình tham chiếu:</b> {_esc(str(role_data.get('phac_do_tham_chieu', '—')))}", styles["body"]))
+                story.append(Paragraph(f"<b>Mục tiêu:</b> {_esc(str(role_data.get('muc_tieu', '—')))}", styles["body"]))
+                
+                actions = role_data.get("hanh_dong")
+                if isinstance(actions, list) and actions:
+                    story.append(Paragraph("<b>Hành động gợi ý:</b>", styles["body_bold"]))
+                    for i, act in enumerate(actions, 1):
+                        story.append(Paragraph(f"{i}. {_esc(str(act))}", styles["bullet"]))
+                elif isinstance(actions, str) and actions:
+                    story.append(Paragraph(f"<b>Hành động gợi ý:</b> {_esc(actions)}", styles["body"]))
+                
+                note = role_data.get("luu_y")
+                if note:
+                    story.append(Paragraph(f"<b>Lưu ý an toàn:</b> {_esc(str(note))}", styles["note"]))
+                story.append(Spacer(1, 8))
+    else:
+        story.append(Paragraph("<i>Chưa có khuyến nghị ZPD. Cần có dữ liệu quan sát để hệ thống tổng hợp.</i>", styles["small"]))
+        story.append(Spacer(1, 8))
+
+    # ========== IX. CHECKLIST VIỆC LÀM TIẾP ==========
+    story.append(_section_title("IX. Kế hoạch hành động đề xuất (checklist)", styles))
     has_probe_real = any(
         isinstance(p, dict) and p.get("scored") and not p.get("is_demo")
         for p in (probes or [])
@@ -939,9 +965,9 @@ def generate_medical_report(student_data: dict, output_path: str, exported_by: O
     ]
     story.append(_data_table(cm_h, cm_b, [55 * mm, 35 * mm, page_w - 90 * mm]))
 
-    # ========== IX. PHƯƠNG PHÁP ==========
+    # ========== X. PHƯƠNG PHÁP ==========
     story.append(PageBreak())
-    story.append(_section_title("IX. Phương pháp &amp; cơ sở khoa học (minh bạch)", styles))
+    story.append(_section_title("X. Phương pháp &amp; cơ sở khoa học (minh bạch)", styles))
     sci = (
         student_data.get("scientific_explanations")
         or risk.get("scientific_explanations")
@@ -987,8 +1013,8 @@ def generate_medical_report(student_data: dict, output_path: str, exported_by: O
     if sci.get("disclaimer"):
         story.append(Paragraph(_esc(str(sci.get("disclaimer"))), styles["note"]))
 
-    # ========== X. CHỮ KÝ ==========
-    story.append(_section_title("X. Xác nhận chuyên môn", styles))
+    # ========== XI. CHỮ KÝ ==========
+    story.append(_section_title("XI. Xác nhận chuyên môn", styles))
     story.append(Paragraph(
         "Tôi xác nhận đã rà soát các nguồn dữ liệu trong báo cáo (quan sát đã xác nhận, "
         "khảo sát PH nếu có, kiểm chứng rubric) và sử dụng kết quả ở mức <b>hỗ trợ quyết định sư phạm</b>, "
