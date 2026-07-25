@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Request
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Request, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -61,6 +61,7 @@ app.add_middleware(
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition", "X-ZPD-Doc"],
 )
 
 MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_MB", "25")) * 1024 * 1024
@@ -1183,7 +1184,7 @@ def chat_endpoint(req: ChatRequest, user: Dict[str, Any] = Depends(get_current_u
         db.close()
 
 @app.get("/api/students/{student_id}/export-pdf")
-def export_student_pdf(student_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def export_student_pdf(student_id: int, background_tasks: BackgroundTasks, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
     """Xuất PDF hồ sơ sàng lọc giáo dục (ReportLab)."""
     assert_student_access(user, student_id)
     dashboard_data = _build_student_dashboard(student_id)
@@ -1204,6 +1205,14 @@ def export_student_pdf(student_id: int, user: Dict[str, Any] = Depends(require_r
 
     exported_by = user.get("full_name") or user.get("username") or "Giáo viên"
     generate_medical_report(dashboard_data, output_path, exported_by=exported_by)
+
+    def remove_file(path: str):
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+            
+    background_tasks.add_task(remove_file, output_path)
 
     return FileResponse(
         path=output_path,
