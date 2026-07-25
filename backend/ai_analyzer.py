@@ -668,16 +668,19 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
   }
 }"""
     try:
-        uploaded_file = genai.upload_file(path=file_path)
-        
-        # Wait for media processing (essential for video files)
-        while uploaded_file.state.name == "PROCESSING":
-            print(f"Waiting for media processing... {uploaded_file.name}")
-            time.sleep(2)
-            uploaded_file = genai.get_file(uploaded_file.name)
-            
-        if uploaded_file.state.name == "FAILED":
-            raise Exception("Media processing failed on Gemini server.")
+        import mimetypes
+        mime_type, _ = mimetypes.guess_type(file_path)
+        if not mime_type:
+            # Default fallback if guess fails
+            mime_type = 'audio/webm' if file_path.endswith('.webm') else 'audio/mp4'
+
+        with open(file_path, "rb") as f:
+            media_bytes = f.read()
+
+        media_part = {
+            "mime_type": mime_type,
+            "data": media_bytes
+        }
             
         models_to_try = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest"]
         response = None
@@ -689,7 +692,7 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
                     generation_config={"response_mime_type": "application/json"}
                 )
                 response = model.generate_content([
-                    uploaded_file,
+                    media_part,
                     "Phân tích hành vi theo trình tự thời gian. Chỉ rõ hành vi xảy ra ở giây thứ mấy trong mảng xai_timestamps. Trả về JSON sàng lọc giáo dục (không chẩn đoán y khoa).",
                 ])
                 break
