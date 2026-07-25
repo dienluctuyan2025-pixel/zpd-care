@@ -7,6 +7,49 @@ import {
 import { api } from '@/lib/api';
 import { toastError, toastSuccess, toastWarn } from '@/lib/toast';
 
+const blobToWav = async (blob) => {
+  const arrayBuffer = await blob.arrayBuffer();
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  
+  const numOfChan = audioBuffer.numberOfChannels;
+  const length = audioBuffer.length * numOfChan * 2 + 44;
+  const buffer = new ArrayBuffer(length);
+  const view = new DataView(buffer);
+  
+  const writeString = (view, offset, string) => {
+    for (let i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  };
+  
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + audioBuffer.length * numOfChan * 2, true);
+  writeString(view, 8, 'WAVE');
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, numOfChan, true);
+  view.setUint32(24, audioBuffer.sampleRate, true);
+  view.setUint32(28, audioBuffer.sampleRate * 2 * numOfChan, true);
+  view.setUint16(32, numOfChan * 2, true);
+  view.setUint16(34, 16, true);
+  writeString(view, 36, 'data');
+  view.setUint32(40, audioBuffer.length * numOfChan * 2, true);
+  
+  let offset = 44;
+  for (let i = 0; i < audioBuffer.length; i++) {
+    for (let channel = 0; channel < numOfChan; channel++) {
+      let sample = audioBuffer.getChannelData(channel)[i];
+      sample = Math.max(-1, Math.min(1, sample));
+      sample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+      view.setInt16(offset, sample, true);
+      offset += 2;
+    }
+  }
+  return new Blob([view], { type: 'audio/wav' });
+};
+
 // --- TAB 1: Behavior Forensics ---
 function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   const [text, setText] = useState(() => {
@@ -133,15 +176,20 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
         }
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         stream.getTracks().forEach(track => track.stop());
         if (audioChunksRef.current.length > 0) {
           const mimeType = mediaRecorder.mimeType || 'audio/webm';
-          const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-          const fileExtension = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
+          let audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
           
-          // Tránh lỗi constructor File trên một số trình duyệt cũ/webview
-          audioBlob.name = `recording.${fileExtension}`;
+          try {
+            audioBlob = await blobToWav(audioBlob);
+            audioBlob.name = 'recording.wav';
+          } catch (e) {
+            console.error('WAV conversion failed:', e);
+            const fileExtension = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
+            audioBlob.name = `recording.${fileExtension}`;
+          }
           
           handleFileUpload({ target: { files: [audioBlob] } });
         } else {
