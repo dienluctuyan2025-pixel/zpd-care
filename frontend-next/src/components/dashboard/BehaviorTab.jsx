@@ -205,7 +205,15 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
       setRecordingTime(0);
       
       timerIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime(prev => {
+          if (prev >= 300) { // 5 minutes limit
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+               mediaRecorderRef.current.stop();
+            }
+            return prev;
+          }
+          return prev + 1;
+        });
       }, 1000);
 
     } catch (err) {
@@ -249,7 +257,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
 
     const url = URL.createObjectURL(file);
     setLocalMediaUrl(url);
-    setLocalMediaType(file.type.startsWith('audio/') ? 'audio' : 'video');
+    let mediaType = 'unknown';
+    if (file.type.startsWith('audio/')) mediaType = 'audio';
+    else if (file.type.startsWith('video/')) mediaType = 'video';
+    else if (file.type.startsWith('image/')) mediaType = 'image';
+    setLocalMediaType(mediaType);
 
     try {
       const res = await api.post(`/analyze-multimodal?student_id=${studentId}`, formData, {
@@ -388,9 +400,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   };
 
   const handleSeek = (timeStr) => {
-    if (mediaRef.current) {
+    if (mediaRef.current && typeof mediaRef.current.currentTime !== 'undefined') {
       mediaRef.current.currentTime = parseTime(timeStr);
-      mediaRef.current.play().catch(() => {});
+      if (typeof mediaRef.current.play === 'function') {
+        mediaRef.current.play().catch(() => {});
+      }
     }
   };
 
@@ -689,9 +703,11 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
                   <div className="obs-panel-body" style={{ padding: 0, backgroundColor: '#000', display: 'flex', justifyContent: 'center' }}>
                     {localMediaType === 'video' ? (
                       <video ref={mediaRef} src={localMediaUrl} controls style={{ width: '100%', maxHeight: 360, display: 'block' }} />
-                    ) : (
+                    ) : localMediaType === 'audio' ? (
                       <audio ref={mediaRef} src={localMediaUrl} controls style={{ width: '100%', margin: '16px 0', padding: '0 16px' }} />
-                    )}
+                    ) : localMediaType === 'image' ? (
+                      <img src={localMediaUrl} style={{ width: '100%', maxHeight: 360, objectFit: 'contain', display: 'block' }} alt="Preview" />
+                    ) : null}
                   </div>
                   {Array.isArray(result.xai_timestamps) && result.xai_timestamps.length > 0 && (
                     <div style={{ padding: '12px 16px', backgroundColor: '#fcfcfd', borderTop: '1px solid #eaeaea', fontSize: 13 }}>
