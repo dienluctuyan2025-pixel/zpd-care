@@ -139,7 +139,7 @@ def _serialize_probe(p) -> Dict[str, Any]:
 
 
 @app.get("/api/probe-catalog")
-def get_probe_catalog(age: Optional[int] = None, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def get_probe_catalog(age: Optional[int] = None, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     return catalog_payload(age)
 
 
@@ -220,7 +220,7 @@ def _ensure_student_catalog_probes(db, student_id: int) -> int:
 
 
 @app.post("/api/probes/assign")
-def assign_probe(req: AssignProbeRequest, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def assign_probe(req: AssignProbeRequest, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     """Gán thêm 1 module (tuỳ chọn). Mặc định dashboard đã tự mở đủ catalog."""
     assert_student_access(user, req.student_id)
     mod = get_module(req.module_id)
@@ -255,7 +255,7 @@ def assign_probe(req: AssignProbeRequest, user: Dict[str, Any] = Depends(require
 
 
 @app.post("/api/students/{student_id}/ensure-probes")
-def ensure_probes(student_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def ensure_probes(student_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     """Mở đủ 7 module catalog + archive legacy (idempotent). Gọi khi mở hồ sơ HS."""
     assert_student_access(user, student_id)
     db = SessionLocal()
@@ -386,7 +386,7 @@ def get_students(user: Dict[str, Any] = Depends(get_current_user)):
 @app.get("/api/school-dashboard")
 def get_school_dashboard(
     refresh: bool = False,
-    user: Dict[str, Any] = Depends(require_roles("expert", "admin")),
+    user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher")),
 ):
     """
     Phân bố rủi ro toàn trường.
@@ -629,7 +629,7 @@ def get_student_dashboard(student_id: int, user: Dict[str, Any] = Depends(get_cu
     return _build_student_dashboard(student_id)
 
 @app.get("/api/students/{student_id}/latest-log")
-def get_latest_log(student_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def get_latest_log(student_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     assert_student_access(user, student_id)
     db = SessionLocal()
     try:
@@ -653,7 +653,7 @@ def get_latest_log(student_id: int, user: Dict[str, Any] = Depends(require_roles
         db.close()
 
 @app.post("/api/analyze")
-def analyze_log(req: BehaviorLogRequest, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def analyze_log(req: BehaviorLogRequest, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     assert_student_access(user, req.student_id)
     db = SessionLocal()
     try:
@@ -701,7 +701,7 @@ class ConfirmObservationRequest(BaseModel):
 @app.post("/api/observations/confirm")
 def confirm_observation(
     req: ConfirmObservationRequest,
-    user: Dict[str, Any] = Depends(require_roles("expert", "admin")),
+    user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher")),
 ):
     """
     GV xác nhận bản nháp multimodal (hoặc bản chờ duyệt):
@@ -785,7 +785,7 @@ def confirm_observation(
 def analyze_multimodal(
     student_id: int,
     file: UploadFile = File(...),
-    user: Dict[str, Any] = Depends(require_roles("expert", "admin")),
+    user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher")),
 ):
     """
     Media → bản nháp AI. KHÔNG tính vào risk, KHÔNG tạo probe
@@ -873,7 +873,7 @@ def analyze_multimodal(
 def update_probe_status(
     probe_id: int,
     req: ProbeStatusUpdate,
-    user: Dict[str, Any] = Depends(require_roles("expert", "admin")),
+    user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher")),
 ):
     """
     Chấm probe:
@@ -937,7 +937,7 @@ def update_probe_status(
         db.close()
 
 @app.delete("/api/probes/{probe_id}")
-def delete_probe(probe_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def delete_probe(probe_id: int, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     db = SessionLocal()
     try:
         probe = db.query(ProactiveProbe).filter(ProactiveProbe.id == probe_id).first()
@@ -1184,7 +1184,7 @@ def chat_endpoint(req: ChatRequest, user: Dict[str, Any] = Depends(get_current_u
         db.close()
 
 @app.get("/api/students/{student_id}/export-pdf")
-def export_student_pdf(student_id: int, background_tasks: BackgroundTasks, user: Dict[str, Any] = Depends(require_roles("expert", "admin"))):
+def export_student_pdf(student_id: int, background_tasks: BackgroundTasks, user: Dict[str, Any] = Depends(require_roles("expert", "admin", "teacher"))):
     """Xuất PDF hồ sơ sàng lọc giáo dục (ReportLab)."""
     assert_student_access(user, student_id)
     dashboard_data = _build_student_dashboard(student_id)

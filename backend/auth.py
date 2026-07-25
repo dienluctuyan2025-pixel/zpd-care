@@ -124,7 +124,7 @@ def assert_student_access(user: Dict[str, Any], student_id: int) -> None:
     if user.get("auth_disabled"):
         return
     role = user.get("role")
-    if role in ("expert", "admin"):
+    if role in ("expert", "admin", "teacher"):
         return
     if role == "parent":
         linked = user.get("student_id")
