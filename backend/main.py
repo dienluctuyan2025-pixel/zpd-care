@@ -64,7 +64,7 @@ app.add_middleware(
 )
 
 MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_MB", "25")) * 1024 * 1024
-ALLOWED_UPLOAD_EXTENSIONS = {".mp3", ".wav", ".m4a", ".ogg", ".mp4", ".webm", ".mov", ".avi", ".mkv"}
+ALLOWED_UPLOAD_EXTENSIONS = {".mp3", ".wav", ".m4a", ".ogg", ".mp4", ".webm", ".mov", ".avi", ".mkv", ".jpg", ".jpeg", ".png", ".heic", ".webp"}
 
 def get_db():
     db = SessionLocal()
