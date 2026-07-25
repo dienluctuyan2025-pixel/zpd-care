@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   FileText, Activity, Clock, Sparkles, Layers, Upload, RefreshCw, AlertTriangle, X, Search, Stethoscope,
-  ShieldCheck, Target, Brain, BookOpen, ChevronRight, Gauge, CheckCircle2, Scale, Eye, Users, ClipboardList
+  ShieldCheck, Target, Brain, BookOpen, ChevronRight, Gauge, CheckCircle2, Scale, Eye, Users, ClipboardList, Mic, Square
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toastError, toastSuccess, toastWarn } from '@/lib/toast';
@@ -23,12 +23,21 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   const [localMediaType, setLocalMediaType] = useState('');
   const mediaRef = useRef(null);
   const abortControllerRef = React.useRef(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const timerIntervalRef = useRef(null);
 
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
         abortControllerRef.current = null;
+      }
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.stream.getTracks().forEach(t => t.stop());
       }
     }
   }, []);
@@ -109,6 +118,68 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
         setAnalyzing(false);
       }
     }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        stream.getTracks().forEach(track => track.stop());
+        if (audioChunksRef.current.length > 0) {
+          const mimeType = mediaRecorder.mimeType || 'audio/webm';
+          const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+          const fileExtension = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
+          const audioFile = new File([audioBlob], `recording.${fileExtension}`, { type: mimeType });
+          
+          handleFileUpload({ target: { files: [audioFile] } });
+        }
+        setIsRecording(false);
+        setRecordingTime(0);
+        clearInterval(timerIntervalRef.current);
+      };
+
+      mediaRecorder.start(200);
+      setIsRecording(true);
+      setRecordingTime(0);
+      
+      timerIntervalRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+      toastError('Không thể truy cập Microphone. Vui lòng kiểm tra quyền trên trình duyệt.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+  };
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
   };
 
   const handleFileUpload = async (e) => {
@@ -388,12 +459,25 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
         />
         
         <div className="obs-actions">
-          <button className="btn-premium" onClick={handleAnalyze} disabled={analyzing || confirming || !text.trim()}>
+          <button className="btn-premium" onClick={handleAnalyze} disabled={analyzing || confirming || isRecording || !text.trim()}>
             {analyzing ? <><div className="loader-spinner"></div> Đang phân tích…</> : <><Layers size={16}/> Phân tích văn bản</>}
           </button>
-          <label className={`btn-premium obs-file-btn ${analyzing || confirming ? 'is-disabled' : ''}`}>
-            {analyzing ? <><div className="loader-spinner"></div> Đang phân tích bằng AI…</> : <><Upload size={16}/> Audio / video</>}
-            <input type="file" accept="audio/*,video/*,image/*" capture="environment" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming} />
+
+          <button 
+            className={`btn-premium obs-mic-btn ${isRecording ? 'recording' : ''}`} 
+            onClick={toggleRecording} 
+            disabled={analyzing || confirming}
+          >
+            {isRecording ? (
+              <><Square size={16} fill="currentColor"/> Dừng ({formatTime(recordingTime)})</>
+            ) : (
+              <><Mic size={16}/> Ghi âm trực tiếp</>
+            )}
+          </button>
+
+          <label className={`btn-premium obs-file-btn ${analyzing || confirming || isRecording ? 'is-disabled' : ''}`}>
+            {analyzing ? <><div className="loader-spinner"></div> Đang phân tích…</> : <><Upload size={16}/> Tải file</>}
+            <input type="file" accept="audio/*,video/*,image/*" capture="environment" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming || isRecording} />
           </label>
           {result && (
             <button 
