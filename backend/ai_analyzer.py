@@ -117,13 +117,13 @@ BẮT BUỘC trả về đúng 1 JSON:
   ],
   "zpd_recommendation": {
       "cho_nha_truong": {
-          "phac_do_tham_chieu": "Tên phác đồ chuẩn y khoa thế giới đang áp dụng (VD: TEACCH, PECS, ABA, ESDM...)",
+          "phac_do_tham_chieu": "Mô hình giáo dục/can thiệp hỗ trợ (evidence-informed, KHÔNG phải phác đồ y khoa) (VD: Mô hình hỗ trợ cảm xúc SEL, TEACCH, PECS...)",
           "muc_tieu": "Mục tiêu bình dân, dễ hiểu (VD: Giúp trẻ giảm căng thẳng)",
           "hanh_dong": ["Hành động cụ thể 1 (VD: Tạo góc yên tĩnh)", "Hành động cụ thể 2"],
           "luu_y": "Mẹo nhỏ gọn (VD: Tuyệt đối không lớn tiếng)"
       },
       "cho_gia_dinh": {
-          "phac_do_tham_chieu": "Tên phác đồ chuẩn y khoa (VD: DIRFloortime, Routine Management, ABA...)",
+          "phac_do_tham_chieu": "Gợi ý phối hợp tại nhà (KHÔNG phải phác đồ y khoa) (VD: DIRFloortime, Routine Management...)",
           "muc_tieu": "Mục tiêu bình dân, dễ hiểu",
           "hanh_dong": ["Hành động cụ thể 1", "Hành động cụ thể 2"],
           "luu_y": "Mẹo nhỏ gọn"
