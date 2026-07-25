@@ -626,7 +626,7 @@ Giọng điệu: chuyên nghiệp, thấu cảm, cầm tay chỉ việc.
             "Bạn vẫn có thể dùng tab Quan sát / Kiểm chứng / Hồ sơ ZPD bình thường."
         )
 
-def analyze_multimodal_log(file_path: str) -> Dict[str, Any]:
+def analyze_multimodal_log(file_path: str, student_name: str = "") -> Dict[str, Any]:
     """
     Multimodal AI: Đọc trực tiếp Audio/Video để phân tích hành vi.
     """
@@ -694,8 +694,9 @@ Nhận audio/video quan sát trẻ. Nhiệm vụ:
                 )
                 response = model.generate_content([
                     media_part,
-                    "CHÚ Ý QUAN TRỌNG: Nếu đây chỉ là file ghi âm (audio), bạn CHỈ ĐƯỢC trích xuất nguyên văn lời nói và cảm xúc qua giọng điệu. TUYỆT ĐỐI KHÔNG tự suy diễn, không bịa đặt các hành vi thị giác (như 'mỉm cười', 'ánh mắt', 'chỉ tay', 'đi lại'...). Hãy bám sát 100% vào những gì bạn NGHE được.\n\n"
-                    "Phân tích theo trình tự thời gian, chỉ rõ ở giây thứ mấy trong mảng xai_timestamps. Trả về JSON sàng lọc giáo dục (không chẩn đoán y khoa)."
+                    f"CHÚ Ý QUAN TRỌNG: Nếu đây chỉ là file ghi âm (audio), bạn CHỈ ĐƯỢC trích xuất nguyên văn lời nói và cảm xúc qua giọng điệu. TUYỆT ĐỐI KHÔNG tự suy diễn, không bịa đặt các hành vi thị giác (như 'mỉm cười', 'ánh mắt', 'chỉ tay', 'đi lại'...). Hãy bám sát 100% vào những gì bạn NGHE được.\n"
+                    f"LƯU Ý: Học sinh đang được quan sát tên là '{student_name}'. Hãy ưu tiên nhận diện tên này nếu có âm thanh tương tự trong file.\n\n"
+                    f"Phân tích theo trình tự thời gian, chỉ rõ ở giây thứ mấy trong mảng xai_timestamps. Trả về JSON sàng lọc giáo dục (không chẩn đoán y khoa)."
                 ])
                 break
             except Exception as e:

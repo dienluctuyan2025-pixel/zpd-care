@@ -829,7 +829,7 @@ def analyze_multimodal(
                     )
                 buffer.write(chunk)
 
-        ai_result = analyze_multimodal_log(file_path)
+        ai_result = analyze_multimodal_log(file_path, student.name if student else "")
         failed = bool(ai_result.get("analysis_failed"))
 
         # Bản nháp vận hành: audit được nhưng KHÔNG vào điểm rủi ro
