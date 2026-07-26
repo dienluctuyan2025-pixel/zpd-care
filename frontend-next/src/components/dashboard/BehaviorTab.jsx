@@ -346,7 +346,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
         setLocalMediaUrl(null);
         setLocalMediaType('');
       }
-      toastSuccess("Đã xác nhận — ghi hồ sơ và cập nhật điểm rủi ro.");
+      toastSuccess(res.data.message || "Đã xác nhận - ghi hồ sơ và cập nhật điểm rủi ro.");
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error(err);

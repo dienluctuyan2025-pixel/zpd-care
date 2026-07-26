@@ -759,6 +759,7 @@ def confirm_observation(
         log.parsed_json = json.dumps(parsed, ensure_ascii=False)
 
         # Tạo các bài test Kiểm chứng tự động (Dynamic Probes) dựa trên gợi ý AI
+        probes_added = 0
         recommended_probes = parsed.get("kich_ban_test_kiem_chung")
         if isinstance(recommended_probes, list):
             from probe_catalog import get_module
@@ -784,11 +785,20 @@ def confirm_observation(
                         scored=0,
                     )
                     db.add(probe)
+                    probes_added += 1
 
         db.commit()
         risk = calculate_final_risk(req.student_id)
+        
+        survey_qs = parsed.get("khao_sat_phu_huynh")
+        surveys_added = len(survey_qs) if isinstance(survey_qs, list) else 0
+        
+        msg = "Đã xác nhận - ghi hồ sơ và cập nhật điểm rủi ro"
+        if probes_added > 0 or surveys_added > 0:
+            msg += f". Hệ thống tự động kích hoạt {probes_added} test Kiểm chứng và {surveys_added} câu Khảo sát PH."
+            
         return {
-            "message": "Đã xác nhận và ghi vào hồ sơ",
+            "message": msg,
             "log_id": log.id,
             "ai_result": parsed,
             "risk_profile": risk,
