@@ -41,9 +41,9 @@ def get_student_surveys(student_id: int, user: Dict[str, Any] = Depends(get_curr
                 "social_score": s.social_score,
                 "routine_score": s.routine_score,
                 "attention_score": s.attention_score,
-                "total_score": s.total_score,
-                "entered_by": s.entered_by,
-                "contact_note": s.contact_note
+                "total_score": getattr(s, "total_score", None),
+                "entered_by": getattr(s, "entered_by", "teacher"),
+                "contact_note": getattr(s, "contact_note", "")
             } for s in surveys
         ]
     finally:
@@ -650,9 +650,9 @@ def _build_student_dashboard(student_id: int):
                     "social_score": s.social_score,
                     "routine_score": s.routine_score,
                     "attention_score": s.attention_score,
-                    "total_score": s.total_score,
-                    "entered_by": s.entered_by,
-                    "contact_note": s.contact_note
+                    "total_score": getattr(s, "total_score", None),
+                    "entered_by": getattr(s, "entered_by", "teacher"),
+                    "contact_note": getattr(s, "contact_note", "")
                 } for s in surveys
             ],
             "history_logs": history_logs,
