@@ -496,82 +496,89 @@ def _build_student_dashboard(student_id: int):
 
         predictive_data = generate_predictive_trajectory(risk_profile["risk_score"])
 
-        latest_log = db.query(TeacherBehaviorLog).filter(TeacherBehaviorLog.student_id == student_id).order_by(TeacherBehaviorLog.id.desc()).first()
+        # 1. Luôn sinh Phác đồ Tổng quan (Holistic ZPD) dựa trên điểm số cuối cùng (kết hợp cả 4 module)
+        if risk_profile["risk_score"] < 2.0:
+            holistic_zpd = {
+                "cho_nha_truong": {
+                    "phac_do_tham_chieu": "Mô hình Giáo dục Tích cực & Play-based Learning",
+                    "muc_tieu": "Duy trì môi trường học tập tích cực, giúp bé phát triển tự nhiên.",
+                    "hanh_dong": [
+                        "Khuyến khích bé tham gia các trò chơi nhóm với bạn bè.", 
+                        "Tạo cơ hội để bé tự đưa ra lựa chọn trong lớp."
+                    ],
+                    "luu_y": "Không cần can thiệp đặc biệt, chỉ cần quan sát và hỗ trợ khi cần."
+                },
+                "cho_gia_dinh": {
+                    "phac_do_tham_chieu": "Mô hình Gia đình Tương tác (Interactive Parenting)",
+                    "muc_tieu": "Gắn kết tình cảm và phát triển kỹ năng giao tiếp hàng ngày.",
+                    "hanh_dong": [
+                        "Dành 15-30 phút mỗi ngày để đọc sách hoặc chơi trò chơi tương tác cùng con.", 
+                        "Lắng nghe và trò chuyện nhiều hơn về ngày học của bé."
+                    ],
+                    "luu_y": "Hạn chế cho bé xem TV/điện thoại một mình."
+                }
+            }
+        elif 2.0 <= risk_profile["risk_score"] <= 2.9:
+            holistic_zpd = {
+                "cho_nha_truong": {
+                    "phac_do_tham_chieu": "Mô hình ZPD Scaffolding (Hỗ trợ cấu trúc)",
+                    "muc_tieu": "Giúp bé tập trung hơn và hoàn thành các nhiệm vụ cơ bản.",
+                    "hanh_dong": [
+                        "Chia nhỏ bài tập thành từng bước ngắn.", 
+                        "Khen ngợi hoặc thưởng ngay lập tức khi bé làm xong một bước."
+                    ],
+                    "luu_y": "Tránh đưa ra quá nhiều yêu cầu cùng lúc khiến bé bị ngợp."
+                },
+                "cho_gia_dinh": {
+                    "phac_do_tham_chieu": "Mô hình Hỗ trợ Thói quen (Routine-Based Support)",
+                    "muc_tieu": "Tạo sự ổn định tâm lý và nề nếp sinh hoạt tại nhà.",
+                    "hanh_dong": [
+                        "Tạo thời gian biểu sinh hoạt cố định (giờ ăn, ngủ, chơi) và dán ở nơi bé dễ thấy.", 
+                        "Thông báo trước 5 phút khi chuẩn bị chuyển sang hoạt động khác."
+                    ],
+                    "luu_y": "Quan sát xem bé có hay bị mất tập trung không để nhắc nhở nhẹ nhàng."
+                }
+            }
+        else:
+            holistic_zpd = {
+                "cho_nha_truong": {
+                    "phac_do_tham_chieu": "Mô hình Giáo dục có cấu trúc (Visual Supports & Routine)",
+                    "muc_tieu": "Kiểm soát cảm xúc và giảm thiểu quá tải giác quan.",
+                    "hanh_dong": [
+                        "Thiết lập 'Góc An Toàn' yên tĩnh trong lớp để bé tĩnh tâm khi bị quá tải.", 
+                        "Sử dụng thẻ hình ảnh để giao tiếp nếu bé chưa thể nói ngay."
+                    ],
+                    "luu_y": "Linh hoạt không ép buộc bé tham gia nhóm nếu bé đang có dấu hiệu quá tải."
+                },
+                "cho_gia_dinh": {
+                    "phac_do_tham_chieu": "Mô hình Hỗ trợ Hành vi Tích cực (Positive Behavior Support)",
+                    "muc_tieu": "Đảm bảo an toàn và hỗ trợ bé bình tĩnh lại.",
+                    "hanh_dong": [
+                        "Trao đổi kỹ hơn với giáo viên để đồng bộ cách phản hồi hành vi của bé.", 
+                        "Loại bỏ các đồ vật có thể gây nguy hiểm khi bé có cảm xúc mạnh."
+                    ],
+                    "luu_y": "Gia đình cần giữ bình tĩnh, đồng hành cùng trẻ và tạo môi trường an toàn."
+                }
+            }
 
-        zpd_rec = None
+        # 2. Bổ sung Khuyến nghị tình huống (Situational Advice) từ AI Quan sát mới nhất
+        latest_log = db.query(TeacherBehaviorLog).filter(TeacherBehaviorLog.student_id == student_id).order_by(TeacherBehaviorLog.id.desc()).first()
         if latest_log and latest_log.parsed_json:
             try:
                 parsed = json.loads(latest_log.parsed_json)
                 if isinstance(parsed, dict):
-                    zpd_rec = parsed.get("zpd_recommendation")
+                    situational_zpd = parsed.get("zpd_recommendation")
+                    if situational_zpd:
+                        for scope in ["cho_nha_truong", "cho_gia_dinh"]:
+                            if situational_zpd.get(scope) and holistic_zpd.get(scope):
+                                sit_actions = situational_zpd[scope].get("hanh_dong", [])
+                                if isinstance(sit_actions, str): sit_actions = [sit_actions]
+                                # Thêm nhãn [Từ tình huống gần nhất] để GV phân biệt
+                                holistic_zpd[scope]["hanh_dong"].extend([f"[Tình huống gần nhất] {a}" for a in sit_actions])
             except (json.JSONDecodeError, TypeError, ValueError):
                 pass
-                
-        # Smart Educational Fallback if AI didn't provide one (e.g. old data)
-        if not isinstance(zpd_rec, dict) or not isinstance(zpd_rec.get("cho_nha_truong"), dict) or "phac_do_tham_chieu" not in zpd_rec.get("cho_nha_truong", {}):
-            if risk_profile["risk_score"] < 2.0:
-                zpd_rec = {
-                    "cho_nha_truong": {
-                        "phac_do_tham_chieu": "Mô hình Giáo dục Tích cực & Play-based Learning",
-                        "muc_tieu": "Duy trì môi trường học tập tích cực, giúp bé phát triển tự nhiên.",
-                        "hanh_dong": [
-                            "Khuyến khích bé tham gia các trò chơi nhóm với bạn bè.", 
-                            "Tạo cơ hội để bé tự đưa ra lựa chọn trong lớp."
-                        ],
-                        "luu_y": "Không cần can thiệp đặc biệt, chỉ cần quan sát và hỗ trợ khi cần."
-                    },
-                    "cho_gia_dinh": {
-                        "phac_do_tham_chieu": "Mô hình Gia đình Tương tác (Interactive Parenting)",
-                        "muc_tieu": "Gắn kết tình cảm và phát triển kỹ năng giao tiếp hàng ngày.",
-                        "hanh_dong": [
-                            "Dành 15-30 phút mỗi ngày để đọc sách hoặc chơi trò chơi tương tác cùng con.", 
-                            "Lắng nghe và trò chuyện nhiều hơn về ngày học của bé."
-                        ],
-                        "luu_y": "Hạn chế cho bé xem TV/điện thoại một mình."
-                    }
-                }
-            elif 2.0 <= risk_profile["risk_score"] <= 2.9:
-                zpd_rec = {
-                    "cho_nha_truong": {
-                        "phac_do_tham_chieu": "Mô hình ZPD Scaffolding (Hỗ trợ cấu trúc)",
-                        "muc_tieu": "Giúp bé tập trung hơn và hoàn thành các nhiệm vụ cơ bản.",
-                        "hanh_dong": [
-                            "Chia nhỏ bài tập thành từng bước ngắn.", 
-                            "Khen ngợi hoặc thưởng ngay lập tức khi bé làm xong một bước."
-                        ],
-                        "luu_y": "Tránh đưa ra quá nhiều yêu cầu cùng lúc khiến bé bị ngợp."
-                    },
-                    "cho_gia_dinh": {
-                        "phac_do_tham_chieu": "Mô hình Hỗ trợ Thói quen (Routine-Based Support)",
-                        "muc_tieu": "Tạo sự ổn định tâm lý và nề nếp sinh hoạt tại nhà.",
-                        "hanh_dong": [
-                            "Tạo thời gian biểu sinh hoạt cố định (giờ ăn, ngủ, chơi) và dán ở nơi bé dễ thấy.", 
-                            "Thông báo trước 5 phút khi chuẩn bị chuyển sang hoạt động khác."
-                        ],
-                        "luu_y": "Quan sát xem bé có hay bị mất tập trung không để nhắc nhở nhẹ nhàng."
-                    }
-                }
-            else:
-                zpd_rec = {
-                    "cho_nha_truong": {
-                        "phac_do_tham_chieu": "Mô hình Giáo dục có cấu trúc (Visual Supports & Routine)",
-                        "muc_tieu": "Kiểm soát cảm xúc và giảm thiểu quá tải giác quan.",
-                        "hanh_dong": [
-                            "Thiết lập 'Góc An Toàn' yên tĩnh trong lớp để bé tĩnh tâm khi bị quá tải.", 
-                            "Sử dụng thẻ hình ảnh để giao tiếp nếu bé chưa thể nói ngay."
-                        ],
-                        "luu_y": "Linh hoạt không ép buộc bé tham gia nhóm nếu bé đang có dấu hiệu quá tải."
-                    },
-                    "cho_gia_dinh": {
-                        "phac_do_tham_chieu": "Mô hình Hỗ trợ Hành vi Tích cực (Positive Behavior Support)",
-                        "muc_tieu": "Đảm bảo an toàn và hỗ trợ bé bình tĩnh lại.",
-                        "hanh_dong": [
-                            "Trao đổi kỹ hơn với giáo viên để đồng bộ cách phản hồi hành vi của bé.", 
-                            "Loại bỏ các đồ vật có thể gây nguy hiểm khi bé có cảm xúc mạnh."
-                        ],
-                        "luu_y": "Gia đình cần giữ bình tĩnh, đồng hành cùng trẻ và tạo môi trường an toàn."
-                    }
-                }
+
+        zpd_rec = holistic_zpd
 
         history_logs_db = db.query(TeacherBehaviorLog).filter(TeacherBehaviorLog.student_id == student_id).order_by(TeacherBehaviorLog.id.desc()).all()
         history_logs = []
