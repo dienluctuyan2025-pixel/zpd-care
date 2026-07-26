@@ -5659,64 +5659,109 @@ html[data-theme="dark"] .xai-modal-body {
   background: var(--bg) !important;
 }
 /* =========================================================
-   MOBILE RESPONSIVE (SMARTPHONE)
+   MOBILE RESPONSIVE (SMARTPHONE) & PWA
 ========================================================= */
 @media (max-width: 768px) {
-  /* Cho phép cuộn nội dung chính thay vì fix 100vh */
+  /* Ngăn cuộn ngang */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Shell chính */
   .app-container, .app-container.sci-shell {
     flex-direction: column;
     height: auto;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow: auto;
   }
 
-  /* Ẩn sidebar mặc định, chuyển thành Drawer vuốt từ trái */
-  .sidebar.sci-sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    height: 100vh;
-    width: 280px;
-    z-index: 1000;
-    transition: left 0.3s ease;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+  /* Drawer Sidebar - Khắc phục lỗi cắt chữ và tràn lề Safari */
+  aside.sidebar, 
+  aside.sidebar.sci-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -100% !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    height: -webkit-fill-available !important;
+    width: 280px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: linear-gradient(185deg, #133b5c 0%, #1d2d50 60%, #15243f 100%) !important;
+    z-index: 99999 !important;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.5) !important;
   }
   
-  .sidebar.sci-sidebar.mobile-open {
-    left: 0;
+  aside.sidebar.sci-sidebar.mobile-open {
+    left: 0 !important;
   }
 
-  /* Lớp mờ (Overlay) khi mở menu */
+  /* Overlay mờ */
   .mobile-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 999;
-    backdrop-filter: blur(2px);
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    background: rgba(0,0,0,0.6) !important;
+    z-index: 99998 !important;
+    backdrop-filter: blur(3px) !important;
     opacity: 0;
-    transition: opacity 0.3s;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
   .mobile-overlay.show {
-    display: block;
     opacity: 1;
+    pointer-events: auto;
   }
 
-  /* Thanh Topbar: Thêm nút Hamburger */
+  /* Block học sinh (Ngăn bị nén, cho phép cuộn bên trong) */
+  .sci-student-block {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 0% !important; /* Quan trọng để chiếm phần dư */
+    height: auto !important;
+    min-height: 200px !important; /* Đảm bảo ko bị nén mất */
+    overflow: hidden !important; 
+  }
+  .sci-student-list {
+    position: absolute !important;
+    top: 90px !important; /* Chừa chỗ cho header của list */
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    flex: none !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: auto !important;
+    padding-bottom: 20px !important;
+  }
+
+  /* Tránh menu Nav phình to */
+  .sci-nav {
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+  }
+
+  /* Topbar Responsive */
   .sci-topbar {
     position: sticky;
     top: 0;
     z-index: 50;
-    padding: 8px 10px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
     border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    margin-bottom: 0;
   }
-  
+  .sci-topbar-left {
+    width: 100%;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
   .sci-mobile-menu-btn {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
     background: transparent;
@@ -5726,16 +5771,59 @@ html[data-theme="dark"] .xai-modal-body {
     margin-right: 4px;
     cursor: pointer;
   }
+  .sci-breadcrumb {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sci-topbar-context {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 120px;
+    vertical-align: bottom;
+  }
+  .sci-topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .sci-search-chip {
+    min-width: 0;
+    flex: 1;
+  }
+  .sci-search-chip kbd {
+    display: none; /* Không dùng kbd trên mobile */
+  }
 
-  /* Thanh Summary gập lại */
+  /* Padding wrapper */
+  .main-wrapper.sci-main, .main-wrapper {
+    padding: 10px 12px 16px;
+  }
+  
+  /* Dashboard Summary Bars */
   .sci-summary-bar {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 16px;
-    border-radius: 0;
+    border-radius: 12px;
   }
   .sci-summary-sources {
     grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .sci-source-cell {
+    padding: 6px;
+  }
+  .sci-source-label {
+    font-size: 9px;
+  }
+  .sci-source-cell strong {
+    font-size: 14px;
   }
   .sci-summary-risk {
     text-align: left;
@@ -5748,7 +5836,7 @@ html[data-theme="dark"] .xai-modal-body {
     align-items: flex-start;
   }
 
-  /* Biểu đồ & Widget (Metrics) */
+  /* Layout Biểu đồ */
   .obs-layout {
     grid-template-columns: 1fr;
     padding: 10px;
@@ -5756,8 +5844,8 @@ html[data-theme="dark"] .xai-modal-body {
   .obs-metrics, .obs-metrics-dense {
     grid-template-columns: 1fr;
   }
-  
-  /* Các thẻ tab (Behavior, Radar, Probes...) */
+
+  /* Tabs */
   .sci-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -5773,203 +5861,14 @@ html[data-theme="dark"] .xai-modal-body {
     font-size: 13px;
   }
 
-  /* Card Bento */
+  /* Bento Card & Buttons */
   .bento-card {
     border-radius: 8px;
     padding: 14px;
   }
-
-  /* Các nút hành động bự hơn để dễ bấm */
   .btn-premium, .btn-secondary, .sci-btn {
     padding: 12px 16px;
     font-size: 14px;
-  }
-}
-
-/* Ẩn nút mobile menu trên PC */
-@media (min-width: 769px) {
-  .sci-mobile-menu-btn {
-    display: none;
-  }
-}
-
-/* Bổ sung Tối ưu hóa UI Mobile Tuyệt đối (Hotfix) */
-@media (max-width: 768px) {
-  body, html {
-    overflow-x: hidden;
-    width: 100%;
-  }
-
-  .sci-topbar {
-    flex-wrap: wrap;
-    padding: 10px 12px;
-  }
-
-  .sci-topbar-left {
-    width: 100%;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-  }
-
-  .sci-breadcrumb {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .sci-topbar-context {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    max-width: 120px;
-    vertical-align: bottom;
-  }
-
-  .sci-topbar-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .sci-search-chip {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .sci-search-chip kbd {
-    display: none;
-  }
-
-  .sci-summary-sources {
-    gap: 4px;
-  }
-
-  .sci-source-cell {
-    padding: 6px;
-  }
-
-  .sci-source-label {
-    font-size: 9px;
-  }
-
-  .sci-source-cell strong {
-    font-size: 14px;
-  }
-
-  .main-wrapper.sci-main, .main-wrapper {
-    padding: 10px 12px 16px;
-  }
-}
-
-/* Sửa lỗi Drawer bị cắt ngang trên điện thoại */
-@media (max-width: 768px) {
-  aside.sidebar.sci-sidebar {
-    height: 100% !important;
-    height: 100dvh !important;
-    bottom: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  
-  .sci-student-block {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-    height: 100% !important;
-    min-height: 0 !important;
-  }
-}
-
-/* Sửa lỗi Drawer bị nén hoàn toàn trên iOS Safari */
-@media (max-width: 768px) {
-  /* Ghi đè tuyệt đối tất cả các class của sidebar khi mở trên mobile */
-  aside.sidebar, 
-  aside.sci-sidebar, 
-  .sidebar.sci-sidebar.mobile-open {
-    position: fixed !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    height: 100vh !important;
-    height: -webkit-fill-available !important;
-    display: flex !important;
-    flex-direction: column !important;
-    background: linear-gradient(185deg, #133b5c 0%, #1d2d50 60%, #15243f 100%) !important;
-    z-index: 99999 !important;
-    max-height: 100vh !important;
-    min-height: 100vh !important;
-  }
-
-  /* Buộc block học sinh phải chiếm toàn bộ phần còn lại */
-  .sci-student-block {
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex-grow: 1 !important;
-    flex-shrink: 0 !important;
-    flex-basis: 0 !important;
-    height: auto !important;
-    min-height: 200px !important;
-    overflow: visible !important;
-  }
-
-  /* Buộc danh sách học sinh phải cuộn được */
-  .sci-student-list {
-    position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    overflow-y: scroll !important;
-    -webkit-overflow-scrolling: touch !important;
-    flex: none !important;
-    height: auto !important;
-  }
-
-  /* Đảm bảo menu nav không bị phình to chiếm hết chỗ */
-  .sci-nav {
-    flex-shrink: 0 !important;
-    flex-grow: 0 !important;
-  }
-
-  /* Fix lỗi overlay bị lọt thỏm */
-  .mobile-overlay.show {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 100vh !important;
-    z-index: 99998 !important;
-  }
-}
-
-/* Sửa lỗi Danh sách học sinh đè lên thanh tìm kiếm */
-@media (max-width: 768px) {
-  .sci-student-block {
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 0% !important;
-    height: auto !important;
-    overflow: hidden !important; /* Quan trọng để flex list bên trong cuộn được */
-  }
-
-  .sci-student-list {
-    position: relative !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    flex: 1 1 0% !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    height: auto !important;
-    padding-top: 4px !important;
   }
 }
 
