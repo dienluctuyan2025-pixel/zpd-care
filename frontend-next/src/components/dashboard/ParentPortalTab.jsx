@@ -13,6 +13,8 @@ function ParentPortalTab({ studentId, studentName, refreshTrigger, onComplete })
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [contactNote, setContactNote] = useState('');
+  const [history, setHistory] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const abortControllerRef = useRef(null);
   const timeoutRef = useRef(null);
 
