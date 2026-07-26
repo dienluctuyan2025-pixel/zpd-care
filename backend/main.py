@@ -467,7 +467,7 @@ def _build_student_dashboard(student_id: int):
         risk_profile = calculate_final_risk(student_id)
         
         # Radar: ưu tiên trục từ probe đã chấm; fallback / blend khảo sát PH
-        surveys = db.query(ParentSurvey).filter(ParentSurvey.student_id == student_id).order_by(ParentSurvey.id.desc()).limit(3).all()
+        surveys = db.query(ParentSurvey).filter(ParentSurvey.student_id == student_id).order_by(ParentSurvey.date.desc(), ParentSurvey.id.desc()).all()
         p_axis_buckets = {"social": [], "routine": [], "attention": []}
         for s in surveys:
             if s.social_score is not None: p_axis_buckets["social"].append(float(s.social_score))
@@ -643,6 +643,18 @@ def _build_student_dashboard(student_id: int):
             "radar_data": radar_data,
             "pending_probes": [_serialize_probe(p) for p in pending_probes],
             "history_probes": [_serialize_probe(p) for p in history_probes],
+            "history_surveys": [
+                {
+                    "id": s.id,
+                    "date": str(s.date),
+                    "social_score": s.social_score,
+                    "routine_score": s.routine_score,
+                    "attention_score": s.attention_score,
+                    "total_score": s.total_score,
+                    "entered_by": s.entered_by,
+                    "contact_note": s.contact_note
+                } for s in surveys
+            ],
             "history_logs": history_logs,
             "predictive_data": predictive_data,
             "latest_log_id": latest_log.id if latest_log else None,

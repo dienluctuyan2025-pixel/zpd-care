@@ -49,6 +49,13 @@ export default function ClinicalTimeline({ dashboardData }) {
 
   const events = useMemo(() => {
     const items = [];
+    
+    const getTs = (d) => {
+      if (!d) return 0;
+      const t = new Date(d).getTime();
+      return isNaN(t) ? 0 : t;
+    };
+
     const logs = dashboardData?.history_logs || [];
     logs.forEach((log) => {
       const parsed = log.parsed_json || {};
@@ -56,7 +63,7 @@ export default function ClinicalTimeline({ dashboardData }) {
       const failed = parsed.analysis_failed;
       const pending = parsed.pending_confirmation && !parsed.teacher_confirmed;
       const placeholder = parsed.is_placeholder || parsed.source === "import_placeholder";
-      if (placeholder) return; // ẩn placeholder import
+      if (placeholder) return;
       items.push({
         id: `log-${log.id}`,
         type: "log",
@@ -64,9 +71,9 @@ export default function ClinicalTimeline({ dashboardData }) {
         title: failed
           ? "Phân tích AI (lỗi)"
           : pending
-            ? "Nháp quan sát — chờ xác nhận"
+            ? "Nháp quan sát chờ xác nhận"
             : "Nhật ký quan sát",
-        detail: (log.raw_text || "").slice(0, 160) + ((log.raw_text || "").length > 160 ? "…" : ""),
+        detail: (log.raw_text || "").slice(0, 160) + ((log.raw_text || "").length > 160 ? "..." : ""),
         meta: failed
           ? "Không chấm"
           : pending
@@ -75,7 +82,7 @@ export default function ClinicalTimeline({ dashboardData }) {
               ? `Mức ${Number(score).toFixed(1)}/4`
               : null,
         tone: failed || pending ? "warn" : score >= 3 ? "danger" : score >= 2 ? "warn" : "ok",
-        sortKey: log.id || 0,
+        sortKey: getTs(log.date),
       });
     });
 
@@ -89,7 +96,7 @@ export default function ClinicalTimeline({ dashboardData }) {
         detail: probeDetail(p),
         meta: "Chờ",
         tone: "warn",
-        sortKey: p.id || 0,
+        sortKey: getTs(p.date) || Date.now() + 100000, // force pending to top
       });
     });
 
@@ -103,24 +110,24 @@ export default function ClinicalTimeline({ dashboardData }) {
         detail: probeDetail(h),
         meta: probeMeta(h),
         tone: probeTone(h),
-        sortKey: h.id || 0,
+        sortKey: getTs(h.date),
       });
     });
 
-    const radar = dashboardData?.radar_data;
-    const rp = dashboardData?.risk_profile;
-    if (radar && (rp?.parent_n > 0 || rp?.avg_parent_score != null)) {
+    const surveys = dashboardData?.history_surveys || [];
+    surveys.forEach((s) => {
+      const sc = s.total_score != null ? Number(s.total_score).toFixed(1) : "?";
       items.push({
-        id: "survey-latest",
+        id: `survey-${s.id}`,
         type: "survey",
-        date: "",
-        title: "Khảo sát phụ huynh (mới nhất)",
-        detail: `Giao tiếp ${radar.social ?? "—"} · Hành vi ${radar.routine ?? "—"} · Tập trung ${radar.attention ?? "—"}`,
-        meta: "PH 30%",
+        date: s.date ? s.date.substring(0, 10) : "",
+        title: "Khảo sát phụ huynh",
+        detail: `Giao tiếp ${s.social_score != null ? s.social_score.toFixed(1) : "?"} • Hành vi ${s.routine_score != null ? s.routine_score.toFixed(1) : "?"} • Tập trung ${s.attention_score != null ? s.attention_score.toFixed(1) : "?"}`,
+        meta: `Điểm ${sc}/4.0`,
         tone: "info",
-        sortKey: 999999,
+        sortKey: getTs(s.date),
       });
-    }
+    });
 
     return items.sort((a, b) => b.sortKey - a.sortKey);
   }, [dashboardData]);
