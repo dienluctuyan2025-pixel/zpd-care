@@ -404,6 +404,31 @@ def calculate_final_risk(student_id: int) -> Dict[str, Any]:
         }
         axis_counts = {k: len(v) for k, v in axis_buckets.items()}
 
+        # 3c. Trục Social / Routine / Attention từ Quan sát của GV
+        t_axis_buckets = {"social": [], "routine": [], "attention": []}
+        for log in logs:
+            if log.parsed_json:
+                try:
+                    data = json.loads(log.parsed_json)
+                    if not _log_counts_toward_risk(data): continue
+                    score = float(data.get("diem_nguy_co", 1.0))
+                    if not (1.0 <= score <= 4.0): continue
+                    cat = str(data.get("nhom_ky_nang", "")).lower()
+                    axis = None
+                    if "giao" in cat or "social" in cat: axis = "social"
+                    elif "rập" in cat or "routine" in cat: axis = "routine"
+                    elif "tập" in cat or "attention" in cat: axis = "attention"
+                    
+                    if axis:
+                        t_axis_buckets[axis].append(score)
+                except (ValueError, TypeError, json.JSONDecodeError):
+                    pass
+                    
+        teacher_axes = {
+            k: (round(sum(v)/len(v), 2) if v else None)
+            for k, v in t_axis_buckets.items()
+        }
+
         # 4. Triangulation — thiếu nguồn → tái phân bổ; không bịa điểm 1.0 giả
         has_t = avg_teacher is not None
         has_p = avg_parent is not None
@@ -459,6 +484,7 @@ def calculate_final_risk(student_id: int) -> Dict[str, Any]:
             "probe_n_used": min(probe_n, 3),
             "axis_scores": axis_scores,
             "axis_counts": axis_counts,
+            "teacher_axes": teacher_axes,
             "sources_filled": sources_filled,
             "sources_completeness": round((sources_filled / 3) * 100),
             "red_flag": red_flag_triggered,

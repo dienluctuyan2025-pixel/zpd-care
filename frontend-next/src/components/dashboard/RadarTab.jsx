@@ -414,6 +414,7 @@ function RadarTab({ dashboardData }) {
                   const key = d.subject === 'Giao tiếp' ? 'social' : d.subject === 'Hành vi' ? 'routine' : 'attention';
                   const pAx = radarSources.probe?.[key];
                   const sAx = radarSources.parent?.[key];
+                  const tAx = radarSources.teacher?.[key];
                   const cnt = radarSources.probe_counts?.[key];
                   return (
                     <div key={d.subject} className="rz-domain-item">
@@ -424,7 +425,7 @@ function RadarTab({ dashboardData }) {
                       <div className="rz-mini-bar"><i style={{ width: `${barPct(d.A)}%`, background: mainColor }} /></div>
                       <span>{d.note}</span>
                       <span className="rz-domain-src">
-                        Probe {pAx != null ? fmt(pAx, 2) : '—'}{cnt ? ` (n=${cnt})` : ''} · PH {sAx != null ? fmt(sAx, 2) : '—'}
+                        GV {tAx != null ? fmt(tAx, 2) : '-'} · PH {sAx != null ? fmt(sAx, 2) : '-'} · Probe {pAx != null ? fmt(pAx, 2) : '-'}{cnt ? ` (n=${cnt})` : ''}
                       </span>
                     </div>
                   );

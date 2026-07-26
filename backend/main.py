@@ -454,28 +454,37 @@ def _build_student_dashboard(student_id: int):
         }
         probe_axes = (risk_profile or {}).get("axis_scores") or {}
         axis_counts = (risk_profile or {}).get("axis_counts") or {}
+        teacher_axes = (risk_profile or {}).get("teacher_axes") or {}
 
         def _axis_val(key: str):
             pv = probe_axes.get(key)
             sv = parent_axes.get(key)
-            if pv is not None and sv is not None:
-                # Probe ưu tiên hơn khi đã có ≥1 lần chấm trục đó
-                return round(0.65 * float(pv) + 0.35 * float(sv), 2)
-            if pv is not None:
-                return float(pv)
+            tv = teacher_axes.get(key)
+            
+            parts = []
+            if tv is not None:
+                parts.append((0.30, tv))
             if sv is not None:
-                return float(sv)
-            return 1.0
+                parts.append((0.30, sv))
+            if pv is not None:
+                parts.append((0.40, pv))
+                
+            if not parts:
+                return 1.0
+                
+            wsum = sum(w for w, _ in parts)
+            return round(sum((w / wsum) * v for w, v in parts), 2)
 
         radar_data = {
             "social": _axis_val("social"),
             "routine": _axis_val("routine"),
             "attention": _axis_val("attention"),
             "sources": {
+                "teacher": teacher_axes,
                 "parent": parent_axes,
                 "probe": probe_axes,
                 "probe_counts": axis_counts,
-                "blend": "0.65·probe + 0.35·PH khi cả hai có; thiếu nguồn thì lấy nguồn còn lại; mặc định 1.0",
+                "blend": "Triangulation 30% GV + 30% PH + 40% Probe (tái phân bổ nếu thiếu nguồn)",
             },
         }
 
