@@ -536,63 +536,63 @@ def _build_student_dashboard(student_id: int):
             holistic_zpd = {
                 "cho_nha_truong": {
                     "phac_do_tham_chieu": "Mô hình Giáo dục Tích cực & Play-based Learning",
-                    "muc_tieu": "Duy trì môi trường học tập tích cực, giúp bé phát triển tự nhiên.",
+                    "muc_tieu": "Duy trì môi trường học tập tích cực, giúp bé phát triển tự nhiên và mở rộng vùng phát triển.",
                     "hanh_dong": [
-                        "Khuyến khích bé tham gia các trò chơi nhóm với bạn bè.", 
-                        "Tạo cơ hội để bé tự đưa ra lựa chọn trong lớp."
+                        "Khuyến khích bé làm trưởng nhóm nhỏ trong các trò chơi đóng vai để phát triển kỹ năng lãnh đạo.", 
+                        "Tạo cơ hội để bé tự đưa ra lựa chọn trong lớp (VD: Chọn góc chơi, chọn bài hát) để tăng tính tự chủ."
                     ],
-                    "luu_y": "Không cần can thiệp đặc biệt, chỉ cần quan sát và hỗ trợ khi cần."
+                    "luu_y": "Không cần can thiệp đặc biệt. Giáo viên đóng vai trò người quan sát và cung cấp học liệu phong phú để bé tự do khám phá."
                 },
                 "cho_gia_dinh": {
                     "phac_do_tham_chieu": "Mô hình Gia đình Tương tác (Interactive Parenting)",
                     "muc_tieu": "Gắn kết tình cảm và phát triển kỹ năng giao tiếp hàng ngày.",
                     "hanh_dong": [
-                        "Dành 15-30 phút mỗi ngày để đọc sách hoặc chơi trò chơi tương tác cùng con.", 
-                        "Lắng nghe và trò chuyện nhiều hơn về ngày học của bé."
+                        "Dành 15-30 phút mỗi ngày để đọc sách tương tác cùng con, đặt các câu hỏi mở (VD: 'Theo con nhân vật này sẽ làm gì tiếp?').", 
+                        "Cho bé tham gia vào các việc nhà đơn giản (nhặt rau, dọn bàn) để rèn luyện vận động tinh và tính trách nhiệm."
                     ],
-                    "luu_y": "Hạn chế cho bé xem TV/điện thoại một mình."
+                    "luu_y": "Hạn chế thời gian sử dụng thiết bị điện tử (TV/iPad) một mình dưới 1 tiếng/ngày."
                 }
             }
         elif 2.0 <= risk_profile["risk_score"] <= 2.9:
             holistic_zpd = {
                 "cho_nha_truong": {
                     "phac_do_tham_chieu": "Mô hình ZPD Scaffolding (Hỗ trợ cấu trúc)",
-                    "muc_tieu": "Giúp bé tập trung hơn và hoàn thành các nhiệm vụ cơ bản.",
+                    "muc_tieu": "Giúp bé tập trung hơn, giảm bớt sự e ngại và hoàn thành các nhiệm vụ cơ bản trong lớp.",
                     "hanh_dong": [
-                        "Chia nhỏ bài tập thành từng bước ngắn.", 
-                        "Khen ngợi hoặc thưởng ngay lập tức khi bé làm xong một bước."
+                        "Áp dụng nguyên tắc 'Chia nhỏ - Làm mẫu': Chia bài tập thành 2-3 bước ngắn, cô làm mẫu bước 1 rồi yêu cầu bé làm theo.", 
+                        "Sử dụng hệ thống khen ngợi bằng Token (tích sao, nhận sticker) ngay lập tức khi bé duy trì được sự chú ý trên 5 phút."
                     ],
-                    "luu_y": "Tránh đưa ra quá nhiều yêu cầu cùng lúc khiến bé bị ngợp."
+                    "luu_y": "Tránh đưa ra quá 2 yêu cầu cùng lúc. Tốc độ nói của giáo viên nên chậm lại và nhấn mạnh vào từ khóa quan trọng."
                 },
                 "cho_gia_dinh": {
                     "phac_do_tham_chieu": "Mô hình Hỗ trợ Thói quen (Routine-Based Support)",
-                    "muc_tieu": "Tạo sự ổn định tâm lý và nề nếp sinh hoạt tại nhà.",
+                    "muc_tieu": "Tạo sự ổn định tâm lý và nề nếp sinh hoạt tại nhà, giúp bé dễ dàng dự đoán các hoạt động.",
                     "hanh_dong": [
-                        "Tạo thời gian biểu sinh hoạt cố định (giờ ăn, ngủ, chơi) và dán ở nơi bé dễ thấy.", 
-                        "Thông báo trước 5 phút khi chuẩn bị chuyển sang hoạt động khác."
+                        "Lập Thời gian biểu bằng hình ảnh (Visual Schedule) cho buổi tối (VD: Tắm -> Ăn -> Chơi -> Ngủ) và dán ở nơi bé dễ thấy.", 
+                        "Quy tắc đếm ngược 5 phút: Luôn thông báo trước 5 phút khi chuẩn bị chuyển sang một hoạt động khác (từ lúc chơi sang lúc đi ngủ)."
                     ],
-                    "luu_y": "Quan sát xem bé có hay bị mất tập trung không để nhắc nhở nhẹ nhàng."
+                    "luu_y": "Phụ huynh cần kiên nhẫn lặp lại chỉ dẫn. Tránh cáu gắt khi bé chưa kịp thích nghi với sự thay đổi."
                 }
             }
         else:
             holistic_zpd = {
                 "cho_nha_truong": {
                     "phac_do_tham_chieu": "Mô hình Giáo dục có cấu trúc (Visual Supports & Routine)",
-                    "muc_tieu": "Kiểm soát cảm xúc và giảm thiểu quá tải giác quan.",
+                    "muc_tieu": "Kiểm soát cảm xúc, giảm thiểu quá tải giác quan và xây dựng kênh giao tiếp thay thế.",
                     "hanh_dong": [
-                        "Thiết lập 'Góc An Toàn' yên tĩnh trong lớp để bé tĩnh tâm khi bị quá tải.", 
-                        "Sử dụng thẻ hình ảnh để giao tiếp nếu bé chưa thể nói ngay."
+                        "Thiết lập 'Góc Bình Yên' (Time-in): Góc nhỏ có đệm êm, ánh sáng dịu, tai nghe chống ồn. Khi bé sắp mất kiểm soát, nhẹ nhàng hướng dẫn bé vào đây nghỉ ngơi tối đa 10 phút.", 
+                        "Giao tiếp qua hình ảnh (PECS): Khi bé khóc lóc ăn vạ, không bắt bé phải nói. Đưa thẻ hình 'Uống nước', 'Nghỉ ngơi' để bé chỉ vào nhằm giảm sự thất vọng vì không thể diễn đạt."
                     ],
-                    "luu_y": "Linh hoạt không ép buộc bé tham gia nhóm nếu bé đang có dấu hiệu quá tải."
+                    "luu_y": "Nguyên tắc ABC (Tiền đề - Hành vi - Hệ quả): Luôn quan sát xem điều gì xảy ra TRƯỚC khi bé bùng nổ để phòng ngừa. Tuyệt đối không ép bé nhìn thẳng vào mắt nếu bé kháng cự."
                 },
                 "cho_gia_dinh": {
                     "phac_do_tham_chieu": "Mô hình Hỗ trợ Hành vi Tích cực (Positive Behavior Support)",
-                    "muc_tieu": "Đảm bảo an toàn và hỗ trợ bé bình tĩnh lại.",
+                    "muc_tieu": "Đảm bảo an toàn, đồng bộ phương pháp với nhà trường để bé không bị bối rối.",
                     "hanh_dong": [
-                        "Trao đổi kỹ hơn với giáo viên để đồng bộ cách phản hồi hành vi của bé.", 
-                        "Loại bỏ các đồ vật có thể gây nguy hiểm khi bé có cảm xúc mạnh."
+                        "Dọn dẹp môi trường: Cất gọn các đồ vật dễ vỡ, sắc nhọn. Sử dụng các trò chơi cảm giác (nặn đất sét, chơi cát) tại nhà để bé giải tỏa căng thẳng.", 
+                        "Không thỏa hiệp với ăn vạ: Nếu bé giật đồ hoặc khóc lóc đòi hỏi, phụ huynh cần giữ thái độ trung tính, phớt lờ hành vi sai và chỉ đáp ứng khi bé bình tĩnh lại hoặc dùng thẻ hình."
                     ],
-                    "luu_y": "Gia đình cần giữ bình tĩnh, đồng hành cùng trẻ và tạo môi trường an toàn."
+                    "luu_y": "Gia đình cần có sổ tay trao đổi hàng ngày với cô giáo. Nếu có sự kiện bất thường ở nhà (bé ốm, mất ngủ), phải báo ngay cho cô vào sáng hôm sau."
                 }
             }
 

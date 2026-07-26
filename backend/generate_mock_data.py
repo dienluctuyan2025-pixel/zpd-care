@@ -36,6 +36,45 @@ def generate_mock_data():
             ("stereotypy_observe", "Hành vi / thói quen")
         ]
 
+        ZPD_CONTEXT = {
+            "Bé chơi hòa đồng với các bạn trong lớp, biết chia sẻ đồ chơi.": {
+                "hanh_dong": "Khen ngợi cụ thể hành vi chia sẻ ('Cô rất vui vì con nhường đồ chơi cho bạn'). Duy trì các trò chơi luân phiên để củng cố kỹ năng này."
+            },
+            "Hôm nay bé tham gia hoạt động góc rất tốt, trả lời to rõ ràng khi cô gọi.": {
+                "hanh_dong": "Tăng dần độ khó của câu hỏi trong giờ hoạt động góc (từ câu hỏi 'Cái gì' sang 'Tại sao' đơn giản). Cho bé làm trưởng nhóm nhỏ để tăng tự tin."
+            },
+            "Bé tự xúc ăn ngoan, ngủ trưa ngoan.": {
+                "hanh_dong": "Tiếp tục khuyến khích tự lập. Có thể giao thêm việc nhỏ như tự cất khay ăn sau khi ăn xong để tăng trách nhiệm cá nhân."
+            },
+            "Bé có tiến bộ trong việc làm theo chỉ dẫn của cô giáo.": {
+                "hanh_dong": "Chuyển từ chỉ dẫn 1 bước sang chỉ dẫn 2 bước liên tiếp (VD: 'Con lấy cất dép rồi đi rửa tay nhé'). Giảm bớt sự hỗ trợ bằng tay."
+            },
+            "Bé thỉnh thoảng mất tập trung khi cô kể chuyện, phải nhắc 2-3 lần mới chú ý lại.": {
+                "hanh_dong": "Sử dụng đồ vật trực quan (rối ngón tay, tranh ảnh) khi kể chuyện. Gọi tên bé hoặc chạm nhẹ vào vai trước khi bắt đầu câu chuyện để thu hút sự chú ý."
+            },
+            "Bé hơi ngại giao tiếp, thường thích chơi một mình ở góc xếp hình.": {
+                "hanh_dong": "Cô giáo ngồi cạnh bé, tham gia xếp hình cùng bé. Dần dần rủ thêm 1 bạn thân thiết vào chơi chung, tạo vòng tròn giao tiếp nhỏ 3 người."
+            },
+            "Lúc chuyển giờ học, bé hơi chậm chạp và cần cô dắt tay.": {
+                "hanh_dong": "Sử dụng bài hát chuyển tiếp hoặc đồng hồ cát báo trước 3 phút. Khen ngợi ngay lập tức nếu bé tự di chuyển được một đoạn ngắn mà không cần dắt."
+            },
+            "Bé có biểu hiện không thích tiếng ồn lớn trong giờ âm nhạc.": {
+                "hanh_dong": "Sắp xếp cho bé ngồi ở vị trí xa loa hoặc gần cửa. Đeo tai nghe chống ồn nhẹ cho bé nếu cần, hoặc cho bé cầm một đồ vật 'trấn an' khi nhạc bật lên."
+            },
+            "Bé gọi tên không quay đầu lại, mắt thường nhìn đi chỗ khác khi cô nói chuyện.": {
+                "hanh_dong": "Hạ thấp trọng tâm ngang tầm mắt bé. Dùng đồ chơi bé thích (VD: quả bóng phát sáng) đặt ngang tầm mắt cô để kích thích giao tiếp mắt trước khi nói."
+            },
+            "Bé có thói quen vẩy tay liên tục trước mặt và đi nhón gót trong lớp.": {
+                "hanh_dong": "Không cấm cản thô bạo. Cung cấp công cụ thay thế (đồ chơi bóp fidget, vòng dẻo) để bé giải tỏa căng thẳng. Chuyển hướng bé vào một hoạt động vận động có mục đích (VD: nhảy theo nhạc)."
+            },
+            "Trong giờ chơi, bé giật đồ chơi của bạn và khóc lóc ăn vạ rất lâu, khó dỗ.": {
+                "hanh_dong": "Đưa bé vào 'Góc Bình Yên' để tĩnh tâm (time-in, không phải time-out). Khi bé bình tĩnh, dùng Thẻ hình ảnh (PECS) dạy bé cách chỉ vào thẻ 'Cho tớ mượn' thay vì giật đồ."
+            },
+            "Bé lặp lại lời nói của cô (nhại lời) thay vì trả lời câu hỏi.": {
+                "hanh_dong": "Thay đổi cách đặt câu hỏi. Dùng câu hỏi có lựa chọn trực quan (Giơ 2 món đồ chơi: 'Con thích màu xanh hay màu đỏ?'). Hỗ trợ mớm lời (prompt) đáp án đúng ngay sau khi hỏi."
+            }
+        }
+
         safe_logs = [
             "Bé chơi hòa đồng với các bạn trong lớp, biết chia sẻ đồ chơi.",
             "Hôm nay bé tham gia hoạt động góc rất tốt, trả lời to rõ ràng khi cô gọi.",
@@ -94,8 +133,14 @@ def generate_mock_data():
                         {"text": f"Ở nhà bé có biểu hiện giống '{raw_text[:15]}' không?", "reason": "Tham chiếu chéo"}
                     ],
                     "zpd_recommendation": {
-                        "cho_nha_truong": {"phac_do_tham_chieu": f"Hướng dẫn {profile} cho trường"},
-                        "cho_phu_huynh": {"phac_do_tham_chieu": f"Hướng dẫn {profile} cho nhà"}
+                        "cho_nha_truong": {
+                            "phac_do_tham_chieu": f"Hướng dẫn {profile} cho trường",
+                            "hanh_dong": [ZPD_CONTEXT.get(raw_text, {}).get("hanh_dong", "Quan sát thêm và điều chỉnh ngữ cảnh phù hợp.")]
+                        },
+                        "cho_phu_huynh": {
+                            "phac_do_tham_chieu": f"Hướng dẫn {profile} cho nhà",
+                            "hanh_dong": ["Dành thêm 15 phút mỗi tối chơi cùng con để áp dụng đồng nhất phương pháp của cô giáo."]
+                        }
                     },
                     "ma_chuan_y_khoa": "Sàng lọc giáo dục (Không y khoa)",
                     "counts_toward_risk": True
