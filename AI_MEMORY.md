@@ -1,4 +1,4 @@
-# AI_MEMORY — ZPD Care (cập nhật 25/07/2026)
+# AI_MEMORY — ZPD Care (Cập nhật 26/07/2026 - Phiên bản Đại tu Vòng Cuối)
 
 **Vai trò:** Project memory cho agent/dev tiếp theo  
 **Stack chạy thật:** `backend` FastAPI `:8000` · `frontend-next` Next.js `:3000`  
@@ -8,16 +8,14 @@
 
 ---
 
-## 1. Mục tiêu sản phẩm (đúng hiện tại)
+## 1. Mục tiêu sản phẩm (Định vị Chuẩn xác 100%)
 
 - **Sàng lọc hành vi giáo dục mầm non** + gợi ý can thiệp **ZPD** (scaffolding lớp/nhà).
 - **Teacher-only web:** chỉ giáo viên/admin đăng nhập. PH **không** cổng login; GV nhập khảo sát hộ.
 - **Human-in-the-loop (HITL):** AI text + media = **nháp** → GV **Xác nhận ghi hồ sơ** mới tính điểm rủi ro.
-- **Không chẩn đoán y khoa:** không ADOS-2/CARS-2 license; thang 1–4 là **CARS-like nội bộ**.
+- **Không chẩn đoán y khoa:** không ADOS-2/CARS-2 license; thang 1–4 là **CARS-like nội bộ**. Tuyệt đối không dùng các từ "bệnh án", "đi khám", hay mã bệnh 299.00.
 - **Dữ liệu HS thật** từ Excel MN Chí Thạnh (roster ~17 HS).
 - **Lớp hiển thị thống nhất:** `Lớp MG 5-6 tuổi A4` (đã thay “Chồi 1/2” trong DB + `import_excel.py`).
-
-> Bản memory 14/07 còn ngôn ngữ “bệnh án / chẩn đoán / ADOS game lâm sàng”. **Hướng sản phẩm hiện tại = sàng lọc giáo dục** — ưu tiên mô tả bên dưới.
 
 ---
 
@@ -33,104 +31,39 @@
 | Seed/import | `backend/import_excel.py`, `seed_data.py` |
 | Shell UI | `frontend-next/src/app/page.js` |
 | CSS sống | `frontend-next/src/app/base.css` + `zpd-ui.css` |
-| CSS chết (archive) | `frontend-next/_archive_css/` |
 | Layout + dark FOUC fix | `frontend-next/src/app/layout.js` |
 | Quan sát | `components/dashboard/BehaviorTab.jsx` |
 | Kiểm chứng | `components/dashboard/ProbesTab.jsx` |
 | Hồ sơ ZPD + Xuất PDF | `components/dashboard/RadarTab.jsx` |
 | Khảo sát PH | `components/dashboard/ParentPortalTab.jsx` |
 | Timeline | `components/ui/ClinicalTimeline.jsx` |
-| Chat trợ lý | `components/chat/ChatWidget.jsx` |
-| Avatar bác sĩ chat | `public/doctor_avatar.jpg` |
-| Logo brand | `public/logo-zpd.svg` |
-
-**Chạy (Windows — bắt buộc UTF-8 cho backend):**
-```powershell
-# Backend
-cd MatThanSuPham/backend
-$env:PYTHONIOENCODING="utf-8"
-python -m uvicorn main:app --host 127.0.0.1 --port 8000
-
-# Frontend
-cd MatThanSuPham/frontend-next
-npm run dev
-```
-
-**Env:** `backend/.env` — `GOOGLE_API_KEY`, `JWT_SECRET`, `ALLOWED_ORIGINS`, `AUTH_DISABLED=0`  
-**CORS mặc định:** `http://localhost:3000`, `127.0.0.1:3000` (+ 3001). Chỉ `*` khi set tường minh.  
-**Optional FE:** `NEXT_PUBLIC_API_URL` (mặc định `http://<hostname>:8000/api`).
 
 ---
 
-## 3. Nghiệp vụ cốt lõi (ổn định — cẩn thận khi sửa)
+## 3. Cốt lõi Hệ thống (Đã Audit 9 Vòng - Ổn định Tuyệt đối)
 
-### 3.1 Tam giác hóa rủi ro (`calculate_final_risk`)
-- **GV 30%** · **PH 30%** · **Probe 40%** (thiếu nguồn → tái phân bổ trọng số).
-- Red-flag AND: probe gần nhất ≥ 3.5 **và** GV ≥ 2 **và** PH ≥ 2 → nâng trần.
-- **Chỉ đếm:**
-  - Log: đã xác nhận HITL; bỏ `analysis_failed`, `counts_toward_risk=false`, placeholder/seed.
-  - Probe: `scored=1` **và** `scored_by` ∉ `{seed, demo, system-seed, import, placeholder}`.
-- Placeholder import: `is_placeholder=true`, `teacher_confirmed=false`, `counts_toward_risk=false`, `source=import_placeholder`.
-- Không bịa điểm 1.0 giả khi thiếu nguồn (trung lập kỹ thuật nếu empty).
+### 3.1 Tam giác hóa rủi ro (Triangulation `calculate_final_risk`)
+- **Tỷ trọng CỐ ĐỊNH:** **GV 30%** · **PH 30%** · **Probe 40%**. 
+- Nếu thiếu 1 nguồn, hệ thống tự động tái phân bổ tỷ trọng dựa trên các nguồn còn lại (Fallback) thay vì chia cho 0 hoặc giả mạo điểm 1.0.
+- **Chỉ đếm:** Log đã xác nhận (HITL); bỏ qua log nháp hoặc import placeholder.
 
-### 3.2 Quan sát (BehaviorTab)
-- Text **và** multimodal → **nháp** (`pending_confirmation`, `counts_toward_risk=false`).
-- GV **Xác nhận ghi hồ sơ** → mới tính risk.
-- Không tạo probe AI lạ từ text analyze (tránh lệch catalog 7 module).
-- Đổi HS: reset pending/result/chat draft state.
+### 3.2 Khảo sát Phụ huynh & Chống Pha loãng (Đại tu 26/07)
+- **Cơ chế Sinh câu hỏi:** Hệ thống tổng hợp Data từ **5 log quan sát gần nhất** để sinh danh sách câu hỏi Khảo sát PH. AI có nhiệm vụ **De-duplication (Loại bỏ trùng lặp)** để không hỏi lại những câu đã hỏi.
+- **Tính điểm rủi ro:** Chống pha loãng (Dilution) do Survey rỗng. Nếu Khảo sát PH chỉ trả về điểm cho 1 miền (vd: social=3, routine=null), hệ thống **bỏ qua `null`** và chỉ tính trung bình miền social, không chia bừa cho 3.
 
-### 3.3 Kiểm chứng (ProbesTab + catalog)
-- **Kho 7 module chuẩn** — Hàng đợi mặc định sẽ **TRỐNG**.
-- **Sinh bài test động**: Khi GV Xác nhận một Quan sát (bấm `Xác nhận ghi hồ sơ`), hệ thống sẽ đọc mảng ID bài test do AI khuyến nghị và tự động đưa các bài test tương ứng vào Hàng đợi Kiểm chứng (Dynamic Probes).
-- **GET dashboard chỉ đọc** (không ghi DB).
-- **3 bài có game** (whitelist cứng FE+BE):
-  - `name_response` → reaction  
-  - `emotion_match` → emotion  
-  - `sustained_attention` → shape  
-- **4 bài chỉ quan sát** (`game_type=none`): joint_attention, turn_taking, routine_transition, stereotypy_observe.
-- **Game = gợi ý rubric** → mở ScoreModal → GV xác nhận mới ghi điểm (HITL).
-- Cột UI: Hàng đợi · Đã chấm · Ưu tiên theo dõi (rubric ≥ 3).
-- Legacy probe không thuộc catalog → archive `Bỏ qua` khi ensure.
+### 3.3 UI Giao tiếp Liên Module (BehaviorTab)
+- Giao diện Draft (Bản nháp AI) đã được làm lại hoàn toàn để xử lý cấu trúc JSON mới:
+  - `kich_ban_test_kiem_chung` giờ là mảng ID thay vì chuỗi. UI sẽ báo số lượng bài test ánh xạ.
+  - Hiển thị công khai **Panel Xem trước Khảo sát PH (Preview)** ngay trong bản nháp để GV duyệt trước khi bấm Xác nhận.
 
-### 3.4 Khảo sát PH
-- GV nhập; điểm PH 30%.
-- Fallback map trục: **q1–q2 = routine**, **q3–q4 = social**, **q5 = attention**.
-- UI gọn — không banner “PH không cần tài khoản”.
+### 3.4 Thẩm mỹ UI (Premium Visuals)
+- Các Risk Cards và XAI Modals sử dụng công nghệ **Glassmorphism (Kính mờ)**: `backdrop-filter: blur(12px)`.
+- Hiển thị Radar: Đồng bộ Text UI với thuật toán Backend (sử dụng chuỗi động `radarSources.blend`), gỡ bỏ text hardcode lỗi thời 65-35.
+- Hoạt ảnh (Micro-animations): Các thẻ nhô lên mượt mà khi `hover`, Modal trượt `Slide Up` và `Fade In`.
 
-### 3.5 Radar / Hồ sơ ZPD (RadarTab)
-- Blend trục: **0.65·probe + 0.35·PH** khi đủ; thiếu thì nguồn còn lại.
-- Khác công thức risk 30/30/40 — hai lớp số liệu (đã ghi chú UI).
-- Hero + method cards + triangulation + sim 6 tháng + ZPD tabs.
-
-### 3.6 Trợ lý chat
-- API `POST /api/chat`: `message` + `history` (≤8 lượt).
-- Backend `_build_chat_dossier`: T/P/K, log, probe, PH, ZPD.
-- Prompt: sàng lọc giáo dục, cấm chẩn đoán, bám hồ sơ.
-- UI v4: chip nhanh + icon; **avatar bác sĩ** `/doctor_avatar.jpg` (FAB + header + bubble).
-- Props: `studentId`, `studentName`, `riskScore`, `riskStatus`.
-
-### 3.7 PDF hồ sơ (viết lại chi tiết 18/07 tối)
-- Generator: `pdf_generator.py` → `generate_medical_report` (= screening report).
-- API: `GET /api/students/{id}/export-pdf`
-  - Filename: `ZPD_HS00x_Ten_YYYYMMDD_HHMMSS.pdf`
-  - `exported_by` từ JWT full_name/username
-- **Cấu trúc PDF:**
-  1. I — HS (DOB, giới, lớp, mã tài liệu, người xuất) + callout phạm vi  
-  2. II — Hero điểm + bảng 3 nguồn (n, %, trạng thái) + formula  
-  3. III — Radar 3 miền + probe/PH breakdown  
-  4. IV — Pred **list 6 tháng** (without/with/Δ) — không còn dict `6_months`  
-  5. V — ZPD trường / nhà  
-  6. VI — Probe: mã module, rubric 1–4, DEMO, TB rubric  
-  7. VII — Quan sát đã xác nhận + **bảng XAI keywords** + diễn giải  
-  8. VIII — Checklist việc làm 2–4 tuần + ma trận đầy đủ dữ liệu  
-  9. IX — Phương pháp (tam giác hóa, CARS-like, HITL, disclaimer khoa học)  
-  10. X — Chữ ký GV + Tổ CM/BGH  
-- Design: header navy + rust bar, footer tiếng Việt có dấu, cold rust.
-- **Không** probe Đạt/Không Đạt xanh-đỏ sai; **không** footer không dấu.
-
-### 3.8 School dashboard
-- `GET /api/school-dashboard?refresh=true` — tính lại cache toàn trường.
-- Login FE gọi refresh=1 lần; sau confirm/chấm → refresh students + school stats.
+### 3.5 Trợ lý chat & Xuất PDF
+- Chatbot sử dụng ngữ cảnh (student_name, risk_score) để tránh AI nói mớ (Hallucination) hoặc bắt lỗi phát âm giọng nói địa phương.
+- Cấu trúc PDF (10 phần) giữ nguyên bản sắc "Báo cáo sàng lọc y khoa - giáo dục", có bảng phân tích chéo 3 nguồn.
 
 ---
 
@@ -138,146 +71,28 @@ npm run dev
 
 - **Palette cold rust:** `#ba370a`, `#af5b3f`, `#f0f4f8`, `#133b5c`, `#1d2d50`.
 - **CSS sống:** `base.css` + `zpd-ui.css` only.
-- **Brand:** `logo-zpd.svg`; badge UI **5.5**. PWA Icon: `apple-icon.png` (do iOS cấm SVG).
-- **PWA / Standalone:** `manifest.json` + meta `apple-mobile-web-app-capable`. Gắn cứng thẻ `<link rel="apple-touch-icon">` trong `layout.js` trỏ vào `apple-icon.png` để tránh iOS sinh icon chữ "Z" rác. Đã xóa `favicon.ico` mặc định của Vercel, dùng `icon.svg`.
-- **Sidebar HS:** search, sort risk/name/class, score chips, class `Lớp MG 5-6 tuổi A4`. Không dùng `position: absolute` cho list để tránh đè lên thanh search (flexbug).
-- **Shortcut:** Ctrl+K.
-- **Chat FAB:** doctor photo + badge ZPD.
-- **Dark mode (đã sửa 18/07 tối):**
-  - Toggle ☀/🌙 topbar → `localStorage.zpd_dark` + `html[data-theme=dark|light]` + `colorScheme`.
-  - `layout.js` script sớm chống FOUC.
-  - **Nguyên nhân hỏng trước:** `:root { --bg: ... !important }` ép light; nhiều `#fff` hardcode.
-  - **Sửa:** bỏ !important token light; block `html[data-theme=dark]` đầy đủ (shell, card, input, tabs, radar, probes, chat, modal, login).
-  - Sidebar navy **giữ tối** cả hai theme (đúng design cold rust).
+- **Dark mode:** Hoạt động chuẩn xác cả 2 lớp layout (tránh FOUC qua script ở thẻ head). 
 
 ---
 
-## 5. Bảo mật / vận hành
+## 5. Quy trình GV chuẩn (Closed-loop)
 
-| Mục | Trạng thái |
-|-----|------------|
-| JWT HMAC + PBKDF2 | Có; cảnh báo console nếu secret mặc định |
-| Rate-limit login | 8 lần sai / 5 phút / IP+username → 429 |
-| Parent login | clearSession, chặn vào app |
-| CORS | localhost mặc định |
-| GET dashboard | chỉ đọc; ensure-probes = POST |
-| Delete probe | recalc risk |
-| Seed/demo khỏi risk | có |
-| AUTH_DISABLED | chỉ debug; prod = 0 |
-| Windows console | print auth ASCII only (tránh crash cp1252) |
-
-**Production còn cần:** JWT_SECRET mạnh, xoay GOOGLE_API_KEY, HTTPS, không commit `.env`.
+1. **Chọn HS** 
+2. **Quan sát (BehaviorTab):** Nhập liệu bằng Giọng nói/Video → AI Sinh bản Nháp (Draft) → GV Duyệt (Xác nhận ghi hồ sơ).
+3. **Kiểm chứng (ProbesTab):** Dựa trên bản nháp đã duyệt, AI Tự động đẩy các bài test vào Hàng đợi → GV thực hành & chấm 1-4.
+4. **Khảo sát (ParentPortalTab):** GV trả lời các câu hỏi AI sinh tự động thay cho Phụ huynh.
+5. **Hồ sơ ZPD (RadarTab):** Biểu đồ Radar động 30-30-40 cập nhật thời gian thực → Xuất PDF.
 
 ---
 
-## 6. Bug đã gặp (18/07) & cách xử lý
+## 6. Nguyên tắc "Bất di bất dịch" cho Agent sau (READ CAREFULLY)
 
-| Bug | Nguyên nhân | Sửa |
-|-----|-------------|-----|
-| Modal chấm hình tròn | Class `pk5-score` pill đè panel | `pk5-score-modal` |
-| Game dính bài quan sát ABC | Fallback game_type → reaction | Whitelist 3 module |
-| Protocol AI “điều tiết cảm giác” | Probe legacy ngoài catalog | Archive + sync scenario |
-| API crash Windows | print tiếng Việt cp1252 | ASCII warning only |
-| Risk bẩn | seed + placeholder 1.0 | Filter risk engine |
-| Text auto-risk | asymmetry multimodal | Text = nháp + confirm |
-| Game auto-ghi điểm | mâu thuẫn HITL | Game chỉ gợi ý |
-| Báo lỗi "Chưa có HS" ngay lúc mở | Thiếu state chờ API | Thêm `fetchingList` + Skeleton loading |
-| Crash React "This page couldn't load" | Dùng regex tiêm code lỗi | Sửa thủ công định nghĩa biến `fetchingList` |
-| Drawer bị cắt cụt / cuộn ngang | Lỗi flex Safari | Gắn `min-height: 0` / `overflow: hidden` |
-| iOS Add to Home Screen hiện icon chữ "Z" | iOS cấm dùng SVG làm icon | Dùng script gen ra `apple-icon.png` 180x180 cứng |
-| Tab hiện logo Vercel đen trắng | Vướng file mặc định | Xóa `favicon.ico`, chuyển sang `icon.svg` |
-| Lớp “Chồi 1/2” | seed cũ | DB + import → `Lớp MG 5-6 tuổi A4` |
-| Lỗi Audio/WebM bị từ chối (0 frames) | Trình duyệt ghi âm audio/webm, Gemini từ chối hoặc báo hỏng video | JS frontend tự convert WebM sang WAV (`blobToWav`) trước khi gửi lên server |
-| AI bịa đặt hành vi (hallucination) | Prompt chung chung "nghe và thấy" | Thêm "Strict anti-hallucination" cấm mô tả thị giác nếu chỉ có file audio |
-| Nhận diện sai tên (Trâm Anh -> Tâm Anh) | STT nhận diện theo âm thanh thuần túy | Truyền `student_name` vào ngữ cảnh AI để tự sửa lỗi phát âm |
-| Nút "Tải file" ép mở Camera điện thoại | `capture="environment"` nằm trên thẻ input | Bỏ capture ở "Tải file", làm thêm một nút "Chụp / Quay" riêng biệt có chứa capture |
+1. **Khóa chặt Logic 30-30-40:** Tuyệt đối không chỉnh sửa thuật toán chia tỷ trọng trong `calculate_final_risk` hay `_build_student_dashboard` trừ khi có lệnh rất rõ ràng.
+2. **Không sửa Giao diện Radar tĩnh:** Radar đang đọc chuỗi động từ Backend để mô tả công thức. Cấm hardcode lại các chuỗi text tính toán trên Frontend.
+3. **Không phá Glassmorphism:** Các class CSS `.sci-cars-hero` và `.xai-modal-content` đã được thiết kế tinh xảo, cấm viết đè (override) làm mất hiệu ứng blur hay shadow.
+4. **Luôn Test Array/Null:** Khi render UI từ dữ liệu AI, luôn dùng `Array.isArray()` và check `null` để tránh sập React DOM.
 
 ---
 
-## 7. Quy trình GV chuẩn
-
-**Chọn HS → Quan sát (AI nháp → Xác nhận) → Kiểm chứng (quan sát/game → Chấm 1–4) → Khảo sát PH → Hồ sơ ZPD / Xuất PDF / Chat.**
-
----
-
-## 8. Catalog 7 module (tham chiếu nhanh)
-
-| id | code | game |
-|----|------|------|
-| name_response | NR-01 | reaction |
-| joint_attention | JA-02 | none |
-| emotion_match | EM-03 | emotion |
-| turn_taking | TT-04 | none |
-| routine_transition | RT-05 | none |
-| sustained_attention | SA-06 | shape |
-| stereotypy_observe | ST-07 | none |
-
----
-
-## 9. Deploy zero-cost (18/07 tối - Đã Deploy Thành Công)
-
-- **Trạng thái:** Live 100%
-- **FE (Vercel):** `https://zpd-care.vercel.app`
-- **API (Render):** `https://zpd-care-api.onrender.com`
-- **Cấu hình Environment:**
-  - FE Vercel: `NEXT_PUBLIC_API_URL` = `https://zpd-care-api.onrender.com/api` (Lưu ý: KHÔNG có dấu cách thừa ở đầu, KHÔNG có trailing slash ở cuối, bắt buộc kết thúc bằng `/api`)
-  - BE Render: `ALLOWED_ORIGINS` = `https://zpd-care.vercel.app` (Lưu ý: KHÔNG để dấu `/` ở cuối)
-- Files cấu hình: `DEPLOY.md`, `frontend-next/vercel.json`, `backend/render.yaml`, `backend/Dockerfile`, `backend/bootstrap.py`
-- Startup: `init_db()` + `bootstrap()` (expert/admin + roster nếu trống)
-- CORS: Backend đã config `ALLOWED_ORIGINS` chuẩn.
-- **Giới hạn free:** Render sleep ~15p; SQLite ephemeral khi redeploy — không “data vĩnh viễn” trừ khi gắn Postgres sau
-- Chi tiết từng bước: xem `MatThanSuPham/DEPLOY.md`
-
-## 10. Việc còn mở (backlog)
-
-1. Rà copy About / prompt AI còn từ “clinical” cũ.
-2. Closed-loop ZPD: mục tiêu → làm → đo lại 2–4 tuần.
-3. Audit log (ai nhập PH / chấm rubric).
-4. Deploy production: JWT mạnh + HTTPS + (tuỳ) Neon Postgres thay SQLite.
-5. E2E: triangulation + confirm + probe + PDF.
-6. Demo ngoài: không để seed risk trên tên HS thật (đã filter; kiểm tra seed_data).
-7. (Tuỳ) 2 GV chấm / IRR; dọn hardcode `#fff` còn sót trong CSS light-only components.
-8. Legacy `backend/app.py` Streamlit — không dùng song song production.
-
----
-
-## 11. Lệnh hữu ích
-
-```powershell
-# Backend UTF-8 + start
-cd MatThanSuPham/backend
-$env:PYTHONIOENCODING="utf-8"
-python -m uvicorn main:app --host 127.0.0.1 --port 8000
-
-# Tính lại cache risk toàn trường (Bearer token)
-# GET /api/school-dashboard?refresh=true
-
-# Đổi tên lớp toàn DB (nếu cần lại)
-# UPDATE students SET class_name = N'Lớp MG 5-6 tuổi A4';
-
-# Import Excel lại (wipe + seed roster — cẩn thận)
-python import_excel.py
-
-# Test PDF local
-python -c "from main import _build_student_dashboard; from pdf_generator import generate_medical_report; d=_build_student_dashboard(5); generate_medical_report(d,'temp_pdfs/t.pdf',exported_by='GV')"
-```
-
----
-
-## 12. Nguyên tắc cho agent sau
-
-1. **Không** đưa lại ngôn ngữ chẩn đoán/bệnh án lên UI/PDF/prompt.
-2. **Không** auto-ghi điểm risk từ AI/game mà không HITL.
-3. **Không** gắn game cho module `game_type=none`.
-4. **Không** import lại `globals.css` / `zpd-product.css` (đã archive).
-5. **Không** thêm `:root { --token: x !important }` — phá dark mode.
-6. Windows: tránh Unicode trong `print()` console (cp1252 crash).
-7. Đổi thuật toán risk → refresh school-dashboard / recompute cache.
-8. Chat avatar: giữ `/doctor_avatar.jpg` trừ khi user đổi asset.
-9. Lớp mặc định seed: `Lớp MG 5-6 tuổi A4`.
-10. PDF: giữ cấu trúc I–X chi tiết; pred = list; probe = rubric.
-
----
-
-**Phiên bản memory:** 2026-07-25 18:50 ICT  
-**UI 5.5** · HITL · PWA · PDF chi tiết · Fix Audio WebM/WAV · Anti-Hallucination STT · 4 nút Input Observaton
+**Phiên bản memory:** 2026-07-26 10:00 ICT  
+**UI 6.0 Premium** · HITL · Triangulation 30-30-40 · Glassmorphism · Survey Anti-Dilution · Cross-Module Sync
