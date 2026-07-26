@@ -348,16 +348,7 @@ export default function Home() {
     );
   }
 
-  if (fetchingList) {
-    return (
-      <>
-        <ToastHost />
-        <TabLoading />
-      </>
-    );
-  }
-
-  if (!students.length) {
+  if (!fetchingList && !students.length) {
     return (
       <>
         <ToastHost />
@@ -618,7 +609,9 @@ export default function Home() {
           )}
 
           <div className="zpd-hs-list sci-student-list">
-            {filteredStudents.length === 0 ? (
+            {fetchingList ? (
+              <div style={{ padding: '20px 10px', textAlign: 'center', opacity: 0.5, fontSize: 13 }}>Đang tải danh sách...</div>
+            ) : filteredStudents.length === 0 ? (
               <div className="sci-student-empty">Không khớp “{studentQuery}”</div>
             ) : (
               filteredStudents.map((s) => {
@@ -745,7 +738,7 @@ export default function Home() {
         <main className="content-area sci-content">
           {activePage === 'about' ? (
             <AboutProject onBack={() => setActivePage('dashboard')} />
-          ) : loading ? (
+          ) : loading || fetchingList ? (
             <TabLoading />
           ) : !dashboardData ? (
             <div className="sci-error-text">Không tải được hồ sơ. {connError}</div>
