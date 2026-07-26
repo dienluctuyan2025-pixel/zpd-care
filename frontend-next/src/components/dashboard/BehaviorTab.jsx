@@ -54,7 +54,7 @@ const blobToWav = async (blob) => {
 function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   const [text, setText] = useState(() => {
     if (typeof window === 'undefined') return '';
-    try { return sessionStorage.getItem(`draft-v2-${studentId}`) || ''; } catch { return ''; }
+    try { return sessionStorage.getItem(`draft-v3-${studentId}`) || ''; } catch { return ''; }
   });
   const [analyzing, setAnalyzing] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -86,7 +86,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
   }, []);
 
   useEffect(() => {
-    sessionStorage.setItem(`draft-v2-${studentId}`, text);
+    sessionStorage.setItem(`draft-v3-${studentId}`, text);
   }, [text, studentId]);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     }
     api.get(`/students/${studentId}/latest-log`)
       .then(res => {
-        const draft = sessionStorage.getItem(`draft-v2-${studentId}`);
+        const draft = sessionStorage.getItem(`draft-v3-${studentId}`);
         if (draft) {
           setText(draft);
           setResult(null);
@@ -369,7 +369,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
       setLocalMediaUrl(null);
       setLocalMediaType('');
     }
-    try { sessionStorage.removeItem(`draft-v2-${studentId}`); } catch { /* ignore */ }
+    try { sessionStorage.removeItem(`draft-v3-${studentId}`); } catch { /* ignore */ }
     toastWarn("Đã bỏ bản nháp (chưa ghi điểm rủi ro).");
   };
 
@@ -579,7 +579,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
                 setResult(null); 
                 setIsLiveResult(false); 
                 setPendingLogId(null); 
-                sessionStorage.removeItem(`draft-v2-${studentId}`);
+                sessionStorage.removeItem(`draft-v3-${studentId}`);
                 if (localMediaUrl) {
                   URL.revokeObjectURL(localMediaUrl);
                   setLocalMediaUrl(null);
