@@ -556,7 +556,9 @@ export default function Home() {
               <span className="sci-brand-name">ZPD Care</span>
               <span className="zpd-brand-badge">GV</span>
             </div>
-            <div className="sci-brand-tag">Sàng lọc hành vi · Mầm non</div>
+            <div className="sci-brand-tag" title="ZPD (Vùng phát triển gần): Không một đứa trẻ nào bị bỏ lại phía sau nếu chúng ta tìm đúng vùng phát triển của chúng">
+              Không trẻ nào bị bỏ lại phía sau
+            </div>
           </div>
         </div>
 

@@ -2,8 +2,8 @@ import "./base.css";
 import "./zpd-ui.css";
 
 export const metadata = {
-  title: "ZPD Care | Sàng lọc hành vi · Mầm non",
-  description: "Hệ thống hỗ trợ sàng lọc hành vi và can thiệp ZPD cho giáo viên mầm non. Không thay thế chẩn đoán y khoa.",
+  title: "ZPD Care | Không một đứa trẻ nào bị bỏ lại phía sau",
+  description: "ZPD Care - Ứng dụng AI hỗ trợ theo dõi và can thiệp giáo dục hòa nhập bậc mầm non. Nơi sự kết hợp giữa thuật toán, tình yêu thương và sự kiên nhẫn của giáo viên làm nên sự thay đổi kỳ diệu ở mỗi đứa trẻ.",
   manifest: "/manifest.json",
   icons: {
     icon: "/logo-zpd.svg",

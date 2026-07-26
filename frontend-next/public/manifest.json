@@ -1,7 +1,7 @@
 {
-  "name": "ZPD Care",
+  "name": "ZPD Care - Không một đứa trẻ nào bị bỏ lại phía sau",
   "short_name": "ZPD Care",
-  "description": "Sàng lọc hành vi và can thiệp ZPD cho giáo viên mầm non.",
+  "description": "ZPD Care - Nơi sự kết hợp giữa thuật toán, tình yêu thương và sự kiên nhẫn làm nên sự thay đổi kỳ diệu ở mỗi đứa trẻ.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1d2d50",
