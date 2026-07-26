@@ -5684,9 +5684,9 @@ html[data-theme="dark"] .xai-modal-body {
     top: 0 !important;
     left: -100% !important;
     bottom: 0 !important;
-    height: 100vh !important;
     height: 100dvh !important;
-    height: -webkit-fill-available !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
     width: 280px !important;
     display: flex !important;
     flex-direction: column !important;
