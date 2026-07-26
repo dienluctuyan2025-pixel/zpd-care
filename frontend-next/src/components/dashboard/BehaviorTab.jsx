@@ -820,49 +820,46 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
                   </section>
                 )}
 
-                {result.kich_ban_test_kiem_chung && (
+                {Array.isArray(result.kich_ban_test_kiem_chung) && result.kich_ban_test_kiem_chung.length > 0 && (
                   <section className="obs-panel elevated">
                     <div className="obs-panel-head">
                       <div className="obs-panel-head-left">
                         <span className="obs-panel-ico"><Stethoscope size={15} /></span>
                         <div>
-                          <h3 className="obs-panel-title">Gợi ý kiểm chứng</h3>
-                          <p className="obs-panel-sub">Thực hành tại lớp</p>
+                          <h3 className="obs-panel-title">Gợi ý kiểm chứng ({result.kich_ban_test_kiem_chung.length} bài)</h3>
+                          <p className="obs-panel-sub">Sẽ tự động kích hoạt sau khi xác nhận</p>
                         </div>
                       </div>
                     </div>
                     <div className="obs-panel-body">
-                      {typeof result.kich_ban_test_kiem_chung === 'string' ? (
-                        <p className="obs-ref-text">{result.kich_ban_test_kiem_chung}</p>
-                      ) : (
-                        <div className="obs-protocol">
-                          <div className="obs-protocol-name">{result.kich_ban_test_kiem_chung?.ten_bai_tap || 'Bài kiểm chứng'}</div>
-                          <dl className="obs-dl">
-                            <div><dt>Mục đích</dt><dd>{result.kich_ban_test_kiem_chung?.muc_dich || '—'}</dd></div>
-                            <div><dt>Chuẩn bị</dt><dd>{result.kich_ban_test_kiem_chung?.chuan_bi || '—'}</dd></div>
-                            <div>
-                              <dt>Các bước</dt>
-                              <dd>
-                                <ol>
-                                  {Array.isArray(result.kich_ban_test_kiem_chung?.cac_buoc)
-                                    ? result.kich_ban_test_kiem_chung.cac_buoc.map((step, idx) => <li key={idx}>{step}</li>)
-                                    : <li>Chưa có hướng dẫn chi tiết</li>}
-                                </ol>
-                              </dd>
-                            </div>
-                          </dl>
-                          <div className="obs-criteria">
-                            <div className="pass">
-                              <strong>Đạt</strong>
-                              <span>{result.kich_ban_test_kiem_chung?.tieu_chi_dat || '—'}</span>
-                            </div>
-                            <div className="fail">
-                              <strong>Không đạt</strong>
-                              <span>{result.kich_ban_test_kiem_chung?.tieu_chi_khong_dat || '—'}</span>
-                            </div>
-                          </div>
+                      <p className="obs-ref-text">
+                        Hệ thống AI đã ánh xạ <strong>{result.kich_ban_test_kiem_chung.length} bài test thực hành</strong> dựa trên quan sát này.
+                        Vui lòng chuyển sang tab <strong>Kiểm chứng</strong> để thực hiện bài test với trẻ.
+                      </p>
+                    </div>
+                  </section>
+                )}
+                
+                {Array.isArray(result.khao_sat_phu_huynh) && result.khao_sat_phu_huynh.length > 0 && (
+                  <section className="obs-panel elevated" style={{ marginTop: 16 }}>
+                    <div className="obs-panel-head">
+                      <div className="obs-panel-head-left">
+                        <span className="obs-panel-ico"><Users size={15} /></span>
+                        <div>
+                          <h3 className="obs-panel-title">Khảo sát Phụ huynh ({result.khao_sat_phu_huynh.length} câu)</h3>
+                          <p className="obs-panel-sub">Sẽ tự động gửi cho phụ huynh sau khi xác nhận</p>
                         </div>
-                      )}
+                      </div>
+                    </div>
+                    <div className="obs-panel-body">
+                      <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, color: '#334155' }}>
+                        {result.khao_sat_phu_huynh.map((q, idx) => (
+                          <li key={idx} style={{ marginBottom: 6 }}>
+                            <strong>{q.text}</strong>
+                            <div style={{ color: '#64748b', fontSize: 12 }}>Mục đích: {q.reason}</div>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </section>
                 )}
@@ -1113,8 +1110,8 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
                     <li><CheckCircle2 size={14} /> Đọc lại / sửa ghi chú trước khi “Xác nhận ghi hồ sơ”.</li>
                     <li><CheckCircle2 size={14} /> Nếu mức ≥ 2: bổ sung quan sát khác thời điểm + khảo sát PH.</li>
                     <li><CheckCircle2 size={14} /> Dùng tab Kiểm chứng / probe để thu thập bằng chứng quan sát có rubric.</li>
-                    {probe?.ten_bai_tap || probe?.name ? (
-                      <li><Target size={14} /> Gợi ý kiểm chứng: <em>{probe.ten_bai_tap || probe.name}</em></li>
+                    {Array.isArray(probe) && probe.length > 0 ? (
+                      <li><Target size={14} /> Gợi ý kiểm chứng: <em>Hệ thống đã tự động chọn {probe.length} bài test chuyên sâu.</em></li>
                     ) : null}
                   </ul>
                 </section>
