@@ -312,7 +312,7 @@ function RadarTab({ dashboardData }) {
           </h2>
           <p className="rz-sub">
             Tam giác hóa 3 nguồn (GV 30% · PH 30% · Probe 40%) theo thang <strong>CARS-like 1–4</strong>.
-            Radar miền blend probe×0.65 + PH×0.35 khi đủ dữ liệu. Không thay ADOS-2 / CARS-2 / chẩn đoán y khoa.
+            Radar miền tính theo: {radarSources.blend || "Triangulation 30% GV + 30% PH + 40% Probe"}. Không thay ADOS-2 / CARS-2 / chẩn đoán y khoa.
           </p>
           <div className="rz-hero-meta">
             <span><Layers size={13} /> Độ đầy đủ nguồn: <b>{rp.sources_completeness ?? sources.completeness}%</b> ({rp.sources_filled ?? sources.filled}/3)</span>
