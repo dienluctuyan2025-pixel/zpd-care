@@ -153,7 +153,7 @@ export default function Home() {
   const [fetchingList, setFetchingList] = useState(true);
   const [schoolStats, setSchoolStats] = useState(null);
   const [activeTab, setActiveTab] = useState('behavior');
-  const [activePage, setActivePage] = useState('dashboard');
+  const [activePage, setActivePage] = useState('about');
   const [connError, setConnError] = useState('');
   const [cmdOpen, setCmdOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -564,14 +564,14 @@ export default function Home() {
         </div>
 
         <nav className="sci-nav">
-          <button type="button" className={activePage === 'dashboard' ? 'active' : ''} onClick={() => setActivePage('dashboard')}>
-            <User size={15} /> Hồ sơ làm việc
-          </button>
           <button type="button" className={activePage === 'about' ? 'active' : ''} onClick={() => setActivePage('about')}>
             <Info size={15} /> Giới thiệu dự án
           </button>
           <button type="button" className={activePage === 'guide' ? 'active' : ''} onClick={() => setActivePage('guide')}>
             <BookOpen size={15} /> Sổ tay vận hành
+          </button>
+          <button type="button" className={activePage === 'dashboard' ? 'active' : ''} onClick={() => setActivePage('dashboard')}>
+            <User size={15} /> Hồ sơ làm việc
           </button>
           <button type="button" onClick={() => setCmdOpen(true)}>
             <Search size={15} /> Tìm kiếm
