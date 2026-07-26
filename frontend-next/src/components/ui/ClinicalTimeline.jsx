@@ -171,20 +171,23 @@ export default function ClinicalTimeline({ dashboardData }) {
         {filtered.length === 0 ? (
           <div className="timeline-empty">Chưa có sự kiện — hãy ghi nhận hành vi hoặc chạy probe.</div>
         ) : (
-          filtered.map((ev) => {
+          filtered.map((ev, idx) => {
             const Icon = iconOf(ev.type);
             return (
               <div key={ev.id} className={`timeline-item tone-${ev.tone}`}>
-                <div className="timeline-dot">
-                  <Icon size={13} />
+                <div className="timeline-rail">
+                  <div className="timeline-dot">
+                    <Icon size={13} />
+                  </div>
+                  {idx < filtered.length - 1 && <div className="timeline-line" />}
                 </div>
-                <div className="timeline-body">
-                  <div className="timeline-row">
-                    <strong>{ev.title}</strong>
+                <div className="timeline-card">
+                  <div className="timeline-card-top">
+                    <div className="timeline-card-title">{ev.title}</div>
                     {ev.meta ? <span className="timeline-meta">{ev.meta}</span> : null}
                   </div>
-                  {ev.date ? <div className="timeline-date">{ev.date}</div> : null}
-                  <p className="timeline-detail">{ev.detail}</p>
+                  {ev.date ? <div className="timeline-date" style={{ marginBottom: '4px' }}>{ev.date}</div> : null}
+                  <p className="timeline-card-detail">{ev.detail}</p>
                 </div>
               </div>
             );
