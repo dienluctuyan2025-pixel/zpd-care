@@ -283,9 +283,18 @@ export default function Home() {
     api.get('/students')
       .then(res => {
         const list = res.data || [];
+        // Sort initial list by risk so the default selected student has the highest CARS score
+        const sorted = [...list].sort((a, b) => {
+          const ra = Number(a.cached_risk_score);
+          const rb = Number(b.cached_risk_score);
+          const sa = Number.isNaN(ra) ? -1 : ra;
+          const sb = Number.isNaN(rb) ? -1 : rb;
+          if (sb !== sa) return sb - sa;
+          return String(a.name || '').localeCompare(String(b.name || ''), 'vi');
+        });
         setStudents(list);
-        if (list.length > 0) {
-          setSelectedStudentId(list[0].id);
+        if (sorted.length > 0) {
+          setSelectedStudentId(sorted[0].id);
         }
         setActiveTab('behavior');
       })
