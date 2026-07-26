@@ -826,7 +826,7 @@ export default function Home() {
               </div>
 
               <div className={`sci-workbench ${showTimeline ? 'split' : ''}`}>
-                <div className="sci-workbench-main" key={activeTab}>
+                <div className="sci-workbench-main" key={activeTab + '-' + selectedStudentId}>
                   {activeTab === 'behavior' && (
                     <BehaviorTab
                       studentId={selectedStudentId}
