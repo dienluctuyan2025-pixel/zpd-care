@@ -99,7 +99,7 @@ function UserGuide() {
         {/* Phần 3: Hướng dẫn chi tiết các tab */}
         <div className="bento-card" style={{ gridColumn: '1 / -1' }}>
           <h2 className="bento-title" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '20px', marginBottom: '20px' }}>
-            <CheckCircle size={20} color="#ef4444"/> 4. Hướng dẫn Nhập liệu & Thao tác
+            <CheckCircle size={20} color="#ef4444"/> 4. Sổ tay Thao tác Lâm sàng (Clinical Operations)
           </h2>
           
           <div className="guide-steps-container">
@@ -107,15 +107,21 @@ function UserGuide() {
             <div className="guide-step">
               <div className="guide-step-header">
                 <span className="step-badge">1</span>
-                <h3>Tab Nhật ký Sự kiện (ABC Data)</h3>
+                <h3>Phân hệ Nhật ký Sự kiện (ABC Data Collection)</h3>
               </div>
               <div className="guide-step-body">
-                <p>Nơi giáo viên ghi lại hành vi của trẻ hàng ngày. Hãy mô tả cụ thể trẻ đã làm gì, trong hoàn cảnh nào.</p>
+                <p>Nơi giáo viên ghi lại hành vi của trẻ hàng ngày. Hãy mô tả cụ thể trẻ đã làm gì, trong hoàn cảnh nào. Hệ thống sử dụng mô hình ABC (Antecedent - Behavior - Consequence) tiêu chuẩn quốc tế.</p>
+                <ul className="guide-list">
+                  <li><strong>A - Tiền đề (Antecedent):</strong> Chuyện gì xảy ra ngay trước khi hành vi xuất hiện? (VD: Cô giáo yêu cầu dọn đồ chơi, Tiếng ồn lớn phát ra từ loa...)</li>
+                  <li><strong>B - Hành vi (Behavior):</strong> Mô tả khách quan những gì trẻ làm (VD: Trẻ nằm vạ, ném đồ chơi, đập đầu) thay vì phán xét (VD: Trẻ hư, lười biếng).</li>
+                  <li><strong>C - Hệ quả (Consequence):</strong> Giáo viên hoặc bạn bè phản ứng thế nào? Trẻ nhận được gì sau hành vi đó? (VD: Trẻ được miễn dọn dẹp, trẻ thu hút được sự chú ý).</li>
+                </ul>
                 <div className="feature-highlight">
-                  <Sparkles size={14} color="#f59e0b" style={{ marginRight: 6 }}/>
-                  <strong>Tính năng nổi bật: Offline-first Draft.</strong> Nếu bạn đang gõ dở mà mất điện hoặc tắt nhầm trình duyệt, dữ liệu sẽ tự động được lưu nháp tại máy tính. Khi mở lại, bản nháp sẽ còn nguyên.
+                  <Sparkles size={14} color="#f59e0b" style={{ marginRight: 6, flexShrink: 0 }}/>
+                  <div>
+                    <strong>Tính năng nổi bật: Phân tích AI Tự động.</strong> Không cần giáo viên phải ngồi bóc tách A, B, C bằng tay. Cô giáo chỉ cần viết tự do (VD: "Nay gọi Bo cất đồ chơi mà Bo không nghe, bực quá ném luôn cái siêu nhân, mình phạt ra góc ngồi"). Trí tuệ nhân tạo (NLP) sẽ tự động phân tách ngữ nghĩa và trích xuất đúng 3 thành phần này để lưu vào CSDL.
+                  </div>
                 </div>
-                <p style={{ marginTop: '8px' }}>Sau khi Lưu, hệ thống sẽ gọi AI để phân tích ngữ nghĩa, tự động bóc tách: Hành vi, Tiền đề, Hệ quả và Cảm xúc.</p>
               </div>
             </div>
 
@@ -123,13 +129,15 @@ function UserGuide() {
             <div className="guide-step">
               <div className="guide-step-header">
                 <span className="step-badge">2</span>
-                <h3>Tab Khảo sát Phụ huynh</h3>
+                <h3>Phân hệ Khảo sát Phụ huynh (Parent Engagement)</h3>
               </div>
               <div className="guide-step-body">
-                <p>Nơi giáo viên phỏng vấn phụ huynh (qua điện thoại hoặc sổ liên lạc) và tick chọn kết quả vào hệ thống. Điểm số từ module này chiếm 30% trọng số.</p>
+                <p>Nơi giáo viên phỏng vấn phụ huynh (qua điện thoại hoặc sổ liên lạc) và tick chọn kết quả vào hệ thống. Điểm số từ module này đóng vai trò quan trọng (30% trọng số) để đánh giá hành vi đó là "rối loạn" (xảy ra ở nhiều môi trường) hay chỉ là "thích nghi kém" (chỉ xảy ra ở trường).</p>
                 <div className="feature-highlight">
-                  <Database size={14} color="#3b82f6" style={{ marginRight: 6 }}/>
-                  <strong>Bộ câu hỏi động:</strong> Hệ thống tự động trích xuất các câu hỏi dựa trên chính những hành vi bất thường mà giáo viên vừa ghi nhận ở Tab Nhật ký, giúp khảo sát đi đúng vào trọng tâm!
+                  <Database size={14} color="#3b82f6" style={{ marginRight: 6, flexShrink: 0 }}/>
+                  <div>
+                    <strong>Công nghệ Bộ câu hỏi động (Dynamic Routing):</strong> Khác với các form cố định khô khan, ZPD Care tự động trích xuất các câu hỏi khảo sát <em>dựa trên chính những hành vi bất thường</em> mà giáo viên vừa ghi nhận ở Tab Nhật ký. Nếu bé hay xoay tròn bánh xe ở lớp, hệ thống sẽ hỏi mẹ: "Ở nhà bé có hay nhìn chăm chú vào quạt trần hay xoay lốp xe ô tô đồ chơi không?".
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,17 +146,22 @@ function UserGuide() {
             <div className="guide-step">
               <div className="guide-step-header">
                 <span className="step-badge">3</span>
-                <h3>Tab Module Kiểm chứng (Telemetry Probes)</h3>
+                <h3>Phân hệ Đo lường Chuyên sâu (Telemetry Probes Catalog)</h3>
               </div>
               <div className="guide-step-body">
-                <p>Gồm 7 bài test siêu tốc (dưới 3 phút/bài) để giáo viên thao tác cùng trẻ trên lớp, nhằm đo lường chính xác các chỉ số:</p>
-                <ul className="guide-list">
-                  <li><strong>NR (Name Response):</strong> Gọi tên trẻ từ phía sau.</li>
-                  <li><strong>JA (Joint Attention):</strong> Chỉ tay vào đồ vật xa.</li>
-                  <li><strong>EM (Eye Contact):</strong> Giao tiếp ánh mắt khi tương tác.</li>
-                  <li><strong>SA (Social Smile):</strong> Khả năng cười đáp lại.</li>
+                <p>Gồm 7 bài test siêu tốc (Play-based Assessment) để giáo viên thao tác cùng trẻ trên lớp, không làm trẻ sợ hãi vì nó giống như trò chơi (Dưới 3 phút/bài):</p>
+                <ul className="guide-list" style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+                  <li><strong>NR (Name Response):</strong> Gọi tên trẻ từ phía sau cách 1m. Đánh giá độ nhạy cảm thính giác và sự chú ý.</li>
+                  <li><strong>JA (Joint Attention):</strong> Chỉ tay vào đồ vật ở xa. Đánh giá khả năng chia sẻ sự chú ý (Dấu hiệu then chốt của ASD).</li>
+                  <li><strong>EM (Eye Contact):</strong> Giao tiếp ánh mắt khi đưa đồ chơi. Đánh giá chất lượng tương tác xã hội.</li>
+                  <li><strong>TT (Turn Taking):</strong> Chơi lăn bóng qua lại. Đánh giá nhận thức về sự luân phiên, tính tương hỗ.</li>
+                  <li><strong>RT (Response to Touch):</strong> Chạm nhẹ vào vai/tay trẻ. Đánh giá rối loạn xử lý cảm giác (SPD - Quá nhạy cảm hoặc kém nhạy cảm).</li>
+                  <li><strong>SA (Social Smile):</strong> Cười với trẻ xem trẻ có cười đáp lại. Đánh giá sự đồng cảm và phản xạ cảm xúc.</li>
+                  <li><strong>ST (Stereotypy Test):</strong> Cung cấp đồ chơi có bánh xe/động cơ. Quan sát hành vi chơi rập khuôn (Spinning/Lining up).</li>
                 </ul>
-                <p style={{ marginTop: '8px' }}>Mỗi module có thang đo rubric (0-3 điểm) rõ ràng, giúp giáo viên không cần phải có chuyên môn sâu về y khoa vẫn đánh giá được chính xác mức độ của trẻ.</p>
+                <div className="feature-highlight" style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.1)', borderLeft: '3px solid #10b981', color: '#6ee7b7' }}>
+                  <strong>Thang đo Rubric Chuẩn hóa:</strong> Mỗi bài test có hệ thống chấm điểm từ 0 (Điển hình) đến 3 (Bất thường nghiêm trọng), có mô tả chi tiết bằng tiếng Việt. Giúp giáo viên mầm non dù không học chuyên ngành Y khoa vẫn chấm điểm chính xác (Inter-rater reliability).
+                </div>
               </div>
             </div>
 
@@ -156,14 +169,34 @@ function UserGuide() {
             <div className="guide-step">
               <div className="guide-step-header">
                 <span className="step-badge">4</span>
-                <h3>Tab Hồ sơ & ZPD</h3>
+                <h3>Đọc hiểu Hồ sơ & Áp dụng Phác đồ ZPD</h3>
               </div>
               <div className="guide-step-body">
-                <p>Bảng điều khiển trung tâm nơi thuật toán hội tụ dữ liệu.</p>
+                <p>Phần cốt lõi tạo nên giá trị của dự án, nằm ở việc diễn giải dữ liệu thành <strong>Kế hoạch hành động sư phạm</strong>.</p>
                 <ul className="guide-list">
-                  <li><strong>Biểu đồ Radar:</strong> Phân tích sức khỏe tâm lý của trẻ trên 3 trục: Giao tiếp Xã hội, Mức độ Tập trung, và Hành vi Lặp lại.</li>
-                  <li><strong>Phác đồ ZPD Sư phạm:</strong> Hiển thị hướng dẫn can thiệp từng bước cho nhà trường và gia đình. Hãy sử dụng bảng này trong các cuộc họp phụ huynh định kỳ.</li>
+                  <li><strong>Biểu đồ Radar đa chiều:</strong> Hiển thị trực quan sức khỏe tâm lý của trẻ trên các trục <em>Giao tiếp Xã hội, Mức độ Tập trung, Cảm giác</em>. Diện tích biểu đồ càng lớn, nguy cơ càng cao.</li>
+                  <li><strong>ZPD Gia đình:</strong> Cung cấp kịch bản để giáo viên tư vấn cho Phụ huynh, với nguyên tắc "Đồng bộ môi trường" (Ví dụ: Giảm thời gian xem iPad, tạo góc chơi ít kích thích âm thanh).</li>
+                  <li><strong>Kỹ năng Prompting (Gợi ý):</strong> ZPD Care hướng dẫn cô giáo cách dùng <em>Fading Prompts</em> (Rút dần hỗ trợ): Từ cầm tay trẻ làm (Physical) -&gt; Chỉ tay (Gestural) -&gt; Nhắc lời (Verbal) -&gt; Trẻ tự làm (Independent). Không để trẻ bị phụ thuộc vào cô.</li>
                 </ul>
+              </div>
+            </div>
+
+            {/* Step 5 */}
+            <div className="guide-step">
+              <div className="guide-step-header">
+                <span className="step-badge">5</span>
+                <h3>Làm chủ Trợ lý AI (Prompt Engineering cho Giáo viên)</h3>
+              </div>
+              <div className="guide-step-body">
+                <p>Trợ lý ảo nằm ở góc phải màn hình không phải là ChatGPT thông thường. Nó được trang bị kỹ thuật <strong>RAG (Retrieval-Augmented Generation)</strong>, nghĩa là nó <em>đã đọc trước toàn bộ lịch sử 30 ngày qua của đứa trẻ bạn đang chọn</em>.</p>
+                <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <strong>Mẹo hỏi AI (Prompt Tips) hiệu quả:</strong>
+                  <ul className="guide-list">
+                    <li>❌ <em>Không nên hỏi:</em> "Trẻ tự kỷ là gì?" (Quá chung chung, bạn có thể tra Google).</li>
+                    <li>✅ <em>Nên hỏi:</em> "Dựa vào bài test JA và EM tuần trước, gợi ý cho tôi 2 trò chơi tương tác phù hợp cho Bo vào giờ ra chơi chiều nay".</li>
+                    <li>✅ <em>Nên hỏi:</em> "Mẹ bé không tin con mình có nguy cơ, tôi nên nói gì trong cuộc họp phụ huynh tới dựa trên biểu đồ Radar này?".</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
