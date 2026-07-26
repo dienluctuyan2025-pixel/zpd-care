@@ -60,12 +60,12 @@ def generate_mock_data():
         today = datetime.date.today()
 
         for i, student in enumerate(students):
-            rand = random.random()
-            if rand < 0.6:
+            score = student.cached_risk_score or 1.0
+            if score < 1.8:
                 profile = "safe"
                 log_pool = safe_logs
                 base_score = random.uniform(1.0, 1.5)
-            elif rand < 0.85:
+            elif score < 3.0:
                 profile = "monitor"
                 log_pool = monitor_logs
                 base_score = random.uniform(1.8, 2.5)
