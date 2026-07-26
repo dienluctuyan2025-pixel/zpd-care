@@ -557,7 +557,7 @@ export default function Home() {
               <span className="zpd-brand-badge">GV</span>
             </div>
             <div className="sci-brand-tag" title="ZPD (Vùng phát triển gần): Không một đứa trẻ nào bị bỏ lại phía sau nếu chúng ta tìm đúng vùng phát triển của chúng">
-              Không trẻ nào bị bỏ lại phía sau
+              Ứng dụng AI hỗ trợ theo dõi và can thiệp giáo dục hòa nhập bậc mầm non.
             </div>
           </div>
         </div>
