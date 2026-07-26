@@ -1032,18 +1032,35 @@ def submit_parent_survey(req: SurveyRequest, user: Dict[str, Any] = Depends(get_
             attention_flags = int(ans.get("q5", 0) or 0)
             attention_max = 1
             
-        social_max = max(1, social_max)
-        routine_max = max(1, routine_max)
-        attention_max = max(1, attention_max)
+        social_max_eff = max(1, social_max)
+        routine_max_eff = max(1, routine_max)
+        attention_max_eff = max(1, attention_max)
         
         def calc_score(flags, max_flags):
             if flags == 0: return 1.0
             return min(4.0, 1.0 + (flags / max_flags) * 3.0)
             
-        social_score = calc_score(social_flags, social_max)
-        routine_score = calc_score(routine_flags, routine_max)
-        attention_score = calc_score(attention_flags, attention_max)
-        total = (social_score + routine_score + attention_score) / 3.0
+        social_score = calc_score(social_flags, social_max_eff)
+        routine_score = calc_score(routine_flags, routine_max_eff)
+        attention_score = calc_score(attention_flags, attention_max_eff)
+        
+        # Chỉ tính trung bình trên các trục thực sự có câu hỏi (Dynamic Target Survey)
+        active_axes = 0
+        sum_scores = 0.0
+        if social_max > 0:
+            active_axes += 1
+            sum_scores += social_score
+        if routine_max > 0:
+            active_axes += 1
+            sum_scores += routine_score
+        if attention_max > 0:
+            active_axes += 1
+            sum_scores += attention_score
+            
+        if active_axes > 0:
+            total = sum_scores / active_axes
+        else:
+            total = 1.0
         
         survey = ParentSurvey(
             student_id=req.student_id,
