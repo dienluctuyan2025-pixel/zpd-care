@@ -38,40 +38,76 @@ def generate_mock_data():
 
         ZPD_CONTEXT = {
             "Bé chơi hòa đồng với các bạn trong lớp, biết chia sẻ đồ chơi.": {
-                "hanh_dong": "Khen ngợi cụ thể hành vi chia sẻ ('Cô rất vui vì con nhường đồ chơi cho bạn'). Duy trì các trò chơi luân phiên để củng cố kỹ năng này."
+                "hanh_dong": [
+                    "Củng cố hành vi (Positive Reinforcement): Khen ngợi cụ thể hành vi chia sẻ ngay lập tức ('Cô rất vui vì con đã nhường khối gỗ cho bạn').",
+                    "Mở rộng kỹ năng xã hội: Đưa bé vào các trò chơi đóng vai (Role-play) phức tạp hơn để rèn luyện kỹ năng đàm phán và giải quyết xung đột nhóm."
+                ]
             },
             "Hôm nay bé tham gia hoạt động góc rất tốt, trả lời to rõ ràng khi cô gọi.": {
-                "hanh_dong": "Tăng dần độ khó của câu hỏi trong giờ hoạt động góc (từ câu hỏi 'Cái gì' sang 'Tại sao' đơn giản). Cho bé làm trưởng nhóm nhỏ để tăng tự tin."
+                "hanh_dong": [
+                    "Nâng cao tư duy (Cognitive Scaffolding): Chuyển từ câu hỏi hội tụ ('Đây là cái gì?') sang câu hỏi phân kỳ ('Tại sao con lại chọn màu này?').",
+                    "Trao quyền tự chủ: Cho bé làm trưởng nhóm nhỏ hướng dẫn các bạn khác, giúp củng cố sự tự tin và kỹ năng diễn đạt logic."
+                ]
             },
             "Bé tự xúc ăn ngoan, ngủ trưa ngoan.": {
-                "hanh_dong": "Tiếp tục khuyến khích tự lập. Có thể giao thêm việc nhỏ như tự cất khay ăn sau khi ăn xong để tăng trách nhiệm cá nhân."
+                "hanh_dong": [
+                    "Thúc đẩy tự lập (Independence Building): Giao thêm các nhiệm vụ tự phục vụ phức tạp hơn (tự cất khay ăn đúng nơi quy định, tự cất gối sau khi ngủ dậy).",
+                    "Giáo dục đồng đẳng: Khuyến khích bé ngồi cạnh những bạn còn ăn chậm để tạo ảnh hưởng tích cực (Peer Modeling)."
+                ]
             },
             "Bé có tiến bộ trong việc làm theo chỉ dẫn của cô giáo.": {
-                "hanh_dong": "Chuyển từ chỉ dẫn 1 bước sang chỉ dẫn 2 bước liên tiếp (VD: 'Con lấy cất dép rồi đi rửa tay nhé'). Giảm bớt sự hỗ trợ bằng tay."
+                "hanh_dong": [
+                    "Tăng độ phức tạp của chuỗi lệnh: Chuyển từ chỉ dẫn 1 bước sang 2-3 bước liên tiếp (VD: 'Con cất đồ chơi, đi rửa tay rồi ra bàn ngồi nhé').",
+                    "Phai mờ hỗ trợ (Fading Prompts): Giảm dần sự hỗ trợ bằng hành động mẫu, chuyển sang chỉ dùng lời nói hoặc ám hiệu bằng mắt."
+                ]
             },
             "Bé thỉnh thoảng mất tập trung khi cô kể chuyện, phải nhắc 2-3 lần mới chú ý lại.": {
-                "hanh_dong": "Sử dụng đồ vật trực quan (rối ngón tay, tranh ảnh) khi kể chuyện. Gọi tên bé hoặc chạm nhẹ vào vai trước khi bắt đầu câu chuyện để thu hút sự chú ý."
+                "hanh_dong": [
+                    "Sử dụng mồi nhử thị giác (Visual Prompts): Dùng rối ngón tay hoặc tranh ảnh pop-up ngay khi bé bắt đầu xao nhãng để kéo sự chú ý trở lại.",
+                    "Vị trí chiến lược (Proximity Control): Xếp bé ngồi ngay cạnh cô giáo, thỉnh thoảng chạm nhẹ vào vai (Tactile prompt) trước khi đặt câu hỏi để bé chuẩn bị tâm lý."
+                ]
             },
             "Bé hơi ngại giao tiếp, thường thích chơi một mình ở góc xếp hình.": {
-                "hanh_dong": "Cô giáo ngồi cạnh bé, tham gia xếp hình cùng bé. Dần dần rủ thêm 1 bạn thân thiết vào chơi chung, tạo vòng tròn giao tiếp nhỏ 3 người."
+                "hanh_dong": [
+                    "Chơi song song (Parallel Play): Cô giáo hoặc một bạn nhỏ hiền hòa ngồi xếp hình cạnh bé, không ép bé giao tiếp ngay, chỉ bắt chước hành động của bé để tạo sự thân thuộc.",
+                    "Can thiệp qua trung gian (Mediated Intervention): Dần dần chia sẻ học liệu chung (để hộp lego ở giữa) để tạo tình huống buộc bé phải tương tác ngắn (VD: 'Cho tớ xin khối màu đỏ')."
+                ]
             },
             "Lúc chuyển giờ học, bé hơi chậm chạp và cần cô dắt tay.": {
-                "hanh_dong": "Sử dụng bài hát chuyển tiếp hoặc đồng hồ cát báo trước 3 phút. Khen ngợi ngay lập tức nếu bé tự di chuyển được một đoạn ngắn mà không cần dắt."
+                "hanh_dong": [
+                    "Báo trước quá trình chuyển tiếp (Transition Warning): Báo trước 3 phút và 1 phút bằng đồng hồ cát hoặc một bài hát chuyển tiếp quen thuộc.",
+                    "Sử dụng vật chuyển tiếp (Transitional Object): Cho phép bé cầm một món đồ chơi yêu thích mang theo từ góc này sang góc khác để tạo cảm giác an toàn."
+                ]
             },
             "Bé có biểu hiện không thích tiếng ồn lớn trong giờ âm nhạc.": {
-                "hanh_dong": "Sắp xếp cho bé ngồi ở vị trí xa loa hoặc gần cửa. Đeo tai nghe chống ồn nhẹ cho bé nếu cần, hoặc cho bé cầm một đồ vật 'trấn an' khi nhạc bật lên."
+                "hanh_dong": [
+                    "Kiểm soát môi trường (Environmental Accommodation): Bố trí bé ngồi ở vị trí xa nguồn âm thanh nhất, gần cửa ra vào để có lối thoát nếu bé quá tải.",
+                    "Giải mẫn cảm dần dần (Systematic Desensitization): Trang bị tai nghe chống ồn nhẹ. Khuyến khích bé tham gia bằng các nhạc cụ gõ nhẹ nhàng thay vì hát to."
+                ]
             },
             "Bé gọi tên không quay đầu lại, mắt thường nhìn đi chỗ khác khi cô nói chuyện.": {
-                "hanh_dong": "Hạ thấp trọng tâm ngang tầm mắt bé. Dùng đồ chơi bé thích (VD: quả bóng phát sáng) đặt ngang tầm mắt cô để kích thích giao tiếp mắt trước khi nói."
+                "hanh_dong": [
+                    "Định hình lại giao tiếp mắt (Shaping Eye Contact): Hạ thấp người ngang tầm mắt bé. Đưa món đồ bé thích lên ngang tầm mắt cô, đợi bé liếc nhìn cô rồi mới trao đồ chơi.",
+                    "Củng cố tích cực (Reinforcement): Không bao giờ mắng khi bé không nhìn. Khen ngợi ngay lập tức (social praise) dù bé chỉ lướt mắt qua cô 1 giây."
+                ]
             },
             "Bé có thói quen vẩy tay liên tục trước mặt và đi nhón gót trong lớp.": {
-                "hanh_dong": "Không cấm cản thô bạo. Cung cấp công cụ thay thế (đồ chơi bóp fidget, vòng dẻo) để bé giải tỏa căng thẳng. Chuyển hướng bé vào một hoạt động vận động có mục đích (VD: nhảy theo nhạc)."
+                "hanh_dong": [
+                    "Không ngăn chặn thô bạo (No Extinction Burst Triggering): Tuyệt đối không giữ tay bé lại, đây là hành vi tự kích thích (Stimming) để điều hòa cảm giác giác quan.",
+                    "Cung cấp hành vi thay thế (Replacement Behavior): Đưa cho bé quả bóng bóp (Stress ball) để thỏa mãn nhu cầu vận động tinh, hoặc tổ chức trò chơi nhảy lò cò để chuyển hóa năng lượng vận động thô."
+                ]
             },
             "Trong giờ chơi, bé giật đồ chơi của bạn và khóc lóc ăn vạ rất lâu, khó dỗ.": {
-                "hanh_dong": "Đưa bé vào 'Góc Bình Yên' để tĩnh tâm (time-in, không phải time-out). Khi bé bình tĩnh, dùng Thẻ hình ảnh (PECS) dạy bé cách chỉ vào thẻ 'Cho tớ mượn' thay vì giật đồ."
+                "hanh_dong": [
+                    "Phục hồi tâm lý (De-escalation): Không giảng giải khi bé đang khóc đỉnh điểm. Đưa bé vào 'Góc Bình Yên' (Time-in, có người lớn bên cạnh) để xoa dịu bằng cái ôm chặt hoặc chăn trọng lượng.",
+                    "Dạy kỹ năng giao tiếp chức năng (Functional Communication Training - FCT): Khi bé đã bình tĩnh, lấy hệ thống thẻ PECS ra hướng dẫn bé trao thẻ 'Cho tớ mượn' để lấy đồ, thay vì dùng bạo lực."
+                ]
             },
             "Bé lặp lại lời nói của cô (nhại lời) thay vì trả lời câu hỏi.": {
-                "hanh_dong": "Thay đổi cách đặt câu hỏi. Dùng câu hỏi có lựa chọn trực quan (Giơ 2 món đồ chơi: 'Con thích màu xanh hay màu đỏ?'). Hỗ trợ mớm lời (prompt) đáp án đúng ngay sau khi hỏi."
+                "hanh_dong": [
+                    "Sửa lỗi Echolalia (Echolalia Mitigation): Đừng hỏi 'Con uống nước không?'. Hãy chuyển thành câu khẳng định mẫu và mớm lời cho bé: Cô cầm cốc nước và nói 'Cho con uống nước', đợi bé nhắc lại câu đó rồi mới đưa cốc.",
+                    "Sử dụng ngôn ngữ bằng hình (Visual Supports): Đưa ra 2 thẻ hình (Uống nước / Đi chơi) và hỏi 'Con chọn cái nào?'. Nhấn mạnh vào thẻ thay vì lời nói để giảm sự nhại lời."
+                ]
             }
         }
 
@@ -134,12 +170,12 @@ def generate_mock_data():
                     ],
                     "zpd_recommendation": {
                         "cho_nha_truong": {
-                            "phac_do_tham_chieu": f"Hướng dẫn {profile} cho trường",
-                            "hanh_dong": [ZPD_CONTEXT.get(raw_text, {}).get("hanh_dong", "Quan sát thêm và điều chỉnh ngữ cảnh phù hợp.")]
+                            "phac_do_tham_chieu": f"Phác đồ theo dõi hành vi mục tiêu ({profile.upper()})",
+                            "hanh_dong": ZPD_CONTEXT.get(raw_text, {}).get("hanh_dong", ["Quan sát định lượng (ABC Data) trong 3 ngày tới.", "Lưu hồ sơ để đánh giá phản ứng với can thiệp."])
                         },
                         "cho_phu_huynh": {
-                            "phac_do_tham_chieu": f"Hướng dẫn {profile} cho nhà",
-                            "hanh_dong": ["Dành thêm 15 phút mỗi tối chơi cùng con để áp dụng đồng nhất phương pháp của cô giáo."]
+                            "phac_do_tham_chieu": f"Mô hình phối hợp phụ huynh ({profile.upper()})",
+                            "hanh_dong": ["Dành 15 phút chơi tương tác tự do (Floortime) mỗi tối để củng cố cảm giác an toàn.", "Ghi chép lại các biểu hiện tương tự (nếu có) vào sổ tay gia đình."]
                         }
                     },
                     "ma_chuan_y_khoa": "Sàng lọc giáo dục (Không y khoa)",
