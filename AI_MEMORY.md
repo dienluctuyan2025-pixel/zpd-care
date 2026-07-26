@@ -92,7 +92,21 @@
 3. **Không phá Glassmorphism:** Các class CSS `.sci-cars-hero` và `.xai-modal-content` đã được thiết kế tinh xảo, cấm viết đè (override) làm mất hiệu ứng blur hay shadow.
 4. **Luôn Test Array/Null:** Khi render UI từ dữ liệu AI, luôn dùng `Array.isArray()` và check `null` để tránh sập React DOM.
 
+## 7. Các bản vá lỗi (Bug Fixes - Đại tu vòng cuối)
+
+- **Lỗi giao diện (BehaviorTab):** Fix triệt để tình trạng UI lấy nội dung nháp trong `sessionStorage` đè lên văn bản gốc của lịch sử quan sát khi người dùng xem lại hồ sơ cũ.
+- **Lỗi API 500 (Dashboard):** Fix lỗi 500 khi load dashboard do truy cập vào các trường `entered_by` và `contact_note` chưa được định nghĩa trong SQLAlchemy model `ParentSurvey`. Sử dụng `getattr` để fallback an toàn.
+- **Lỗi dữ liệu giả lập (Mock Engine):** Fix lỗi `generate_mock_data.py` phân bổ ngẫu nhiên kịch bản "Bé an toàn" (Safe Logs) cho các bé có điểm CARS cao (Alert). Đã sửa để thuật toán sinh dữ liệu dựa trên `cached_risk_score` thực tế của học sinh.
+- **Lỗi kẹt bản nháp cũ (SessionStorage Cache):** Cập nhật key lưu trữ từ `draft-${studentId}` thành `draft-v2-${studentId}` trong `BehaviorTab.jsx` để tự động vô hiệu hóa và bỏ qua các bản nháp cũ bị sai logic trên trình duyệt người dùng mà không cần họ phải xóa thủ công.
+- **Lỗi Đồng bộ Timeline (ClinicalTimeline):** 
+  - Khắc phục lỗi sắp xếp lộn xộn các sự kiện (Probe/Log) bằng cách convert toàn bộ `sortKey` sang Unix Timestamp `new Date().getTime()`.
+  - Hiển thị toàn bộ Lịch sử Khảo sát PH trên Timeline thay vì chỉ hiển thị một block duy nhất "Mới nhất".
+- **Giao diện Lịch sử Khảo sát (ParentPortalTab):** Bổ sung API `GET /api/students/{id}/surveys` và xây dựng thêm khối giao diện hiển thị danh sách lịch sử khảo sát bên dưới form nhập liệu. Đồng bộ class CSS `obs-history-list` để có giao diện UI/UX nhất quán với các tab khác.
+- **Sửa lỗi Crash màn hình trắng (ParentPortalTab):** Fix triệt để lỗi thiếu khai báo state variables (`history` và `loadingHistory`) gây sập giao diện khi người dùng bấm vào tab Khảo sát PH.
+- **Xây dựng Sổ tay Vận hành ZPD Care (UserGuide):** Tạo module hướng dẫn cực kỳ chi tiết, tích hợp ngay trong app với giao diện Bento Grid, phân giải cặn kẽ 7 bài test Probes, phương pháp ABC, kỹ thuật nhắc lệnh AI (Prompt Engineering) và đạo đức dữ liệu lâm sàng.
+- **Tối ưu chuẩn hóa PWA & SEO (Frontend):** Sửa lỗi title dài bị cắt xén, bổ sung thẻ OpenGraph cho trang web (`layout.js`) và chuẩn hóa file `manifest.json` để ứng dụng hoạt động 100% như một App Native trên thiết bị di động. Cải thiện tương phản (Contrast) của các khối text màu ở chế độ Light Mode.
+
 ---
 
-**Phiên bản memory:** 2026-07-26 10:00 ICT  
-**UI 6.0 Premium** · HITL · Triangulation 30-30-40 · Glassmorphism · Survey Anti-Dilution · Cross-Module Sync
+**Phiên bản memory:** 2026-07-26 12:45 ICT  
+**UI 6.0 Premium** · HITL · Triangulation 30-30-40 · Glassmorphism · Survey Anti-Dilution · Cross-Module Sync · Timeline Sorted · PWA & SEO Optimized
