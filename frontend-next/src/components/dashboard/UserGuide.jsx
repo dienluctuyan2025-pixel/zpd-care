@@ -10,7 +10,7 @@ function UserGuide() {
     <div className="sci-about-container">
       <div className="bento-header" style={{ marginBottom: 32 }}>
         <div>
-          <h1 className="bento-title" style={{ fontSize: '28px', color: '#fff' }}>
+          <h1 className="bento-title" style={{ fontSize: '28px', color: 'var(--text-main)' }}>
             <BookOpen size={28} style={{ color: 'var(--brand-primary)', marginRight: '12px' }}/>
             Sổ tay Vận hành ZPD Care
           </h1>
@@ -28,7 +28,7 @@ function UserGuide() {
             <Scale size={20} color="#3b82f6"/> 1. Triết lý Vận hành: Tam giác hóa Dữ liệu (Data Triangulation)
           </h2>
           <div style={{ marginTop: '16px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-            <div style={{ flex: '1 1 400px', fontSize: '15px', lineHeight: 1.6, color: '#e7e5e4' }}>
+            <div style={{ flex: '1 1 400px', fontSize: '15px', lineHeight: 1.6, color: 'var(--text-main)' }}>
               <p style={{ marginBottom: '12px' }}>
                 ZPD Care không phải là một công cụ y tế để dán nhãn chẩn đoán trẻ. Nó là một <strong>Hệ sinh thái Giáo dục</strong> sử dụng triết lý <em>Tam giác hóa Dữ liệu (Data Triangulation)</em> nhằm loại bỏ thiên kiến cá nhân của giáo viên, mang lại góc nhìn 360 độ về trẻ.
               </p>
@@ -52,7 +52,7 @@ function UserGuide() {
                   </div>
                 </li>
               </ul>
-              <p style={{ marginTop: '16px', fontStyle: 'italic', color: '#a8a29e' }}>
+              <p style={{ marginTop: '16px', fontStyle: 'italic', color: 'var(--text-muted)' }}>
                 Thuật toán của hệ thống sẽ tự động tổng hợp 3 luồng dữ liệu này để đưa ra Phân tích mức độ (Cảnh báo sớm) và quan trọng nhất là: <strong>Vùng Phát triển Gần (ZPD)</strong>.
               </p>
             </div>
@@ -67,7 +67,7 @@ function UserGuide() {
           <h2 className="bento-title" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '18px' }}>
             <Layout size={18} color="#10b981"/> 2. Tổng quan Giao diện (Dashboard)
           </h2>
-          <div style={{ marginTop: '16px', fontSize: '14px', lineHeight: 1.6, color: '#d6d3d1' }}>
+          <div style={{ marginTop: '16px', fontSize: '14px', lineHeight: 1.6, color: 'var(--text-main)' }}>
             <p>Trang chủ (Dashboard) được thiết kế theo cấu trúc "Split-Pane" (chia 2 màn hình) giúp giáo viên dễ dàng thao tác mà không bị mất dấu học sinh đang theo dõi.</p>
             <ul style={{ paddingLeft: '20px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <li><strong>Thanh Sidebar (Trái):</strong> Hiển thị danh sách học sinh. Các bé được tự động phân loại theo 4 mức độ: Xanh (An toàn), Vàng (Theo dõi), Cam (Lưu ý), Đỏ (Báo động). Thanh này có tích hợp tính năng <em>Sắp xếp thông minh</em> theo mức độ nguy cơ hoặc theo Tên/Lớp.</li>
@@ -82,7 +82,7 @@ function UserGuide() {
             <Brain size={18} color="#8b5cf6"/> 3. Phác đồ ZPD & AI Trợ lý
           </h2>
           <div style={{ marginTop: '16px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-            <div style={{ flex: '1 1 200px', fontSize: '14px', lineHeight: 1.6, color: '#d6d3d1' }}>
+            <div style={{ flex: '1 1 200px', fontSize: '14px', lineHeight: 1.6, color: 'var(--text-main)' }}>
               <p>Điểm sáng tạo cốt lõi của đề tài nằm ở việc cung cấp <strong>Khuyến nghị Can thiệp ZPD (Zone of Proximal Development)</strong>. Thay vì chỉ đưa ra con số báo động vô hồn, hệ thống giúp giáo viên "Biết phải làm gì tiếp theo".</p>
               <ul style={{ paddingLeft: '20px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <li><strong>ZPD Toàn diện (Holistic ZPD):</strong> Các nguyên tắc sư phạm chung (Ví dụ: <em>Thiết lập Góc Bình Yên</em>, <em>Áp dụng nguyên tắc ABC</em>).</li>
@@ -173,8 +173,8 @@ function UserGuide() {
         {/* Phần footer */}
         <div className="bento-card soft" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '30px' }}>
           <Cpu size={32} color="#94a3b8" style={{ margin: '0 auto 16px' }}/>
-          <h3 style={{ color: '#f1f5f9', marginBottom: '8px' }}>Được thiết kế cho Tương lai của Giáo dục Mầm non</h3>
-          <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '600px', margin: '0 auto' }}>
+          <h3 style={{ color: 'var(--text-main)', marginBottom: '8px' }}>Được thiết kế cho Tương lai của Giáo dục Mầm non</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', maxWidth: '600px', margin: '0 auto' }}>
             ZPD Care không thay thế giáo viên, mà trao cho họ một "Con mắt thứ 3" và "Bộ não Sư phạm" để không một đứa trẻ nào bị bỏ lại phía sau. 
             Mọi dữ liệu được mã hóa và bảo mật, tuân thủ đạo đức nghiên cứu giáo dục.
           </p>
@@ -220,13 +220,13 @@ function UserGuide() {
         }
         .guide-step-header h3 {
           font-size: 17px;
-          color: #f8fafc;
+          color: var(--text-main);
           margin: 0;
         }
         .guide-step-body {
           font-size: 14px;
           line-height: 1.6;
-          color: #d6d3d1;
+          color: var(--text-main);
           padding-left: 40px;
         }
         .feature-highlight {
@@ -248,10 +248,10 @@ function UserGuide() {
           gap: 6px;
         }
         .guide-list li {
-          color: #d6d3d1;
+          color: var(--text-main);
         }
         .guide-list li strong {
-          color: #e2e8f0;
+          color: var(--text-main);
         }
       `}</style>
     </div>
