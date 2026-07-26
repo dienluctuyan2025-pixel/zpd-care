@@ -568,7 +568,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
             {analyzing ? <><div className="loader-spinner"></div> Đang phân tích…</> : <><Camera size={16}/> Chụp / Quay</>}
             <input type="file" accept="video/*,image/*" capture="environment" style={{display: 'none'}} onChange={handleFileUpload} disabled={analyzing || confirming || isRecording} />
           </label>
-          {result && (
+          {(result || text.trim() || localMediaUrl) && (
             <button 
               className="btn-secondary" 
               onClick={() => { 
