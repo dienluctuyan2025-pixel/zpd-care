@@ -86,7 +86,7 @@ function UserGuide() {
               <p>Điểm sáng tạo cốt lõi của đề tài nằm ở việc cung cấp <strong>Khuyến nghị Can thiệp ZPD (Zone of Proximal Development)</strong>. Thay vì chỉ đưa ra con số báo động vô hồn, hệ thống giúp giáo viên "Biết phải làm gì tiếp theo".</p>
               <ul style={{ paddingLeft: '20px', marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <li><strong>ZPD Toàn diện (Holistic ZPD):</strong> Các nguyên tắc sư phạm chung (Ví dụ: <em>Thiết lập Góc Bình Yên</em>, <em>Áp dụng nguyên tắc ABC</em>).</li>
-                <li><strong>ZPD Tình huống (Situational ZPD):</strong> AI tự động đọc nhật ký gần nhất của trẻ và sinh ra hướng dẫn đặc trị. <em>(VD: Bé vẩy tay -> Gợi ý cung cấp đồ chơi bóp fidget - Replacement Behavior).</em></li>
+                <li><strong>ZPD Tình huống (Situational ZPD):</strong> AI tự động đọc nhật ký gần nhất của trẻ và sinh ra hướng dẫn đặc trị. <em>(VD: Bé vẩy tay -&gt; Gợi ý cung cấp đồ chơi bóp fidget - Replacement Behavior).</em></li>
                 <li><strong>Chatbot AI Nhúng:</strong> Ở góc phải dưới màn hình có một trợ lý ảo ZPD. AI này đã được "đọc" toàn bộ hồ sơ của bé và sẽ trả lời các thắc mắc chuyên môn của cô giáo theo đúng ngữ cảnh thực tế của trẻ đó.</li>
               </ul>
             </div>
