@@ -9,8 +9,10 @@ function resolveApiUrl() {
   if (typeof window !== 'undefined') {
     const host = window.location.hostname || 'localhost';
     const proto = window.location.protocol === 'https:' ? 'https' : 'http';
-    // Dev: backend :8000; reverse-proxy có thể set NEXT_PUBLIC_API_URL
-    return `${proto}://${host}:8000/api`;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return `${proto}://${host}:8000/api`;
+    }
+    return 'https://zpd-care-api.onrender.com/api';
   }
   return 'http://localhost:8000/api';
 }
