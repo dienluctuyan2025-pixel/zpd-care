@@ -271,19 +271,23 @@ function ParentPortalTab({ studentId, studentName, refreshTrigger, onComplete })
           <div className="obs-history-list" style={{ marginTop: '16px' }}>
             {history.map((surv, idx) => (
               <div className="obs-history-item" key={surv.id}>
-                {idx < history.length - 1 && <span className="obs-history-line" />}
-                <div className="obs-history-dot"></div>
-                <div className="obs-history-content">
-                  <div className="obs-history-meta">
+                <div className="obs-history-rail" aria-hidden>
+                  <span className="obs-history-dot" />
+                  {idx < history.length - 1 && <span className="obs-history-line" />}
+                </div>
+                <div className="obs-history-body">
+                  <div className="obs-history-top">
                     <span className="obs-history-date">{surv.date.substring(0, 10)}</span>
-                    <span className="obs-history-badge">Nguồn: {surv.entered_by === 'teacher' ? 'GV nhập' : 'PH tự nhập'}</span>
+                    <span className="obs-history-tag">Nguồn: {surv.entered_by === 'teacher' ? 'GV nhập' : 'PH tự nhập'}</span>
                   </div>
                   <div className="obs-history-text">
                     Điểm tổng hợp: <strong>{surv.total_score != null ? surv.total_score.toFixed(1) : '?'} / 4.0</strong>
-                    <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
-                      XH: {surv.social_score != null ? surv.social_score.toFixed(1) : '?'} | Hành vi: {surv.routine_score != null ? surv.routine_score.toFixed(1) : '?'} | Chú ý: {surv.attention_score != null ? surv.attention_score.toFixed(1) : '?'}
+                    <div className="obs-history-tags" style={{ marginTop: '6px' }}>
+                      <span className="obs-history-tag soft">XH: {surv.social_score != null ? surv.social_score.toFixed(1) : '?'}</span>
+                      <span className="obs-history-tag soft">Hành vi: {surv.routine_score != null ? surv.routine_score.toFixed(1) : '?'}</span>
+                      <span className="obs-history-tag soft">Chú ý: {surv.attention_score != null ? surv.attention_score.toFixed(1) : '?'}</span>
                     </div>
-                    {surv.contact_note && <div style={{ fontSize: '13px', color: 'var(--text-color)', marginTop: '4px', fontStyle: 'italic' }}>Ghi chú: {surv.contact_note}</div>}
+                    {surv.contact_note && <div style={{ fontSize: '13px', color: 'var(--text-color)', marginTop: '8px', fontStyle: 'italic' }}>Ghi chú: {surv.contact_note}</div>}
                   </div>
                 </div>
               </div>
