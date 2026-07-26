@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import {
-  User, ShieldCheck, Activity, BarChart2, Stethoscope,
+  User, ShieldCheck, Activity, BarChart2, Stethoscope, BookOpen,
   LogOut, Info, Search, Moon, Sun, LayoutList, Phone, ArrowUpDown, Menu, X
 } from 'lucide-react';
 import LoginScreen from '@/components/auth/LoginScreen';
@@ -17,6 +17,7 @@ const RadarTab = dynamic(() => import('@/components/dashboard/RadarTab'), { ssr:
 const ProbesTab = dynamic(() => import('@/components/dashboard/ProbesTab'), { ssr: false, loading: () => <TabLoading /> });
 const ParentPortalTab = dynamic(() => import('@/components/dashboard/ParentPortalTab'), { ssr: false, loading: () => <TabLoading /> });
 const AboutProject = dynamic(() => import('@/components/dashboard/AboutProject'), { ssr: false, loading: () => <TabLoading /> });
+const UserGuide = dynamic(() => import('@/components/dashboard/UserGuide'), { ssr: false, loading: () => <TabLoading /> });
 const ChatWidget = dynamic(() => import('@/components/chat/ChatWidget'), { ssr: false });
 
 function TabLoading() {
@@ -569,6 +570,9 @@ export default function Home() {
           <button type="button" className={activePage === 'about' ? 'active' : ''} onClick={() => setActivePage('about')}>
             <Info size={15} /> Giới thiệu dự án
           </button>
+          <button type="button" className={activePage === 'guide' ? 'active' : ''} onClick={() => setActivePage('guide')}>
+            <BookOpen size={15} /> Sổ tay vận hành
+          </button>
           <button type="button" onClick={() => setCmdOpen(true)}>
             <Search size={15} /> Tìm kiếm
             <kbd className="sci-kbd">Ctrl+K</kbd>
@@ -740,6 +744,8 @@ export default function Home() {
         <main className="content-area sci-content">
           {activePage === 'about' ? (
             <AboutProject onBack={() => setActivePage('dashboard')} />
+          ) : activePage === 'guide' ? (
+            <UserGuide />
           ) : loading || fetchingList ? (
             <TabLoading />
           ) : !dashboardData ? (
