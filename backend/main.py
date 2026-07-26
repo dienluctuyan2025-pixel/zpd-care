@@ -28,6 +28,27 @@ import datetime as dt
 
 app = FastAPI(title="ZPD Care API", version="1.2.0")
 
+@app.get("/api/students/{student_id}/surveys")
+def get_student_surveys(student_id: int, user: Dict[str, Any] = Depends(get_current_user)):
+    assert_student_access(user, student_id)
+    db = SessionLocal()
+    try:
+        surveys = db.query(ParentSurvey).filter(ParentSurvey.student_id == student_id).order_by(ParentSurvey.date.desc(), ParentSurvey.id.desc()).all()
+        return [
+            {
+                "id": s.id,
+                "date": str(s.date),
+                "social_score": s.social_score,
+                "routine_score": s.routine_score,
+                "attention_score": s.attention_score,
+                "total_score": s.total_score,
+                "entered_by": s.entered_by,
+                "contact_note": s.contact_note
+            } for s in surveys
+        ]
+    finally:
+        db.close()
+
 @app.on_event("startup")
 def on_startup():
     init_db()

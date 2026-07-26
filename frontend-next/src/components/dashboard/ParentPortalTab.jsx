@@ -28,15 +28,16 @@ function ParentPortalTab({ studentId, studentName, refreshTrigger, onComplete })
 
   useEffect(() => {
     if (!studentId) return;
-    setIsSubmitted(false);
-    setLoadingQs(true);
-    setCurrentStep(0);
-    setAnswers({});
-    setContactNote('');
 
     if (abortControllerRef.current) abortControllerRef.current.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
+
+    setLoadingQs(true);
+    setLoadingHistory(true);
+    setCurrentStep(0);
+    setAnswers({});
+    setContactNote('');
 
     api.get(`/students/${studentId}/survey-questions`, { signal: controller.signal })
       .then((res) => {
@@ -56,6 +57,25 @@ function ParentPortalTab({ studentId, studentName, refreshTrigger, onComplete })
       .finally(() => {
         if (abortControllerRef.current === controller) setLoadingQs(false);
       });
+
+    api.get(`/students/${studentId}/surveys`, { signal: controller.signal })
+      .then((res) => {
+        if (abortControllerRef.current === controller) setHistory(res.data || []);
+      })
+      .catch((err) => {
+        if (err?.code !== 'ERR_CANCELED') console.error('Failed to fetch survey history', err);
+      })
+      .finally(() => {
+        if (abortControllerRef.current === controller) setLoadingHistory(false);
+      });
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [studentId, refreshTrigger]);
 
   const handleSelect = (qId, val) => {
@@ -232,6 +252,42 @@ function ParentPortalTab({ studentId, studentName, refreshTrigger, onComplete })
                 )}
               </div>
             </div>
+          </div>
+        )}
+      </div>
+
+      <div className="bento-header" style={{ marginTop: '24px', borderTop: '1px solid var(--border)', paddingTop: '24px' }}>
+        <div>
+          <h2 className="bento-title"><ShieldCheck size={18} /> Lịch sử khảo sát</h2>
+          <p className="obs-subtitle">Các lần lấy ý kiến phụ huynh trước đây</p>
+        </div>
+      </div>
+      <div className="parent-survey-history">
+        {loadingHistory ? (
+           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted)' }}>Đang tải lịch sử...</div>
+        ) : history.length === 0 ? (
+           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--muted)' }}>Chưa có lịch sử khảo sát nào.</div>
+        ) : (
+          <div className="obs-history-list" style={{ marginTop: '16px' }}>
+            {history.map((surv, idx) => (
+              <div className="obs-history-item" key={surv.id}>
+                {idx < history.length - 1 && <span className="obs-history-line" />}
+                <div className="obs-history-dot"></div>
+                <div className="obs-history-content">
+                  <div className="obs-history-meta">
+                    <span className="obs-history-date">{surv.date.substring(0, 10)}</span>
+                    <span className="obs-history-badge">Nguồn: {surv.entered_by === 'teacher' ? 'GV nhập' : 'PH tự nhập'}</span>
+                  </div>
+                  <div className="obs-history-text">
+                    Điểm tổng hợp: <strong>{surv.total_score != null ? surv.total_score.toFixed(1) : '?'} / 4.0</strong>
+                    <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
+                      XH: {surv.social_score != null ? surv.social_score.toFixed(1) : '?'} | Hành vi: {surv.routine_score != null ? surv.routine_score.toFixed(1) : '?'} | Chú ý: {surv.attention_score != null ? surv.attention_score.toFixed(1) : '?'}
+                    </div>
+                    {surv.contact_note && <div style={{ fontSize: '13px', color: 'var(--text-color)', marginTop: '4px', fontStyle: 'italic' }}>Ghi chú: {surv.contact_note}</div>}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
