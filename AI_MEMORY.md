@@ -80,7 +80,8 @@ npm run dev
 - Đổi HS: reset pending/result/chat draft state.
 
 ### 3.3 Kiểm chứng (ProbesTab + catalog)
-- **7 module cố định** — `POST /api/students/{id}/ensure-probes` khi mở hồ sơ.
+- **Kho 7 module chuẩn** — Hàng đợi mặc định sẽ **TRỐNG**.
+- **Sinh bài test động**: Khi GV Xác nhận một Quan sát (bấm `Xác nhận ghi hồ sơ`), hệ thống sẽ đọc mảng ID bài test do AI khuyến nghị và tự động đưa các bài test tương ứng vào Hàng đợi Kiểm chứng (Dynamic Probes).
 - **GET dashboard chỉ đọc** (không ghi DB).
 - **3 bài có game** (whitelist cứng FE+BE):
   - `name_response` → reaction  

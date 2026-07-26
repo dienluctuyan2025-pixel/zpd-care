@@ -31,7 +31,7 @@ function TabLoading() {
       <div className="skeleton skeleton-card" style={{ height: 100 }} />
       {slow && (
         <p style={{ color: '#af5b3f', fontSize: 13, textAlign: 'center', opacity: 0.8, marginTop: 12 }}>
-          Đang đánh thức máy chủ API (có thể mất 1-2 phút do chế độ ngủ của Cloud)...
+          Đang kết nối và tải dữ liệu, vui lòng đợi...
         </p>
       )}
     </div>

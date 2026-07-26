@@ -185,12 +185,10 @@ def _archive_legacy_open_probes(db, student_id: int) -> int:
 
 def _ensure_student_catalog_probes(db, student_id: int) -> int:
     """
-    Mỗi HS có đủ 7 module catalog ở trạng thái chờ (nếu chưa có phiên mở).
-    Đồng bộ scenario từ catalog. CHỈ gọi từ POST — không side-effect trên GET.
+    Không còn tự động mở 7 module. Chỉ đồng bộ kịch bản cho các module hiện ĐANG mở.
     """
     from probe_catalog import MODULES
     archived = _archive_legacy_open_probes(db, student_id)
-    created = 0
     synced = 0
     for mod in MODULES:
         open_row = db.query(ProactiveProbe).filter(
@@ -204,19 +202,9 @@ def _ensure_student_catalog_probes(db, student_id: int) -> int:
                 open_row.generated_scenario = fresh
                 open_row.test_category = mod["axis_label"]
                 synced += 1
-            continue
-        db.add(ProactiveProbe(
-            student_id=student_id,
-            generated_scenario=fresh,
-            test_category=mod["axis_label"],
-            result_status="Chờ kiểm tra",
-            module_id=mod["id"],
-            scored=0,
-        ))
-        created += 1
-    if created or synced or archived:
+    if synced or archived:
         db.commit()
-    return created
+    return 0
 
 
 @app.post("/api/probes/assign")
@@ -749,26 +737,32 @@ def confirm_observation(
         log.raw_text = edited
         log.parsed_json = json.dumps(parsed, ensure_ascii=False)
 
-        # Tạo probe một lần khi xác nhận (tránh trùng nếu đã có)
-        scenario_data = parsed.get("kich_ban_test_kiem_chung")
-        if scenario_data:
-            scenario_str = json.dumps(scenario_data, ensure_ascii=False) if isinstance(scenario_data, dict) else str(scenario_data)
-            existing = (
-                db.query(ProactiveProbe)
-                .filter(
+        # Tạo các bài test Kiểm chứng tự động (Dynamic Probes) dựa trên gợi ý AI
+        recommended_probes = parsed.get("kich_ban_test_kiem_chung")
+        if isinstance(recommended_probes, list):
+            from probe_catalog import get_module
+            for module_id in recommended_probes:
+                if not isinstance(module_id, str): continue
+                mod = get_module(module_id)
+                if not mod: continue
+                
+                # Kiểm tra xem bài test này đã nằm trong hàng đợi chưa (để tránh trùng)
+                dup = db.query(ProactiveProbe).filter(
                     ProactiveProbe.student_id == req.student_id,
-                    ProactiveProbe.generated_scenario == scenario_str,
+                    ProactiveProbe.module_id == mod["id"],
                     ProactiveProbe.result_status == "Chờ kiểm tra",
-                )
-                .first()
-            )
-            if not existing:
-                db.add(ProactiveProbe(
-                    student_id=req.student_id,
-                    generated_scenario=scenario_str,
-                    test_category=parsed.get("nhom_ky_nang", "Chưa xác định"),
-                    result_status="Chờ kiểm tra",
-                ))
+                ).first()
+                
+                if not dup:
+                    probe = ProactiveProbe(
+                        student_id=req.student_id,
+                        generated_scenario=_module_scenario_json(mod),
+                        test_category=mod["axis_label"],
+                        result_status="Chờ kiểm tra",
+                        module_id=mod["id"],
+                        scored=0,
+                    )
+                    db.add(probe)
 
         db.commit()
         risk = calculate_final_risk(req.student_id)

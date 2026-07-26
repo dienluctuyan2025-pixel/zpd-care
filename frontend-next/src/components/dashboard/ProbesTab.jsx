@@ -134,14 +134,14 @@ function ProbesTab({ dashboardData, onRefresh }) {
       <header className="pk5-hero">
         <div className="pk5-hero-main">
           <div className="pk5-badges">
-            <span className="pk5-pill">7 bài có sẵn</span>
+            <span className="pk5-pill">Sinh tự động từ Quan sát</span>
             <span className="pk5-pill soft">3 bài có game</span>
             <span className="pk5-pill">4 bài chỉ quan sát</span>
             <span className="pk5-pill soft">40% hồ sơ</span>
           </div>
           <h2>Kiểm chứng khoa học</h2>
           <p>
-            7 bài sẵn. <strong>3 bài có game</strong> (gợi ý mức) · <strong>4 bài chỉ quan sát</strong>.
+            Các bài test sẽ được <strong>AI tự động đề xuất</strong> dựa trên phân tích Quan sát của GV.
             Chỉ khi GV bấm <strong>Xác nhận chấm 1–4</strong> mới ghi vào hồ sơ (HITL).
           </p>
           <div className="pk5-formula">
@@ -162,7 +162,7 @@ function ProbesTab({ dashboardData, onRefresh }) {
       <div className="pk5-note" role="note">
         <ShieldCheck size={15} />
         <div>
-          <strong>Logic:</strong> Game chỉ hiện khi <em>khớp</em> protocol bài (3/7). Bài quan sát thuần = chấm tay sau khi làm bước.
+          <strong>Logic:</strong> Kho bài test chuẩn chỉ xuất hiện khi AI phát hiện dấu hiệu từ Quan sát. Bài quan sát thuần = chấm tay sau khi làm bước.
           Điểm vào Kiểm chứng 40%. Sàng lọc giáo dục — không chẩn đoán y khoa.
         </div>
       </div>

@@ -37,7 +37,7 @@ def build_safe_analysis_fallback(raw_text: str, error_msg: str = "", source: str
             "Điểm này KHÔNG phản ánh nguy cơ lâm sàng. Vui lòng thử lại hoặc ghi nhận thủ công."
         ),
         "xai_confidence": "0%",
-        "kich_ban_test_kiem_chung": None,
+        "kich_ban_test_kiem_chung": [],
         "xai_highlights": [],
         "khao_sat_phu_huynh": [],
         "zpd_recommendation": {
@@ -87,7 +87,7 @@ TUYỆT ĐỐI KHÔNG:
 NẾU HÀNH VI BÌNH THƯỜNG / TÍCH CỰC:
 - "ma_chuan_y_khoa": "Không có dấu hiệu cần theo dõi đặc biệt (sàng lọc giáo dục)".
 - "diem_nguy_co": 1.0
-- "kich_ban_test_kiem_chung": null
+- "kich_ban_test_kiem_chung": []
 - "khao_sat_phu_huynh": []
 - "xai_highlights": []
 
@@ -99,7 +99,16 @@ BẮT BUỘC trả về đúng 1 JSON:
   "diem_nguy_co": 2.0,
   "diem_nguy_co_giai_thich": "Giải thích mức 1–4 theo quan sát sư phạm (1 an toàn · 2 theo dõi · 3 đáng kể · 4 báo động theo dõi nội bộ).",
   "xai_confidence": "Độ tin cậy gợi ý AI (VD: 75%)",
-  "kich_ban_test_kiem_chung": null,
+  "kich_ban_test_kiem_chung": [
+      "Lựa chọn các ID bài test Kiểm chứng phù hợp từ kho sau (nếu cần):",
+      "- 'name_response' (Gọi tên)",
+      "- 'joint_attention' (Chú ý chung, chỉ trỏ)",
+      "- 'emotion_match' (Cảm xúc)",
+      "- 'turn_taking' (Luân phiên / chia sẻ)",
+      "- 'routine_transition' (Chuyển đổi hoạt động)",
+      "- 'sustained_attention' (Duy trì tập trung)",
+      "- 'stereotypy_observe' (Hành vi rập khuôn)"
+  ],
   "xai_highlights": [
       {
           "keyword": "CHỈ trích NGUYÊN VĂN 2-8 từ có trong hanh_vi_goc",
