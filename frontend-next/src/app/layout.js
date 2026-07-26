@@ -4,6 +4,12 @@ import "./zpd-ui.css";
 export const metadata = {
   title: "ZPD Care | Giáo dục hòa nhập",
   description: "ZPD Care - Ứng dụng AI hỗ trợ theo dõi và can thiệp giáo dục hòa nhập bậc mầm non. Nơi sự kết hợp giữa thuật toán, tình yêu thương và sự kiên nhẫn của giáo viên làm nên sự thay đổi kỳ diệu ở mỗi đứa trẻ.",
+  openGraph: {
+    title: "ZPD Care | Giáo dục hòa nhập",
+    description: "Ứng dụng AI hỗ trợ theo dõi và can thiệp giáo dục hòa nhập bậc mầm non.",
+    siteName: "ZPD Care",
+    type: "website",
+  },
   manifest: "/manifest.json",
   icons: {
     icon: "/logo-zpd.svg",
