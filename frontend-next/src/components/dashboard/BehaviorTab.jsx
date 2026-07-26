@@ -107,10 +107,14 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
     }
     api.get(`/students/${studentId}/latest-log`)
       .then(res => {
-        if (res.data) {
-          const draft = sessionStorage.getItem(`draft-${studentId}`);
+        const draft = sessionStorage.getItem(`draft-${studentId}`);
+        if (draft) {
+          setText(draft);
+          setResult(null);
+          setIsLiveResult(false);
+        } else if (res.data) {
           const parsed = res.data.parsed_json || null;
-          setText(draft || res.data.raw_text || '');
+          setText(res.data.raw_text || '');
           setResult(parsed);
           setIsLiveResult(false);
           // Nếu log còn pending confirm → hiện thanh xác nhận
@@ -118,8 +122,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
             setPendingLogId(res.data.id);
           }
         } else {
-          const draft = sessionStorage.getItem(`draft-${studentId}`);
-          setText(draft || '');
+          setText('');
           setResult(null);
           setIsLiveResult(false);
         }
@@ -791,7 +794,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
                     {renderHighlightedText(
                       result.hanh_vi_goc,
                       result.xai_highlights,
-                      selectedLog ? (result.raw_text_ref || result.raw_text || result.hanh_vi_goc) : (text || result.raw_text_ref || result.raw_text || result.hanh_vi_goc)
+                      text || result.raw_text_ref || result.raw_text || result.hanh_vi_goc
                     )}
                   </div>
                   {hlCount === 0 && (
@@ -940,7 +943,7 @@ function BehaviorTab({ studentId, dashboardData, onRefresh }) {
         const riskTone = score < 2 ? '#0f766e' : score < 3 ? '#b45309' : score < 3.6 ? '#c2410c' : '#b91c1c';
         const scorePct = Math.max(6, Math.min(100, ((Math.max(score, 1) - 1) / 3) * 100));
         const skill = result?.nhom_ky_nang || result?.skill_group || '—';
-        const sourceText = (result?.hanh_vi_goc || (selectedLog ? selectedLog.raw_text : text) || '').trim();
+        const sourceText = (result?.hanh_vi_goc || text || '').trim();
         const mapRef = result?.ma_chuan_y_khoa || 'Chưa có tham chiếu khung sàng lọc';
         const scoreWhy = result?.diem_nguy_co_giai_thich || 'Chưa có diễn giải điểm.';
         const probe = result?.kich_ban_test_kiem_chung;
