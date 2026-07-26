@@ -159,8 +159,8 @@ function UserGuide() {
                   <li><strong>SA (Social Smile):</strong> Cười với trẻ xem trẻ có cười đáp lại. Đánh giá sự đồng cảm và phản xạ cảm xúc.</li>
                   <li><strong>ST (Stereotypy Test):</strong> Cung cấp đồ chơi có bánh xe/động cơ. Quan sát hành vi chơi rập khuôn (Spinning/Lining up).</li>
                 </ul>
-                <div className="feature-highlight" style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.1)', borderLeft: '3px solid #10b981', color: '#6ee7b7' }}>
-                  <strong>Thang đo Rubric Chuẩn hóa:</strong> Mỗi bài test có hệ thống chấm điểm từ 0 (Điển hình) đến 3 (Bất thường nghiêm trọng), có mô tả chi tiết bằng tiếng Việt. Giúp giáo viên mầm non dù không học chuyên ngành Y khoa vẫn chấm điểm chính xác (Inter-rater reliability).
+                <div className="feature-highlight" style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.1)', borderLeft: '3px solid #10b981', color: 'var(--text-main)' }}>
+                  <strong style={{ color: '#10b981' }}>Thang đo Rubric Chuẩn hóa:</strong> Mỗi bài test có hệ thống chấm điểm từ 0 (Điển hình) đến 3 (Bất thường nghiêm trọng), có mô tả chi tiết bằng tiếng Việt. Giúp giáo viên mầm non dù không học chuyên ngành Y khoa vẫn chấm điểm chính xác (Inter-rater reliability).
                 </div>
               </div>
             </div>
@@ -196,6 +196,25 @@ function UserGuide() {
                     <li>✅ <em>Nên hỏi:</em> "Dựa vào bài test JA và EM tuần trước, gợi ý cho tôi 2 trò chơi tương tác phù hợp cho Bo vào giờ ra chơi chiều nay".</li>
                     <li>✅ <em>Nên hỏi:</em> "Mẹ bé không tin con mình có nguy cơ, tôi nên nói gì trong cuộc họp phụ huynh tới dựa trên biểu đồ Radar này?".</li>
                   </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 6 */}
+            <div className="guide-step">
+              <div className="guide-step-header">
+                <span className="step-badge">6</span>
+                <h3>Bảo mật & Đạo đức Dữ liệu (Data Privacy & Ethics)</h3>
+              </div>
+              <div className="guide-step-body">
+                <p>Một dự án liên quan đến đánh giá trẻ em bắt buộc phải tuân thủ nghiêm ngặt các quy định về đạo đức nghề nghiệp và bảo mật thông tin.</p>
+                <ul className="guide-list">
+                  <li><strong>Lưu trữ mã hóa:</strong> Toàn bộ dữ liệu của trẻ (tên, ngày sinh, điểm số) không bao giờ được chia sẻ công khai. Mật khẩu của giáo viên được băm bằng thuật toán BCrypt.</li>
+                  <li><strong>Quyền tự quyết của Phụ huynh:</strong> Nhà trường phải xin phép phụ huynh trước khi áp dụng hệ thống đánh giá lên trẻ. Phụ huynh có quyền từ chối hoặc yêu cầu xóa dữ liệu bất cứ lúc nào.</li>
+                  <li><strong>Không dán nhãn (No Labeling):</strong> Kết quả từ hệ thống chỉ được dùng nội bộ để <em>hỗ trợ giáo dục</em>, tuyệt đối không dùng từ "Bé bị Tự kỷ" hay "Bé bị tăng động" khi trao đổi với phụ huynh. Hãy dùng từ: "Bé cần hỗ trợ thêm về khả năng tập trung".</li>
+                </ul>
+                <div className="feature-highlight" style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.1)', borderLeft: '3px solid #ef4444', color: 'var(--text-main)' }}>
+                  <strong style={{ color: '#ef4444' }}>Cảnh báo Lâm sàng:</strong> Nếu trẻ đạt mức Báo động đỏ liên tục trong 3 tháng dù đã can thiệp ZPD, giáo viên phải có trách nhiệm đề xuất phụ huynh đưa trẻ đến các cơ sở y tế chuyên khoa để có chẩn đoán chính thức từ Bác sĩ tâm thần nhi.
                 </div>
               </div>
             </div>
@@ -268,10 +287,16 @@ function UserGuide() {
           background: rgba(245, 158, 11, 0.1);
           border-left: 3px solid #f59e0b;
           border-radius: 4px;
-          color: #fcd34d;
+          color: var(--text-main);
           font-size: 13.5px;
           display: flex;
           align-items: flex-start;
+        }
+        .feature-highlight strong {
+          color: #d97706; /* Màu đậm để đọc rõ trên nền sáng */
+        }
+        :global(.dark) .feature-highlight strong {
+          color: #fcd34d; /* Màu sáng để đọc rõ trên nền tối */
         }
         .guide-list {
           padding-left: 20px;
