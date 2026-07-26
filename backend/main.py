@@ -446,11 +446,16 @@ def _build_student_dashboard(student_id: int):
         risk_profile = calculate_final_risk(student_id)
         
         # Radar: ưu tiên trục từ probe đã chấm; fallback / blend khảo sát PH
-        surveys = db.query(ParentSurvey).filter(ParentSurvey.student_id == student_id).order_by(ParentSurvey.id.desc()).first()
+        surveys = db.query(ParentSurvey).filter(ParentSurvey.student_id == student_id).order_by(ParentSurvey.id.desc()).limit(3).all()
+        p_axis_buckets = {"social": [], "routine": [], "attention": []}
+        for s in surveys:
+            if s.social_score is not None: p_axis_buckets["social"].append(float(s.social_score))
+            if s.routine_score is not None: p_axis_buckets["routine"].append(float(s.routine_score))
+            if s.attention_score is not None: p_axis_buckets["attention"].append(float(s.attention_score))
+            
         parent_axes = {
-            "social": float(surveys.social_score) if surveys and surveys.social_score is not None else None,
-            "routine": float(surveys.routine_score) if surveys and surveys.routine_score is not None else None,
-            "attention": float(surveys.attention_score) if surveys and surveys.attention_score is not None else None,
+            k: (round(sum(v)/len(v), 2) if v else None)
+            for k, v in p_axis_buckets.items()
         }
         probe_axes = (risk_profile or {}).get("axis_scores") or {}
         axis_counts = (risk_profile or {}).get("axis_counts") or {}
@@ -967,7 +972,9 @@ def get_survey_questions(student_id: int, user: Dict[str, Any] = Depends(get_cur
     assert_student_access(user, student_id)
     db = SessionLocal()
     try:
-        latest_log = db.query(TeacherBehaviorLog).filter(TeacherBehaviorLog.student_id == student_id).order_by(TeacherBehaviorLog.id.desc()).first()
+        recent_logs = db.query(TeacherBehaviorLog).filter(
+            TeacherBehaviorLog.student_id == student_id
+        ).order_by(TeacherBehaviorLog.id.desc()).limit(5).all()
         
         default_questions = [
             { "id": "q1", "text": "Khi ở nhà, bé có thường xuyên bị hoảng sợ quá mức bởi các âm thanh lớn không?", "type": "routine", "reason": "Giúp đánh giá độ nhạy cảm giác quan." },
@@ -977,15 +984,29 @@ def get_survey_questions(student_id: int, user: Dict[str, Any] = Depends(get_cur
             { "id": "q5", "text": "Bé có thường bỏ dở trò chơi chỉ sau 1-2 phút và không thể tập trung không?", "type": "attention", "reason": "Giúp sàng lọc vấn đề duy trì sự chú ý." }
         ]
 
-        if latest_log and latest_log.parsed_json:
-            try:
-                data = json.loads(latest_log.parsed_json)
-                if isinstance(data, dict) and "khao_sat_phu_huynh" in data and isinstance(data["khao_sat_phu_huynh"], list):
-                    # Nếu mảng rỗng (AI báo hành vi bình thường), trả về rỗng luôn không dùng default
-                    return {"questions": data["khao_sat_phu_huynh"]}
-            except Exception as e:
-                pass
-                
+        dynamic_qs = []
+        seen_ids = set()
+        
+        for log in recent_logs:
+            if log.parsed_json:
+                try:
+                    data = json.loads(log.parsed_json)
+                    if isinstance(data, dict) and "khao_sat_phu_huynh" in data and isinstance(data["khao_sat_phu_huynh"], list):
+                        for q in data["khao_sat_phu_huynh"]:
+                            q_id = q.get("id")
+                            if q_id and q_id not in seen_ids:
+                                dynamic_qs.append(q)
+                                seen_ids.add(q_id)
+                except Exception:
+                    pass
+                    
+        if dynamic_qs:
+            return {"questions": dynamic_qs}
+            
+        if recent_logs:
+            # Nếu quét cả 5 log đều không có câu hỏi nào (tất cả đều bình thường)
+            return {"questions": []}
+            
         return {"questions": default_questions}
     finally:
         db.close()
